@@ -1,4 +1,4 @@
-=== Career Development ===
+=== BKPSDMD Prima ===
 
 Contributors: cretathemes
 Requires at least: 5.9
@@ -10,7 +10,7 @@ Tags: news, portfolio, blog, left-sidebar, right-sidebar, one-column, two-column
 
 == Description ==
 
-The Career Development theme is tailored for websites dedicated to coaching, professional growth, skill training, and personal development services. It features organized sections for programs, workshops, testimonials, team profiles, blogs, and contact details, all presented in a layout that ensures responsive functionality for seamless viewing on both desktop and mobile devices. Customization options enable changes to colors, typography, banners, and page layouts, enhancing user experience without compromising usability. Additionally, the theme supports podcast integration, service showcases, and call-to-action sections for sharing valuable career coaching resources and learning materials. With clean navigation and well-structured content areas, visitors can easily explore information about coaching sessions, training programs, and consulting services. This theme is ideal for life coaches, agencies, educational mentors, or marketing consultants, providing a professional framework for showcasing career-focused content and development opportunities.
+Tema resmi BKPSDMD Kabupaten Bangka – dirancang untuk mendukung informasi kepegawaian, pengembangan sumber daya manusia aparatur, dan layanan aparatur sipil negara secara profesional dan modern.
 
 == Changelog ==
 
@@ -38,10 +38,10 @@ The Career Development theme is tailored for websites dedicated to coaching, pro
 * Updated Theme Functions.
 == Copyright ==
 
-Career Development WordPress Theme, Copyright 2026 Creta Themes
-Career Development is distributed under the terms of the GNU GPL.
+BKPSDMD Prima WordPress Theme, Copyright 2026 BKPSDMD Kabupaten Bangka
+BKPSDMD Prima is distributed under the terms of the GNU GPL.
 
-Career Development is based on Catch Bells WordPress Theme, 2012-2025
+BKPSDMD Prima is based on Catch Bells WordPress Theme, 2012-2025
 Catch Bells is distributed under the terms of the GNU GPL.
 
 == Resources ==

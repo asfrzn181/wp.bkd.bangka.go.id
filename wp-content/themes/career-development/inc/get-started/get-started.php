@@ -87,7 +87,7 @@ function career_development_test_guide() {
 					<a href="<?php echo esc_url( CAREER_DEVELOPMENT_PRO_THEME_BUNDLE ); ?>" target="_blank"><?php esc_html_e('Get Theme Bundle For ', 'career-development'); ?><span><?php esc_html_e('$86', 'career-development'); ?></a>
 				</div>
 				<div class="pro-boxes pro-theme-container">
-					<h4><?php esc_html_e('Career Development Pro', 'career-development'); ?></h4>
+					<h4><?php esc_html_e('BKPSDMD Prima', 'career-development'); ?></h4>
 					<p class="pro-theme-price" ><?php esc_html_e('$39', 'career-development'); ?></p>
 					<img role="img" src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/get-started/images/premium.png" alt="premium image" />
 					<p><?php esc_html_e('SUMMER SALE: ', 'career-development'); ?><strong><?php esc_html_e('Extra 25%', 'career-development'); ?></strong><?php esc_html_e(' OFF on WordPress Block Themes! Use Code: ', 'career-development'); ?><strong><?php esc_html_e('“SUMMER25”', 'career-development'); ?></strong></p>

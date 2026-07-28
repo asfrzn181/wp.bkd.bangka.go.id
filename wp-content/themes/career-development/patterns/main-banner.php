@@ -43,7 +43,7 @@
 
 <!-- wp:buttons {"className":"learn-btn","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"layout":{"type":"flex","justifyContent":"center"}} -->
 <div class="wp-block-buttons learn-btn" style="margin-top:0;margin-bottom:0"><!-- wp:button {"textAlign":"center","textColor":"primary","className":"is-style-outline","style":{"elements":{"link":{"color":{"text":"var:preset|color|primary"}}},"border":{"width":"0px","style":"none"},"spacing":{"padding":{"left":"0","right":"0","top":"0","bottom":"0"}},"typography":{"fontSize":"16px","fontStyle":"normal","fontWeight":"400"}},"fontFamily":"plus-jakarta-sans"} -->
-<div class="wp-block-button is-style-outline"><a href="#" class="wp-block-button__link has-primary-color has-text-color has-link-color has-plus-jakarta-sans-font-family has-text-align-center has-custom-font-size wp-element-button" style="border-style:none;border-width:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;font-size:16px;font-style:normal;font-weight:400"><?php esc_html_e( 'Learn More About Career Development', 'career-development' ); ?> <i class="fa-solid fa-arrow-right-long"></i></a></div>
+<div class="wp-block-button is-style-outline"><a href="#" class="wp-block-button__link has-primary-color has-text-color has-link-color has-plus-jakarta-sans-font-family has-text-align-center has-custom-font-size wp-element-button" style="border-style:none;border-width:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;font-size:16px;font-style:normal;font-weight:400"><?php esc_html_e( 'Pelajari Lebih Lanjut', 'career-development' ); ?> <i class="fa-solid fa-arrow-right-long"></i></a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:column --></div>

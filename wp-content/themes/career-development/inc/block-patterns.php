@@ -8,7 +8,7 @@
 
 function career_development_register_block_patterns() {
 	$career_development_block_pattern_categories = array(
-		'career-development' => array( 'label' => esc_html__( 'Career Development', 'career-development' ) ),
+		'career-development' => array( 'label' => esc_html__( 'BKPSDMD Prima', 'career-development' ) ),
 		'pages' => array( 'label' => esc_html__( 'Pages', 'career-development' ) ),
 	);
 
