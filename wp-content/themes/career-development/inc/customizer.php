@@ -1,8 +1,8 @@
 <?php
 /**
- *Career Development: Customizer
+ * BKPSDMD Prima: Customizer
  *
- * @package Career Development
+ * @package BKPSDMD Prima
  * @subpackage career_development
  */
 

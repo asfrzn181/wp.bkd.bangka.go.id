@@ -1,6 +1,6 @@
 <?php
 /**
- * Career Development functions and definitions
+ * BKPSDMD Prima functions and definitions
  *
  * @package career-development
  * @since 1.0
@@ -146,7 +146,7 @@ function career_development_admin_notice() {
 	    } if($current_screen->base != 'appearance_page_career-development-guide-page' && $current_screen->base != 'toplevel_page_cretats-theme-showcase' ) { ?>
 
 	    <div class="notice notice-success dash-notice">
-	        <h1><?php esc_html_e('Hey, Thank you for installing Career Development Theme!', 'career-development'); ?></h1>
+	        	<h1><?php esc_html_e('Hey, Terima kasih telah menggunakan tema BKPSDMD Prima!', 'career-development'); ?></h1>
 	        <p> <a href="javascript:void(0);" id="install-activate-button" class="button admin-button info-button get-start-btn">
 				   <?php echo __('Navigate Getstart', 'career-development'); ?>
 				</a>

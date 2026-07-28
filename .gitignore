@@ -1,2 +1,27 @@
 *.zip
 bkpsdmdBangka.zip
+
+# ==========================================
+# DATA SERVER - tidak boleh tertimpa git pull
+# ==========================================
+wp-config.php
+.htaccess
+wp-content/uploads/
+#/asset/
+
+# ==========================================
+# FILE BESAR & BACKUP
+# ==========================================
+*.zip
+*.tar.gz
+*.sql
+*.sql.gz
+*.bak
+
+# ==========================================
+# LOG & SYSTEM FILES
+# ==========================================
+*.log
+error_log
+.DS_Store
+Thumbs.db

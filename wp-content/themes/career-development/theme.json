@@ -100,7 +100,7 @@
           "name": "Foreground and background"
         },
         {
-          "colors": ["#EF4B3C", "#202020"],
+          "colors": ["#03A2E9", "#3C3D8B"],
           "slug": "primary-and-heading",
           "name": "Primary and Heading"
         }
@@ -147,30 +147,50 @@
           "name": "Header Overlay"
         }
       ],
-      "palette": [        
+      "palette": [
         {
           "slug": "primary",
-          "color": "#FF9A04",
+          "color": "#03A2E9",
           "name": "Primary"
         },
         {
+          "slug": "primary-dark",
+          "color": "#0F73BF",
+          "name": "Primary Dark"
+        },
+        {
           "slug": "secondary",
-          "color": "#FFFDEE",
+          "color": "#51BCED",
           "name": "Secondary"
         },
         {
+          "slug": "secondary-light",
+          "color": "#97D6F4",
+          "name": "Secondary Light"
+        },
+        {
+          "slug": "accent",
+          "color": "#ED7C1C",
+          "name": "Accent"
+        },
+        {
+          "slug": "accent-light",
+          "color": "#F9C106",
+          "name": "Accent Light"
+        },
+        {
           "slug": "heading",
-          "color": "#2A2A2A",
-          "name": "heading"
+          "color": "#3C3D8B",
+          "name": "Heading"
         },
         {
           "slug": "Text Color",
-          "color": "#2A2A2AB2",
+          "color": "#3C3D8BE0",
           "name": "text-color"
         },
         {
           "slug": "border-color",
-          "color": "#D9D9D9",
+          "color": "#97D6F4",
           "name": "Border Color"
         },
         {
@@ -179,8 +199,13 @@
           "name": "Background"
         },
         {
+          "slug": "neutral-surface",
+          "color": "#F5F8FA",
+          "name": "Neutral Surface"
+        },
+        {
           "slug": "body-text",
-          "color": "#1F1F1F",
+          "color": "#3C3D8B",
           "name": "Body Text"
         },
         {
