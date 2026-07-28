@@ -1,0 +1,295 @@
+/* =====================================================
+   ASN Data Dashboard Admin Stylesheet
+   ===================================================== */
+
+.asndd-admin-wrap {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin-right: 20px;
+}
+
+/* Control Bar */
+.asndd-control-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 15px 20px;
+    border: 1px solid #ccd0d4;
+    border-radius: 8px;
+    margin: 15px 0 20px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.asndd-control-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.asndd-select {
+    font-size: 14px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #8c8f94;
+    min-width: 150px;
+}
+
+/* Summary Metric Cards */
+.asndd-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.asndd-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-left: 5px solid #007cba;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.asndd-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.asndd-card-blue   { border-left-color: #2563eb; }
+.asndd-card-green  { border-left-color: #10b981; }
+.asndd-card-orange { border-left-color: #f59e0b; }
+.asndd-card-purple { border-left-color: #8b5cf6; }
+
+.asndd-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+}
+.asndd-card-blue .asndd-card-icon   { background: #dbeafe; color: #2563eb; }
+.asndd-card-green .asndd-card-icon  { background: #d1fae5; color: #10b981; }
+.asndd-card-orange .asndd-card-icon { background: #fef3c7; color: #d97706; }
+.asndd-card-purple .asndd-card-icon { background: #ede9fe; color: #8b5cf6; }
+
+.asndd-card-icon .dashicons {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+}
+
+.asndd-card-body {
+    display: flex;
+    flex-direction: column;
+}
+.asndd-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+}
+.asndd-card-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1.2;
+    margin: 2px 0;
+}
+.asndd-card-sub {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Tabs */
+.asndd-nav-tabs {
+    margin-bottom: 20px;
+}
+.asndd-tab-content {
+    display: none;
+}
+.asndd-tab-active {
+    display: block;
+}
+
+/* Layout Grid */
+.asndd-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px;
+}
+.asndd-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+@media (max-width: 782px) {
+    .asndd-grid-2, .asndd-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.asndd-mt-10 { margin-top: 10px; }
+.asndd-mt-20 { margin-top: 20px; }
+
+/* Box Container */
+.asndd-box {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 8px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.asndd-box h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+.asndd-box h3 .dashicons {
+    color: #007cba;
+}
+
+/* Tables */
+.asndd-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 5px;
+}
+.asndd-table th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.asndd-table th.col-num,
+.asndd-table td.col-num {
+    text-align: center;
+    width: 110px;
+}
+.asndd-table th.col-total,
+.asndd-table td.col-total {
+    background: #f1f5f9;
+    font-weight: 700;
+    color: #0f172a;
+}
+.asndd-input-num {
+    width: 80px !important;
+    text-align: center;
+    padding: 3px 6px !important;
+    font-size: 13px !important;
+    border-radius: 4px !important;
+}
+.asndd-input-num:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 1px #2563eb !important;
+}
+.asndd-row-total {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+}
+.asndd-tfoot-total th {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    font-size: 13px !important;
+}
+.asndd-table-scroll {
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+/* Charts */
+.asndd-chart-container {
+    position: relative;
+    height: 320px;
+    width: 100%;
+}
+.asndd-chart-square {
+    height: 260px;
+}
+
+/* Modals */
+.asndd-modal {
+    display: none;
+    position: fixed;
+    z-index: 100000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    align-items: center;
+    justify-content: center;
+}
+.asndd-modal-active {
+    display: flex;
+}
+.asndd-modal-content {
+    background-color: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    overflow: hidden;
+    animation: asnddFadeIn 0.2s ease;
+}
+@keyframes asnddFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+.asndd-modal-header {
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.asndd-modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #0f172a;
+}
+.asndd-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #64748b;
+}
+.asndd-modal-body {
+    padding: 20px;
+}
+.asndd-modal-footer {
+    padding: 12px 20px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Field Group */
+.asndd-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}

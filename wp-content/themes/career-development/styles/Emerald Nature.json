@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "title": "Emerald Nature",
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "primary",
+          "color": "#0A8754",
+          "name": "Primary"
+        },
+        {
+          "slug": "secondary",
+          "color": "#F1FFF8",
+          "name": "Secondary"
+        },
+        {
+          "slug": "heading",
+          "color": "#173D30",
+          "name": "Heading"
+        },
+        {
+          "slug": "text-color",
+          "color": "#173D30B2",
+          "name": "Text Color"
+        },
+        {
+          "slug": "border-color",
+          "color": "#CFE5DB",
+          "name": "Border Color"
+        },
+        {
+          "slug": "background",
+          "color": "#FFFFFF",
+          "name": "Background"
+        },
+        {
+          "slug": "body-text",
+          "color": "#1C1C1C",
+          "name": "Body Text"
+        },
+        {
+          "slug": "foreground",
+          "color": "#000000",
+          "name": "Foreground"
+        }
+      ]
+    }
+  }
+}

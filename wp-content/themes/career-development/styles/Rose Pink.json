@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "title": "Rose Pink",
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "primary",
+          "color": "#E63973",
+          "name": "Primary"
+        },
+        {
+          "slug": "secondary",
+          "color": "#FFF2F7",
+          "name": "Secondary"
+        },
+        {
+          "slug": "heading",
+          "color": "#3B1C28",
+          "name": "Heading"
+        },
+        {
+          "slug": "text-color",
+          "color": "#3B1C28B2",
+          "name": "Text Color"
+        },
+        {
+          "slug": "border-color",
+          "color": "#F0D5DF",
+          "name": "Border Color"
+        },
+        {
+          "slug": "background",
+          "color": "#FFFFFF",
+          "name": "Background"
+        },
+        {
+          "slug": "body-text",
+          "color": "#222222",
+          "name": "Body Text"
+        },
+        {
+          "slug": "foreground",
+          "color": "#000000",
+          "name": "Foreground"
+        }
+      ]
+    }
+  }
+}

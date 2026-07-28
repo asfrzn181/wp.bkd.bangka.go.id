@@ -1,0 +1,7 @@
+
+
+.lowongan-fieldset{clear:both;border-bottom:1px solid #eee;padding:5px 0;width:100%;float:left}
+.lowongan-label{color:#47617a;width:19.852941176470587%;float:left;text-align:right;padding:0 15px 0 0;font-family:'NeoSansIntelMedium',Tahoma,"Open Sans",Verdana,Arial,serif}
+.lowongan-field{width:77.94117647058823%;float:right;text-align:left}.lowongan-field p{margin:0 0 10px 0}
+.lowongan-attach{padding-left:15px;background:transparent url(images/icon-attach.png) no-repeat left center}
+@media only screen and (max-width:800px){#head{text-align:center}#head #site-title{display:block;text-align:center;float:none} #head img{float:none;display:block;margin:5px auto 0 auto} #hero{margin-bottom:0} #content-wrap{width:100%;margin-bottom:10px} #content{padding:20px 20px}#content .date{float:none} .lowongan-fieldset{border:none;padding-bottom:15px} .lowongan-label{width:auto;float:none;text-align:left;background:#f1f1f1;padding:4px 10px;border:1px solid #eee;border-radius:4px;margin-bottom:10px} .lowongan-field{width:100%;float:none;word-break:break-all}}@media only screen and (max-width:640px){}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "title": "Rose Pink",
+  "version": 2,
+  "settings": {
+    "color": {
+			"palette": [
+				{
+					"color": "#E85D75",
+					"name": "Accent",
+					"slug": "accent"
+				},
+				{
+					"color": "#F8B4C4",
+					"name": "Secaccent",
+					"slug": "secaccent"
+				},
+				{
+					"color": "#5B4250",
+					"name": "Thirdaccent",
+					"slug": "thirdaccent"
+				},
+				{
+					"color": "#2F1D28",
+					"name": "Forthaccent",
+					"slug": "forthaccent"
+				},
+				{
+					"color": "#FFFFFF",
+					"name": "Background",
+					"slug": "background"
+				},
+				{
+					"color": "#FFFDFD",
+					"name": "Fourground",
+					"slug": "fourground"
+				},
+				{
+					"color": "#FFF1F4",
+					"name": "Secbackground",
+					"slug": "secbackground"
+				},
+				{
+					"color": "#111111",
+					"name": "primary",
+					"slug": "primary"
+				},
+				{
+					"color": "#FFFFFF",
+					"name": "Secondary",
+					"slug": "secondary"
+				},
+				{
+					"color": "#352733",
+					"name": "tertiary",
+					"slug": "tertiary"
+				}
+			],
+			"gradients":[
+				{
+					"slug": "primary-gradient",
+					"gradient": "linear-gradient(180deg, rgb(17, 17, 17) 5%, rgb(131, 164, 212) 30%, rgb(182, 251, 255) 55%, rgb(17, 17, 17) 100%);",
+					"name": "Primary Gradient"
+				}
+			]
+    }
+  }
+}

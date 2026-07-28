@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "title": "Royal Purple",
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "primary",
+          "color": "#7B2CBF",
+          "name": "Primary"
+        },
+        {
+          "slug": "secondary",
+          "color": "#F7F0FF",
+          "name": "Secondary"
+        },
+        {
+          "slug": "heading",
+          "color": "#24123A",
+          "name": "Heading"
+        },
+        {
+          "slug": "text-color",
+          "color": "#24123AB2",
+          "name": "Text Color"
+        },
+        {
+          "slug": "border-color",
+          "color": "#DDD1F0",
+          "name": "Border Color"
+        },
+        {
+          "slug": "background",
+          "color": "#FFFFFF",
+          "name": "Background"
+        },
+        {
+          "slug": "body-text",
+          "color": "#1D1D1D",
+          "name": "Body Text"
+        },
+        {
+          "slug": "foreground",
+          "color": "#000000",
+          "name": "Foreground"
+        }
+      ]
+    }
+  }
+}

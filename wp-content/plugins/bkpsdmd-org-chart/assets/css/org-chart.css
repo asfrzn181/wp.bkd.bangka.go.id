@@ -1,0 +1,466 @@
+/* ==========================================================
+   org-chart.css — Frontend Struktur Organisasi
+   BKPSDMD Bangka — Org Chart Design
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ---- Root Variabel Warna Per Level ---- */
+:root {
+    --org-color-0:   #0a3d7c;  /* Kepala Badan - biru tua */
+    --org-color-1a:  #1565c0;  /* Sekretaris/Bidang - biru */
+    --org-color-1b:  #1976d2;
+    --org-color-2:   #0288d1;  /* Kasubbag - biru muda */
+    --org-color-3:   #0097a7;  /* Staf - teal */
+    --org-line:      #93c5fd;  /* Warna garis */
+    --org-line-dark: #1565c0;
+    --org-bg:        #f0f6ff;
+    --org-shadow:    rgba(10,61,124,0.15);
+}
+
+/* ---- Wrap Utama ---- */
+.bkpsdmd-org-wrap {
+    width: 100%;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    position: relative;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* ---- Header & Kontrol ---- */
+.bkpsdmd-org-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 2px solid var(--org-color-0);
+}
+.bkpsdmd-org-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--org-color-0);
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+.bkpsdmd-org-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.bkpsdmd-ctrl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: 1.5px solid #dbeafe;
+    border-radius: 8px;
+    background: #fff;
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+.bkpsdmd-ctrl-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.bkpsdmd-ctrl-btn:hover {
+    background: #1d4ed8;
+    color: #fff;
+    border-color: #1d4ed8;
+}
+#bkpsdmd-zoom-in, #bkpsdmd-zoom-out, #bkpsdmd-zoom-reset { padding: 6px 9px; }
+
+/* ---- Canvas Area ---- */
+.bkpsdmd-org-canvas-wrap {
+    overflow: auto;
+    border: 2px solid #dbeafe;
+    border-radius: 20px;
+    background-color: #f8faff;
+    background-image:
+        radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+    background-size: 28px 28px;
+    min-height: 450px;
+    cursor: grab;
+    position: relative;
+}
+.bkpsdmd-org-canvas-wrap:active { cursor: grabbing; }
+.bkpsdmd-org-canvas {
+    display: inline-block;
+    min-width: 100%;
+    padding: 48px 60px 72px;
+    transform-origin: top center;
+    transition: transform 0.2s ease;
+}
+
+/* ================================================================
+   POHON ORG CHART — CSS Tree Layout (Classic Horizontal)
+   ================================================================ */
+
+.bkpsdmd-org-tree {
+    display: flex;
+    justify-content: center;
+}
+
+/* ---- Daftar node (ul) ---- */
+.bkpsdmd-tree-root,
+.bkpsdmd-tree-children {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    /* Garis horizontal di atas semua anak */
+    padding-top: 32px;
+}
+
+/* Garis vertikal dari parent ke garis horizontal */
+.bkpsdmd-tree-children::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 32px;
+    background: var(--org-line-dark);
+    transform: translateX(-50%);
+}
+
+/* Garis horizontal menghubungkan seluruh sibling */
+.bkpsdmd-tree-children::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 32px;
+    left: calc(50% - 50% + 50px);
+    right: calc(50% - 50% + 50px);
+    height: 2px;
+    background: var(--org-line);
+    /* Dari kiri anak pertama ke kanan anak terakhir */
+    left: 0;
+    right: 0;
+}
+/* Untuk single child, tidak perlu garis horizontal */
+.bkpsdmd-tree-children:has(> li:only-child)::after {
+    display: none;
+}
+.bkpsdmd-tree-children:has(> li:only-child) {
+    padding-top: 32px;
+}
+
+/* ---- Item node (li) ---- */
+.bkpsdmd-tree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 0 8px;
+    flex-shrink: 0;
+}
+
+/* Garis vertikal turun dari garis horizontal ke kartu */
+.bkpsdmd-tree-children > .bkpsdmd-tree-node::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 32px;
+    background: var(--org-line);
+    transform: translateX(-50%);
+}
+/* Single child: garis langsung dari parent */
+.bkpsdmd-tree-children:has(> li:only-child) > .bkpsdmd-tree-node::before {
+    background: var(--org-line-dark);
+}
+
+/* Garis vertikal turun dari kartu node ke children */
+.bkpsdmd-tree-node.has-children > .bkpsdmd-node-outer {
+    position: relative;
+}
+.bkpsdmd-tree-node.has-children > .bkpsdmd-node-outer::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 32px;
+    background: var(--org-line-dark);
+    margin: 0 auto;
+}
+
+/* ---- Outer wrapper kartu (untuk line connector) ---- */
+.bkpsdmd-node-outer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ================================================================
+   KARTU NODE
+   ================================================================ */
+.bkpsdmd-node-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 12px 12px;
+    border-radius: 14px;
+    width: 155px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1),
+                box-shadow 0.25s ease;
+    border: 2px solid transparent;
+    background: #fff;
+    box-sizing: border-box;
+}
+.bkpsdmd-node-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    z-index: 10;
+}
+
+/* Level 0 — Kepala Badan */
+.bkpsdmd-node-level-0 {
+    background: linear-gradient(150deg, var(--org-color-0) 0%, #1565c0 100%);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(10,61,124,0.40), 0 0 0 3px rgba(255,255,255,0.2);
+    width: 190px;
+    border-color: rgba(255,255,255,0.2);
+}
+.bkpsdmd-node-level-0:hover { box-shadow: 0 16px 40px rgba(10,61,124,0.5); }
+.bkpsdmd-node-level-0 .bkpsdmd-node-jabatan { color: #fff; font-size: 11.5px; }
+.bkpsdmd-node-level-0 .bkpsdmd-node-nama    { color: rgba(255,255,255,0.92); }
+.bkpsdmd-node-level-0 .bkpsdmd-node-nip     { color: rgba(255,255,255,0.65); }
+.bkpsdmd-node-level-0 .bkpsdmd-node-avatar  { border-color: rgba(255,255,255,0.5); }
+.bkpsdmd-node-level-0 .bkpsdmd-node-badge   { background: rgba(255,255,255,0.2); color: #fff; }
+
+/* Level 1 — Sekretaris & Kepala Bidang */
+.bkpsdmd-node-level-1 {
+    background: linear-gradient(145deg, #1565c0, #1976d2);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(21,101,192,0.35);
+    width: 165px;
+    border-color: rgba(255,255,255,0.15);
+}
+.bkpsdmd-node-level-1:hover { box-shadow: 0 10px 28px rgba(21,101,192,0.5); }
+.bkpsdmd-node-level-1 .bkpsdmd-node-jabatan { color: #fff; font-size: 11px; }
+.bkpsdmd-node-level-1 .bkpsdmd-node-nama    { color: rgba(255,255,255,0.9); }
+.bkpsdmd-node-level-1 .bkpsdmd-node-nip     { color: rgba(255,255,255,0.6); }
+.bkpsdmd-node-level-1 .bkpsdmd-node-avatar  { border-color: rgba(255,255,255,0.4); }
+.bkpsdmd-node-level-1 .bkpsdmd-node-badge   { background: rgba(255,255,255,0.18); color: #fff; }
+
+/* Level 2 — Kasubbag + Fungsional Sekretaris */
+.bkpsdmd-node-level-2 {
+    background: #fff;
+    border-color: #1976d2;
+    box-shadow: 0 4px 14px rgba(25,118,210,0.18);
+    width: 148px;
+}
+.bkpsdmd-node-level-2:hover { box-shadow: 0 8px 22px rgba(25,118,210,0.32); border-color: var(--org-color-0); }
+.bkpsdmd-node-level-2 .bkpsdmd-node-jabatan { color: #1a2d6e; font-size: 11px; }
+.bkpsdmd-node-level-2 .bkpsdmd-node-badge   { background: #e8f0fe; color: #1565c0; }
+
+/* Level 3 — Staf & Fungsional Level Bawah */
+.bkpsdmd-node-level-3 {
+    background: #f8faff;
+    border-color: #93c5fd;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.1);
+    width: 136px;
+    padding: 10px 8px;
+}
+.bkpsdmd-node-level-3:hover { box-shadow: 0 6px 16px rgba(25,118,210,0.22); border-color: #1976d2; }
+.bkpsdmd-node-level-3 .bkpsdmd-node-jabatan { font-size: 10.5px; }
+.bkpsdmd-node-level-3 .bkpsdmd-node-avatar  { width: 40px; height: 40px; }
+
+/* Avatar */
+.bkpsdmd-node-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(255,255,255,0.5);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+    background: #e8f0fe;
+}
+.bkpsdmd-node-level-2 .bkpsdmd-node-avatar,
+.bkpsdmd-node-level-3 .bkpsdmd-node-avatar {
+    border-color: #1976d2;
+}
+.bkpsdmd-node-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+}
+
+/* Badge jabatan fungsional */
+.bkpsdmd-node-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: #e8f0fe;
+    color: #1565c0;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
+}
+
+/* Info teks */
+.bkpsdmd-node-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+}
+.bkpsdmd-node-jabatan {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--org-color-0);
+    display: block;
+}
+.bkpsdmd-node-nama {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #374151;
+    display: block;
+    line-height: 1.3;
+}
+.bkpsdmd-node-nip {
+    font-size: 9.5px;
+    color: #9ca3af;
+    display: block;
+    font-family: monospace;
+}
+
+/* Tombol Collapse/Expand */
+.bkpsdmd-toggle-btn {
+    position: absolute;
+    bottom: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--org-line-dark);
+    background: #fff;
+    color: var(--org-line-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.2s ease;
+    padding: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.bkpsdmd-toggle-btn svg { width: 11px; height: 11px; pointer-events: none; }
+.bkpsdmd-toggle-btn:hover {
+    background: var(--org-line-dark);
+    color: #fff;
+    transform: translateX(-50%) scale(1.2);
+}
+
+/* Collapsed state */
+.bkpsdmd-tree-node.is-collapsed > .bkpsdmd-tree-children,
+.bkpsdmd-tree-node.is-collapsed > .bkpsdmd-node-outer > .bkpsdmd-tree-children {
+    display: none;
+}
+.bkpsdmd-tree-node.is-collapsed > .bkpsdmd-node-outer::after {
+    display: none;
+}
+
+/* ================================================================
+   HOVER POPUP FOTO
+   ================================================================ */
+.bkpsdmd-photo-popup {
+    position: fixed;
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.bkpsdmd-photo-popup.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+.bkpsdmd-popup-inner {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.22), 0 0 0 1.5px rgba(10,61,124,0.1);
+    overflow: hidden;
+    width: 230px;
+}
+.bkpsdmd-popup-img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 3px solid var(--org-color-0);
+}
+.bkpsdmd-popup-info {
+    padding: 12px 16px 14px;
+    background: linear-gradient(135deg, var(--org-color-0), #1565c0);
+    color: #fff;
+}
+.bkpsdmd-popup-jabatan {
+    font-size: 12.5px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    line-height: 1.3;
+    opacity: 0.95;
+}
+.bkpsdmd-popup-nama {
+    font-size: 11.5px;
+    margin: 0 0 3px;
+    opacity: 0.88;
+    font-weight: 500;
+}
+.bkpsdmd-popup-nip {
+    font-size: 10px;
+    margin: 0;
+    opacity: 0.65;
+    font-family: monospace;
+    letter-spacing: 0.3px;
+}
+
+/* ================================================================
+   JABATAN FUNGSIONAL — tampilan khusus (grup)
+   ================================================================ */
+.bkpsdmd-node-card.is-fungsional {
+    border-style: dashed;
+    opacity: 0.9;
+}
+.bkpsdmd-node-card.is-fungsional:hover { opacity: 1; }
+
+/* ---- Empty State ---- */
+.bkpsdmd-org-empty {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+    border: 2px dashed #e5e7eb;
+    border-radius: 14px;
+    background: #f9fafb;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 768px) {
+    .bkpsdmd-org-header { flex-direction: column; align-items: flex-start; }
+    .bkpsdmd-org-canvas-wrap { min-height: 300px; }
+    .bkpsdmd-node-card { width: 120px !important; min-width: 120px !important; padding: 10px 8px; }
+    .bkpsdmd-node-avatar { width: 40px !important; height: 40px !important; }
+    .bkpsdmd-node-jabatan { font-size: 10px !important; }
+    .bkpsdmd-ctrl-btn span { display: none; }
+}

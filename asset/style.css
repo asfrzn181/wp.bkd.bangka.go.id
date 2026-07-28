@@ -1,0 +1,6 @@
+@import url("css/main.css");
+.box_info{ border:4px solid #8a8a8a;  color:#000; background:#fff; height: 240px; z-index: 9999; width:550px; position:fixed; left:50%; top:36%; margin-left:-283px; margin-top:40px; }
+.box_info .div{ text-align: right; width: 550px; height: 6px; }
+.box_info .div img{ cursor:pointer }
+.box_info .title_box{ text-align: center; width:100% !important; font-weight:bold !important; color:#000 !important; font-size:22px !important; }
+.box_info .content_box{ text-align: center; }

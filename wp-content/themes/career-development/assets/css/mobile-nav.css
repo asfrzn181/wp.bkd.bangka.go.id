@@ -1,0 +1,425 @@
+/* =====================================================
+   Mobile Navigation & Logo Fix
+   Tema: career-development / BKPSDMD Bangka
+   ===================================================== */
+
+/* =====================================================
+   1. LOGO — Ukuran responsif di semua perangkat
+   ===================================================== */
+
+/* Desktop: biarkan normal */
+.main-header .wp-block-site-title,
+.main-header .wp-block-site-logo {
+    max-width: 100%;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    /* wp-block-site-logo (Site Logo block) */
+    .main-header .wp-block-site-logo img,
+    .main-header .wp-site-logo img {
+        max-width: 140px !important;
+        height: auto !important;
+    }
+    /* wp-block-image (Image block dipakai sebagai logo) */
+    .main-header .wp-block-column:first-child .wp-block-image img,
+    .main-header .wp-block-column:first-child figure img {
+        max-width: 140px !important;
+        width: 140px !important;
+        height: auto !important;
+    }
+    .main-header .wp-block-site-title {
+        font-size: 18px !important;
+    }
+}
+
+/* Smartphone */
+@media (max-width: 768px) {
+    /* wp-block-site-logo */
+    .main-header .wp-block-site-logo img,
+    .main-header .wp-site-logo img {
+        max-width: 90px !important;
+        height: auto !important;
+    }
+    /* wp-block-image dipakai sebagai logo */
+    .main-header .wp-block-column:first-child .wp-block-image,
+    .main-header .wp-block-column:first-child figure.wp-block-image {
+        max-width: 90px !important;
+        margin: 0 !important;
+    }
+    .main-header .wp-block-column:first-child .wp-block-image img,
+    .main-header .wp-block-column:first-child figure.wp-block-image img {
+        max-width: 90px !important;
+        width: 90px !important;
+        height: auto !important;
+        object-fit: contain !important;
+    }
+    .main-header .wp-block-site-title {
+        font-size: 15px !important;
+        line-height: 1.3 !important;
+    }
+    /* Header section padding lebih kecil */
+    .main-header .wp-block-columns {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+    /* Kolom logo: shrink sesuai konten */
+    .main-header .wp-block-column:first-child {
+        flex-basis: auto !important;
+        flex: 0 0 auto !important;
+        min-width: 0 !important;
+        width: auto !important;
+    }
+}
+
+/* =====================================================
+   2. HAMBURGER BUTTON
+   Desktop: SEMBUNYIKAN
+   Mobile:  Tampilkan, perbesar & rapikan
+   ===================================================== */
+
+/* DESKTOP — sembunyikan hamburger, tampilkan nav normal */
+@media (min-width: 769px) {
+    .main-header .wp-block-navigation__responsive-container-open {
+        display: none !important;
+    }
+    /* Pastikan container nav desktop tampil */
+    .main-header .wp-block-navigation__responsive-container:not(.is-menu-open) {
+        display: contents !important;
+    }
+}
+
+/* MOBILE — tampilkan hamburger */
+@media (max-width: 768px) {
+    .main-header .wp-block-navigation__responsive-container-open,
+    .main-header button.wp-block-navigation__responsive-container-open {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 8px;
+        border-radius: 8px;
+        background: var(--wp--preset--color--primary, #FF9A04);
+        border: none;
+        cursor: pointer;
+        transition: filter .2s ease;
+        -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
+    }
+    .main-header .wp-block-navigation__responsive-container-open:hover {
+        filter: brightness(1.08);
+    }
+    .main-header .wp-block-navigation__responsive-container-open svg {
+        width: 22px !important;
+        height: 22px !important;
+        fill: #fff !important;
+        stroke: #fff !important;
+        color: #fff !important;
+    }
+}
+
+/* =====================================================
+   3. CLOSE BUTTON di overlay mobile
+   ===================================================== */
+.main-header .wp-block-navigation__responsive-container-close,
+.main-header button.wp-block-navigation__responsive-container-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.15);
+    border: 2px solid rgba(255,255,255,.4);
+    cursor: pointer;
+    transition: background .2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.main-header .wp-block-navigation__responsive-container-close:hover {
+    background: rgba(255,255,255,.25);
+}
+.main-header .wp-block-navigation__responsive-container-close svg,
+.main-header .wp-block-navigation__responsive-container-close-icon {
+    width: 20px !important;
+    height: 20px !important;
+    fill: #fff !important;
+    stroke: #fff !important;
+}
+
+/* =====================================================
+   4. MOBILE MENU OVERLAY — Full screen, tampilan premium
+   ===================================================== */
+.main-header .wp-block-navigation__responsive-container.is-menu-open {
+    background: var(--wp--preset--color--heading, #2A2A2A) !important;
+    padding: 24px 28px 40px !important;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* Smooth open animation */
+    animation: cdNavSlideIn .28s cubic-bezier(.25,.46,.45,.94) both;
+}
+
+@keyframes cdNavSlideIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Header overlay (baris logo + tombol close) */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__responsive-dialog {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+/* Logo di dalam overlay */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-site-title a,
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-site-logo {
+    color: #fff !important;
+    filter: brightness(10);
+}
+
+/* =====================================================
+   5. ITEM MENU UTAMA di mobile
+   ===================================================== */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    margin-top: 24px;
+    padding: 0;
+}
+
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item {
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    width: 100%;
+}
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item:first-child {
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+
+/* Link menu utama */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item__content,
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item > a {
+    display: flex !important;
+    align-items: center;
+    width: 100% !important;
+    padding: 14px 4px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    transition: color .18s ease, padding-left .18s ease;
+}
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item__content:hover,
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item > a:hover {
+    color: var(--wp--preset--color--primary, #FF9A04) !important;
+    padding-left: 10px !important;
+}
+
+/* Item aktif / current */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item.current-menu-item > .wp-block-navigation-item__content,
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item.current-menu-item > a {
+    color: var(--wp--preset--color--primary, #FF9A04) !important;
+}
+
+/* =====================================================
+   6. SUBMENU di mobile — tampilan accordion
+   ===================================================== */
+
+/* Tombol toggle submenu */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-icon {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    padding: 4px;
+    color: rgba(255,255,255,.6);
+    transition: transform .2s ease, color .18s ease;
+}
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    stroke: currentColor !important;
+    fill: none !important;
+}
+/* Rotasi arrow saat submenu terbuka */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-item.open-on-click.is-menu-open > .wp-block-navigation-item__content
+.wp-block-navigation__submenu-icon,
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation-submenu.is-menu-open > .wp-block-navigation-item__content
+.wp-block-navigation__submenu-icon {
+    transform: rotate(180deg);
+    color: var(--wp--preset--color--primary, #FF9A04);
+}
+
+/* Container submenu */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-container {
+    background: rgba(0,0,0,.2) !important;
+    border-radius: 8px;
+    margin: 0 0 6px 0;
+    padding: 4px 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: static !important; /* override absolute positioning */
+    width: 100% !important;
+    min-width: unset !important;
+}
+
+/* Item submenu */
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-container .wp-block-navigation-item {
+    border-bottom: none;
+    border-top: none;
+    width: 100%;
+}
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-container .wp-block-navigation-item__content,
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-container .wp-block-navigation-item > a {
+    padding: 11px 20px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    color: rgba(255,255,255,.75) !important;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    transition: color .15s ease, padding-left .15s ease;
+}
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-container .wp-block-navigation-item__content::before,
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-container .wp-block-navigation-item > a::before {
+    content: '–';
+    color: var(--wp--preset--color--primary, #FF9A04);
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-container .wp-block-navigation-item__content:hover,
+.main-header .wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__submenu-container .wp-block-navigation-item > a:hover {
+    color: #fff !important;
+    padding-left: 26px !important;
+}
+
+/* =====================================================
+   7. DESKTOP SUBMENU — Perbaikan dropdown desktop
+   ===================================================== */
+@media (min-width: 769px) {
+    .main-header .wp-block-navigation__submenu-container {
+        border-radius: 10px !important;
+        border: 1px solid rgba(0,0,0,.08) !important;
+        box-shadow: 0 8px 30px rgba(0,0,0,.12) !important;
+        padding: 6px 0 !important;
+        min-width: 200px !important;
+        background: #fff !important;
+        overflow: hidden;
+        animation: cdSubFadeIn .18s ease both;
+    }
+    @keyframes cdSubFadeIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .main-header .wp-block-navigation__submenu-container
+    .wp-block-navigation-item__content,
+    .main-header .wp-block-navigation__submenu-container
+    .wp-block-navigation-item > a {
+        padding: 10px 18px !important;
+        font-size: 13.5px !important;
+        color: var(--wp--preset--color--heading, #2A2A2A) !important;
+        white-space: nowrap;
+        display: block;
+        text-decoration: none !important;
+        transition: background .15s ease, color .15s ease, padding-left .15s ease;
+    }
+    .main-header .wp-block-navigation__submenu-container
+    .wp-block-navigation-item__content:hover,
+    .main-header .wp-block-navigation__submenu-container
+    .wp-block-navigation-item > a:hover {
+        background: #fff8ee !important;
+        color: var(--wp--preset--color--primary, #FF9A04) !important;
+        padding-left: 24px !important;
+    }
+    .main-header .wp-block-navigation__submenu-container
+    .wp-block-navigation-item {
+        border-bottom: 1px solid rgba(0,0,0,.05) !important;
+    }
+    .main-header .wp-block-navigation__submenu-container
+    .wp-block-navigation-item:last-child {
+        border-bottom: none !important;
+    }
+}
+
+/* =====================================================
+   8. HEADER LAYOUT di mobile — satu baris rapi
+   ===================================================== */
+@media (max-width: 768px) {
+    /* Satu baris: logo | ... | hamburger */
+    .main-header .wp-block-columns {
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+    }
+    /* Sembunyikan kolom social links di mobile */
+    .main-header .wp-block-column:last-child:has(.wp-block-social-links) {
+        display: none !important;
+    }
+    /* Kolom navigasi rata kanan, flex auto */
+    .main-header .wp-block-column:has(.wp-block-navigation) {
+        display: flex !important;
+        justify-content: flex-end !important;
+        flex-basis: auto !important;
+        flex: 1 !important;
+    }
+    /* Header section shadow */
+    .main-header .header-section {
+        border-radius: 0 0 16px 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    }
+    /* Pastikan header tidak melampaui viewport */
+    .main-header {
+        width: 100% !important;
+        overflow: hidden;
+    }
+}
+
+
+/* =====================================================
+   9. SCROLL BEHAVIOR — Cegah body scroll saat menu buka
+   ===================================================== */
+body:has(.wp-block-navigation__responsive-container.is-menu-open) {
+    overflow: hidden;
+}
+
+/* =====================================================
+   10. TOUCH — Hapus highlight biru di iOS/Android
+   ===================================================== */
+.main-header .wp-block-navigation-item__content,
+.main-header .wp-block-navigation__responsive-container-open,
+.main-header .wp-block-navigation__responsive-container-close {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+.main-header .wp-block-navigation-item__content:focus-visible,
+.main-header .wp-block-navigation__responsive-container-open:focus-visible {
+    outline: 2px solid var(--wp--preset--color--primary, #FF9A04);
+    outline-offset: 3px;
+}

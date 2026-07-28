@@ -1,0 +1,729 @@
+# Copyright (C) 2026 Creta Themes
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Career Development 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/career-development\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-05-13T11:51:11+05:30\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: career-development\n"
+
+#. Theme Name of the theme
+#: style.css
+#: inc/block-patterns.php:11
+msgid "Career Development"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://www.cretathemes.com/products/career-development"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "The Career Development theme is designed with a structured and responsive layout for presenting educational, training, and professional growth-related content in an organized manner. It includes customizable homepage sections, banner areas, content blocks, testimonial sections, and contact information integration. The theme supports navigation menus, widget-ready areas, social media links, and customization options for colors, typography, and layout settings. It is compatible with commonly used plugins and maintains consistent performance across different screen sizes and devices. The homepage layout allows clear presentation of programs, articles, resources, schedules, and informational content. Additional features include blog integration, image display options, footer customization, and flexible section arrangements for maintaining a clean and user-friendly website structure."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "Creta Themes"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://www.cretathemes.com/"
+msgstr ""
+
+#: inc/block-patterns.php:12
+msgid "Pages"
+msgstr ""
+
+#: inc/block-styles.php:17
+msgid "No Padding"
+msgstr ""
+
+#: inc/block-styles.php:26
+#: inc/block-styles.php:44
+#: inc/block-styles.php:53
+#: inc/block-styles.php:63
+#: inc/block-styles.php:73
+#: inc/block-styles.php:82
+msgid "Theme Style"
+msgstr ""
+
+#: inc/block-styles.php:35
+msgid "Plain"
+msgstr ""
+
+#: inc/icon-function.php:26
+msgid "Please define default parameters in the form of an array."
+msgstr ""
+
+#: inc/icon-function.php:31
+msgid "Please define an SVG icon filename."
+msgstr ""
+
+#: patterns/404.php
+msgctxt "Pattern title"
+msgid "404 Page"
+msgstr ""
+
+#: patterns/404.php:9
+msgid "404"
+msgstr ""
+
+#: patterns/404.php:13
+msgid "Oops! That page cannot be found"
+msgstr ""
+
+#: patterns/archive-header-with-background.php
+msgctxt "Pattern title"
+msgid "Archive Header With Background"
+msgstr ""
+
+#: patterns/archive-header-with-background.php:10
+#: patterns/default-header.php:9
+#: patterns/main-banner.php:33
+#: patterns/post-header-with-background.php:9
+#: patterns/search-header-with-background.php:9
+msgid "Banner Image"
+msgstr ""
+
+#: patterns/blog-section.php
+msgctxt "Pattern title"
+msgid "Blog Section"
+msgstr ""
+
+#: patterns/blog-section.php:9
+msgid "Our Blogs"
+msgstr ""
+
+#: patterns/blog-section.php:13
+msgid "Latest News"
+msgstr ""
+
+#: patterns/default-header.php
+msgctxt "Pattern title"
+msgid "Default Header"
+msgstr ""
+
+#: patterns/expert-section.php
+msgctxt "Pattern title"
+msgid "Expert Section"
+msgstr ""
+
+#: patterns/expert-section.php:9
+msgid "Team Expert"
+msgstr ""
+
+#: patterns/expert-section.php:13
+msgid "Meet Our Career"
+msgstr ""
+
+#: patterns/expert-section.php:13
+msgid "Experts"
+msgstr ""
+
+#: patterns/expert-section.php:19
+#: patterns/expert-section.php:45
+#: patterns/expert-section.php:71
+#: patterns/expert-section.php:97
+msgid "Expert Image"
+msgstr ""
+
+#: patterns/expert-section.php:24
+msgid "Brooklyn Simmons"
+msgstr ""
+
+#: patterns/expert-section.php:28
+msgid "Leadership Development Coach"
+msgstr ""
+
+#: patterns/expert-section.php:50
+msgid "Marx Hershey"
+msgstr ""
+
+#: patterns/expert-section.php:54
+msgid "Interview Strategy Expert"
+msgstr ""
+
+#: patterns/expert-section.php:76
+msgid "Ralph Edwards"
+msgstr ""
+
+#: patterns/expert-section.php:80
+msgid "Senior Career Coach"
+msgstr ""
+
+#: patterns/expert-section.php:102
+msgid "Gorjona Hiller"
+msgstr ""
+
+#: patterns/expert-section.php:106
+msgid "Junior Career Coach"
+msgstr ""
+
+#: patterns/footer-columns.php
+msgctxt "Pattern title"
+msgid "Footer Columns"
+msgstr ""
+
+#: patterns/footer-columns.php:22
+msgid "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown prpoppins took a galley of type and scrambled it to make a type specimen book"
+msgstr ""
+
+#: patterns/footer-columns.php:28
+msgid "Our Link"
+msgstr ""
+
+#: patterns/footer-columns.php:45
+#: patterns/main-header.php:26
+msgid "Contact Us"
+msgstr ""
+
+#: patterns/footer-columns.php:49
+msgid "your location here"
+msgstr ""
+
+#: patterns/footer-columns.php:53
+msgid "+12 3456789123"
+msgstr ""
+
+#: patterns/footer-columns.php:57
+msgid "careercoacing@example.com"
+msgstr ""
+
+#: patterns/footer-columns.php:63
+msgid "Our Gallery"
+msgstr ""
+
+#: patterns/footer-columns.php:68
+#: patterns/footer-columns.php:72
+#: patterns/footer-columns.php:76
+#: patterns/footer-columns.php:80
+#: patterns/sidebar.php:87
+#: patterns/sidebar.php:91
+#: patterns/sidebar.php:95
+#: patterns/sidebar.php:99
+msgid "Gallery Image"
+msgstr ""
+
+#: patterns/footer-columns.php:94
+msgid "Copyright © 2026 Career Development. All Right Reserved."
+msgstr ""
+
+#: patterns/main-banner.php
+msgctxt "Pattern title"
+msgid "Main Banner"
+msgstr ""
+
+#: patterns/main-banner.php:12
+msgid "WELCOME TO CareerElevate"
+msgstr ""
+
+#: patterns/main-banner.php:16
+msgid "Elevate Your"
+msgstr ""
+
+#: patterns/main-banner.php:16
+msgid "Career With"
+msgstr ""
+
+#: patterns/main-banner.php:16
+msgid "Expert Coaching"
+msgstr ""
+
+#: patterns/main-banner.php:20
+msgid "Get personalized career guidance, interview"
+msgstr ""
+
+#: patterns/main-banner.php:20
+msgid "preparation, and job search strategies to achieve your"
+msgstr ""
+
+#: patterns/main-banner.php:20
+msgid "professional goals faster."
+msgstr ""
+
+#: patterns/main-banner.php:25
+msgid "Book Free Consultation"
+msgstr ""
+
+#: patterns/main-banner.php:46
+msgid "Learn More About Career Development"
+msgstr ""
+
+#: patterns/main-header.php
+msgctxt "Pattern title"
+msgid "Main Header"
+msgstr ""
+
+#: patterns/main-header.php:16
+msgid "Home"
+msgstr ""
+
+#: patterns/main-header.php:18
+msgid "About Us"
+msgstr ""
+
+#: patterns/main-header.php:20
+msgid "Services"
+msgstr ""
+
+#: patterns/main-header.php:22
+msgid "Projects"
+msgstr ""
+
+#: patterns/main-header.php:24
+msgid "Team"
+msgstr ""
+
+#: patterns/post-header-with-background.php
+msgctxt "Pattern title"
+msgid "Post Header With Background"
+msgstr ""
+
+#: patterns/search-header-with-background.php
+msgctxt "Pattern title"
+msgid "Search Header With Background"
+msgstr ""
+
+#: patterns/search.php
+msgctxt "Pattern title"
+msgid "Search"
+msgstr ""
+
+#: patterns/search.php:42
+msgid "Sorry Nothing Found. Try searching..!!"
+msgstr ""
+
+#: patterns/sidebar.php
+msgctxt "Pattern title"
+msgid "Sidebar"
+msgstr ""
+
+#: patterns/sidebar.php:10
+msgid "Search"
+msgstr ""
+
+#: patterns/sidebar.php:18
+msgid "About"
+msgstr ""
+
+#: patterns/sidebar.php:22
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown prmontserrat took a galley of type and scrambled it to make a type specimen book."
+msgstr ""
+
+#: patterns/sidebar.php:26
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown prmontserrat took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+msgstr ""
+
+#: patterns/sidebar.php:32
+msgid "Archive"
+msgstr ""
+
+#: patterns/sidebar.php:40
+msgid "Categories"
+msgstr ""
+
+#: patterns/sidebar.php:48
+msgid "Recent Posts"
+msgstr ""
+
+#: patterns/sidebar.php:56
+msgid "Tags"
+msgstr ""
+
+#: patterns/sidebar.php:64
+msgid "Social Icons"
+msgstr ""
+
+#: patterns/sidebar.php:82
+msgid "Gallery"
+msgstr ""
+
+#: patterns/testimonial.php
+msgctxt "Pattern title"
+msgid "Testimonial"
+msgstr ""
+
+#: patterns/testimonial.php:12
+msgid "Our Testimonials"
+msgstr ""
+
+#: patterns/testimonial.php:16
+msgid "Feedback that motivates us to deliver better every day"
+msgstr ""
+
+#: patterns/testimonial.php:23
+#: patterns/testimonial.php:49
+#: patterns/testimonial.php:75
+msgid "Testimonial Image"
+msgstr ""
+
+#: patterns/testimonial.php:28
+msgid "Adrew William"
+msgstr ""
+
+#: patterns/testimonial.php:32
+#: patterns/testimonial.php:58
+#: patterns/testimonial.php:84
+msgid "London"
+msgstr ""
+
+#: patterns/testimonial.php:38
+#: patterns/testimonial.php:64
+#: patterns/testimonial.php:90
+msgid "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+msgstr ""
+
+#: patterns/testimonial.php:42
+#: patterns/testimonial.php:68
+#: patterns/testimonial.php:94
+msgid "Testimonial Star Image"
+msgstr ""
+
+#: patterns/testimonial.php:54
+msgid "Nancy Tyagi"
+msgstr ""
+
+#: patterns/testimonial.php:80
+msgid "John Simon"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Plus Jakarta Sans"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Upper Heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Normal"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Content Heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Site Title"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Post Title"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Semi Huge"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge (Display)"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Foreground and background"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Primary and Heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical foreground to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical background to foreground"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to foreground"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Projects Overlay"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Banner Overlay"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Header Overlay"
+msgstr ""
+
+#: theme.json
+#: styles/Emerald Nature.json
+#: styles/Luxury Gold.json
+#: styles/Modern Dark Cyan.json
+#: styles/Ocean Breeze.json
+#: styles/Rose Pink.json
+#: styles/Royal Purple.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr ""
+
+#: theme.json
+#: styles/Emerald Nature.json
+#: styles/Luxury Gold.json
+#: styles/Modern Dark Cyan.json
+#: styles/Ocean Breeze.json
+#: styles/Rose Pink.json
+#: styles/Royal Purple.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "text-color"
+msgstr ""
+
+#: theme.json
+#: styles/Emerald Nature.json
+#: styles/Luxury Gold.json
+#: styles/Modern Dark Cyan.json
+#: styles/Ocean Breeze.json
+#: styles/Rose Pink.json
+#: styles/Royal Purple.json
+msgctxt "Color name"
+msgid "Border Color"
+msgstr ""
+
+#: theme.json
+#: styles/Emerald Nature.json
+#: styles/Luxury Gold.json
+#: styles/Modern Dark Cyan.json
+#: styles/Ocean Breeze.json
+#: styles/Rose Pink.json
+#: styles/Royal Purple.json
+msgctxt "Color name"
+msgid "Background"
+msgstr ""
+
+#: theme.json
+#: styles/Emerald Nature.json
+#: styles/Luxury Gold.json
+#: styles/Modern Dark Cyan.json
+#: styles/Ocean Breeze.json
+#: styles/Rose Pink.json
+#: styles/Royal Purple.json
+msgctxt "Color name"
+msgid "Body Text"
+msgstr ""
+
+#: theme.json
+#: styles/Emerald Nature.json
+#: styles/Luxury Gold.json
+#: styles/Modern Dark Cyan.json
+#: styles/Ocean Breeze.json
+#: styles/Rose Pink.json
+#: styles/Royal Purple.json
+msgctxt "Color name"
+msgid "Foreground"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Main Header"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer Columns"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Post Content"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Page Content"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Sidebar"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blank"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Post (Sidebar on Left)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Post (No Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Post (No Header Image)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Page (Sidebar on Right)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Page (Sidebar on Left)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Page (No Header Image)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (Right Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (Left Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (No Sidebar)"
+msgstr ""
+
+#: styles/Emerald Nature.json
+msgctxt "Style variation name"
+msgid "Emerald Nature"
+msgstr ""
+
+#: styles/Emerald Nature.json
+#: styles/Luxury Gold.json
+#: styles/Modern Dark Cyan.json
+#: styles/Ocean Breeze.json
+#: styles/Rose Pink.json
+#: styles/Royal Purple.json
+msgctxt "Color name"
+msgid "Heading"
+msgstr ""
+
+#: styles/Emerald Nature.json
+#: styles/Luxury Gold.json
+#: styles/Modern Dark Cyan.json
+#: styles/Ocean Breeze.json
+#: styles/Rose Pink.json
+#: styles/Royal Purple.json
+msgctxt "Color name"
+msgid "Text Color"
+msgstr ""
+
+#: styles/Luxury Gold.json
+msgctxt "Style variation name"
+msgid "Luxury Gold"
+msgstr ""
+
+#: styles/Modern Dark Cyan.json
+msgctxt "Style variation name"
+msgid "Modern Dark Cyan"
+msgstr ""
+
+#: styles/Ocean Breeze.json
+msgctxt "Style variation name"
+msgid "Ocean Breeze"
+msgstr ""
+
+#: styles/Rose Pink.json
+msgctxt "Style variation name"
+msgid "Rose Pink"
+msgstr ""
+
+#: styles/Royal Purple.json
+msgctxt "Style variation name"
+msgid "Royal Purple"
+msgstr ""
