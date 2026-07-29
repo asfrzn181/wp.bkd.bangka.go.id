@@ -7,7 +7,7 @@ bkpsdmdBangka.zip
 wp-config.php
 .htaccess
 wp-content/uploads/
-/asset/
+#/asset/
 
 # ==========================================
 # FILE BESAR & BACKUP
