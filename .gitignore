@@ -5,7 +5,7 @@ bkpsdmdBangka.zip
 # DATA SERVER - tidak boleh tertimpa git pull
 # ==========================================
 wp-config.php
-.htaccess
+#.htaccess
 wp-content/uploads/
 #/asset/
 
