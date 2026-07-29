@@ -119,7 +119,9 @@ class WBR_SK {
 
     /**
      * Upload file SK yang sudah ditandatangani → status final
-     * Trigger batch generate petikan via WP Cron
+     *
+     * ALUR BARU: Sertifikat sudah ada (dibuat saat absensi), 
+     * yang perlu dilakukan hanya mengisi sk_id di semua petikan webinar ini.
      */
     public static function upload_signed( $sk_id, $file ) {
         global $wpdb;
@@ -143,13 +145,14 @@ class WBR_SK {
         $ext       = pathinfo( $file['name'], PATHINFO_EXTENSION );
         $filename  = 'sk-signed-' . $sk_id . '-' . time() . '.' . strtolower( $ext );
         $dest_dir  = WBR_UPLOAD . 'sk/';
+        wp_mkdir_p( $dest_dir );
         $dest_path = $dest_dir . $filename;
 
         if ( ! move_uploaded_file( $file['tmp_name'], $dest_path ) ) {
             return [ 'success' => false, 'message' => 'Gagal menyimpan file.' ];
         }
 
-        // Update DB
+        // Update SK status menjadi final
         $wpdb->update(
             $wpdb->prefix . 'webinar_sk',
             [
@@ -160,19 +163,19 @@ class WBR_SK {
             [ '%s', '%s' ], [ '%d' ]
         );
 
-        // Schedule batch generate petikan (background job)
-        wp_schedule_single_event(
-            time() + 5,
-            'wbr_generate_certificates_batch',
-            [ $sk_id ]
-        );
+        // Link sk_id ke semua petikan webinar ini yang belum terhubung ke SK
+        WBR_Certificate::link_sk_to_certificates( $sk_id, $sk->webinar_id );
+
+        // Generate petikan yang mungkin belum ada (jika ada attendance sebelum SK tapi after SK final)
+        wp_schedule_single_event( time() + 5, 'wbr_generate_certificates_batch', [ $sk->webinar_id ] );
 
         return [
             'success'  => true,
-            'message'  => 'SK berhasil difinalisasi. Petikan sertifikat akan digenerate otomatis.',
+            'message'  => 'SK berhasil difinalisasi. Semua petikan sertifikat telah dihubungkan dengan SK ini.',
             'filename' => $filename,
         ];
     }
+
 
     /**
      * Regenerate draft SK (jika data berubah)

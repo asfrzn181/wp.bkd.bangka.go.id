@@ -1,23 +1,35 @@
 <?php
 /**
- * Public View: Form Absensi (diakses via /absensi/{token} atau ?wbr_token={token})
+ * Public View: Form Absensi (Self-service via token ATAU Walk-in langsung)
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 global $wpdb;
 
-if ( ! isset( $registrant ) || ! $registrant ) {
-    wp_die( 'Token absensi tidak valid atau tidak ditemukan.', 'Error Absensi', [ 'response' => 404 ] );
+$is_walkin = isset( $is_walkin ) && $is_walkin;
+
+if ( $is_walkin ) {
+    $webinar_id = isset( $webinar_id ) ? absint( $webinar_id ) : 0;
+    $webinar    = get_post( $webinar_id );
+    if ( ! $webinar || $webinar->post_type !== 'webinar' ) {
+        wp_die( 'Webinar tidak ditemukan.', 'Error Absensi', [ 'response' => 404 ] );
+    }
+    $already_attended = false;
+    $reg_data         = [];
+    $token            = '';
+} else {
+    if ( ! isset( $registrant ) || ! $registrant ) {
+        wp_die( 'Token absensi tidak valid atau tidak ditemukan.', 'Error Absensi', [ 'response' => 404 ] );
+    }
+    $webinar_id       = $registrant->webinar_id;
+    $webinar          = get_post( $webinar_id );
+    $token            = $registrant->unique_token;
+    $already_attended = (bool) $wpdb->get_var( $wpdb->prepare(
+        "SELECT id FROM {$wpdb->prefix}webinar_attendance WHERE webinar_id = %d AND registrant_id = %d LIMIT 1",
+        $webinar_id, $registrant->id
+    ) );
+    $reg_data         = json_decode( $registrant->submission_data, true ) ?: [];
 }
-
-$webinar_id = $registrant->webinar_id;
-$webinar    = get_post( $webinar_id );
-
-// Cek apakah sudah absen
-$already_attended = (bool) $wpdb->get_var( $wpdb->prepare(
-    "SELECT id FROM {$wpdb->prefix}webinar_attendance WHERE webinar_id = %d AND registrant_id = %d LIMIT 1",
-    $webinar_id, $registrant->id
-) );
 
 // Ambil field form absensi
 $fields = $wpdb->get_results( $wpdb->prepare(
@@ -26,8 +38,6 @@ $fields = $wpdb->get_results( $wpdb->prepare(
      ORDER BY sort_order ASC",
     $webinar_id
 ) );
-
-$reg_data = json_decode( $registrant->submission_data, true ) ?: [];
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -53,11 +63,15 @@ $reg_data = json_decode( $registrant->submission_data, true ) ?: [];
         </div>
 
         <?php else : ?>
-        <form id="wbr-attendance-form" data-token="<?php echo esc_attr( $registrant->unique_token ); ?>">
+        <form id="wbr-attendance-form"
+              data-token="<?php echo esc_attr( $token ); ?>"
+              data-webinar-id="<?php echo esc_attr( $webinar_id ); ?>"
+              data-is-walkin="<?php echo $is_walkin ? '1' : '0'; ?>">
             <div id="wbr-att-msg"></div>
 
             <?php foreach ( $fields as $f ) :
-                $is_ident = (bool) $f->is_identity_field;
+                // Jika walk-in, identity field TETAP bisa diisi (tidak locked)
+                $is_ident = ( ! $is_walkin ) && (bool) $f->is_identity_field;
                 $val      = $is_ident ? ( $reg_data[ $f->field_key ] ?? '' ) : '';
                 $opts     = $f->options ? (array) json_decode( $f->options, true ) : [];
                 $req_mark = $f->is_required ? ' <span class="wbr-req">*</span>' : '';
@@ -69,7 +83,7 @@ $reg_data = json_decode( $registrant->submission_data, true ) ?: [];
                 </label>
 
                 <?php if ( $is_ident ) : ?>
-                <!-- Identity field: READ-ONLY -->
+                <!-- Identity field: READ-ONLY (karena sudah registrasi) -->
                 <input type="text" class="wbr-pub-input readonly"
                        value="<?php echo esc_attr( is_array($val) ? implode(', ',$val) : $val ); ?>"
                        readonly disabled>
@@ -90,6 +104,11 @@ $reg_data = json_decode( $registrant->submission_data, true ) ?: [];
                             <option value="<?php echo esc_attr( $opt ); ?>"><?php echo esc_html( $opt ); ?></option>
                             <?php endforeach; ?>
                         </select>
+                        <?php break;
+
+                    case 'email': ?>
+                        <input type="email" name="form_data[<?php echo esc_attr( $f->field_key ); ?>]"
+                               class="wbr-pub-input" <?php echo $f->is_required ? 'required' : ''; ?>>
                         <?php break;
 
                     default: ?>

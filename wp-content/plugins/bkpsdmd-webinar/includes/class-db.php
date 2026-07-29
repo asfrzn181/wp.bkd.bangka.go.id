@@ -86,11 +86,15 @@ class WBR_DB {
         ) $charset;" );
 
         // ── 6. webinar_certificate ───────────────────────────────────────────
+        // sk_id adalah NULLABLE — sertifikat bisa terbit sebelum SK dibuat
         dbDelta( "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}webinar_certificate (
             id                   BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            sk_id                BIGINT(20) UNSIGNED NOT NULL,
-            registrant_id        BIGINT(20) UNSIGNED NOT NULL,
+            webinar_id           BIGINT(20) UNSIGNED NOT NULL,
+            sk_id                BIGINT(20) UNSIGNED NULL DEFAULT NULL,
+            attendance_id        BIGINT(20) UNSIGNED NOT NULL,
             petikan_number       VARCHAR(255)        NOT NULL DEFAULT '',
+            holder_name          VARCHAR(255)        NOT NULL DEFAULT '',
+            holder_email         VARCHAR(191)        NOT NULL DEFAULT '',
             file_path_pdf        VARCHAR(500)        NOT NULL DEFAULT '',
             qr_verification_hash VARCHAR(64)         NOT NULL,
             status               VARCHAR(20)         NOT NULL DEFAULT 'active',
@@ -100,9 +104,10 @@ class WBR_DB {
             generated_at         DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             UNIQUE KEY uk_hash (qr_verification_hash),
-            UNIQUE KEY uk_sk_reg (sk_id, registrant_id),
+            UNIQUE KEY uk_att (attendance_id),
+            INDEX idx_webinar (webinar_id),
             INDEX idx_sk (sk_id),
-            INDEX idx_registrant (registrant_id)
+            INDEX idx_status (status)
         ) $charset;" );
     }
 

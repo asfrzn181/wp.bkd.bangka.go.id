@@ -126,6 +126,32 @@ class WBR_Registrant {
     }
 
     /**
+     * Buat registrant minimal untuk peserta walk-in (tidak melalui form pendaftaran)
+     * Data diambil dari form absensi.
+     *
+     * @param int    $webinar_id
+     * @param string $email       Dari field email di form absensi
+     * @param array  $form_data   Semua data dari form absensi
+     * @return int|null  registrant_id
+     */
+    public static function create_walkin( $webinar_id, $email, array $form_data ) {
+        global $wpdb;
+        $token = self::generate_token();
+        $wpdb->insert(
+            $wpdb->prefix . 'webinar_registrant',
+            [
+                'webinar_id'      => $webinar_id,
+                'unique_token'    => $token,
+                'email'           => sanitize_email( $email ),
+                'submission_data' => wp_json_encode( [] ), // no pre-registration data
+                'registered_at'   => current_time( 'mysql' ),
+            ],
+            [ '%d', '%s', '%s', '%s', '%s' ]
+        );
+        return $wpdb->insert_id ?: null;
+    }
+
+    /**
      * Hapus registrant (admin action)
      */
     public static function delete( $id ) {
@@ -133,6 +159,7 @@ class WBR_Registrant {
         $wpdb->delete( $wpdb->prefix . 'webinar_registrant', [ 'id' => $id ], [ '%d' ] );
         $wpdb->delete( $wpdb->prefix . 'webinar_attendance', [ 'registrant_id' => $id ], [ '%d' ] );
     }
+
 
     // ── Private helpers ───────────────────────────────────────────────────────
 

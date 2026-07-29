@@ -9,6 +9,7 @@ class WBR_Ajax {
     public static function init() {
         // ── Admin AJAX ──────────────────────────────────────────────────────
         $admin_actions = [
+            'wbr_save_webinar'       => [ 'save_webinar',              'manage_webinars' ],
             'wbr_save_meta'          => [ 'save_webinar_meta',        'manage_webinars' ],
             'wbr_save_form_fields'   => [ 'save_form_fields',          'manage_webinars' ],
             'wbr_delete_registrant'  => [ 'delete_registrant',         'manage_webinars' ],
@@ -40,11 +41,100 @@ class WBR_Ajax {
         add_action( 'wp_ajax_wbr_upload_sk_signed', [ __CLASS__, 'upload_sk_signed' ] );
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    //  ADMIN HANDLERS
-    // ──────────────────────────────────────────────────────────────────────────
+    public static function save_webinar() {
+        global $wpdb;
+        $post_id      = absint( $_POST['post_id'] ?? 0 );
+        $post_title   = sanitize_text_field( $_POST['post_title'] ?? '' );
+        $post_excerpt = sanitize_textarea_field( $_POST['post_excerpt'] ?? '' );
+        $post_content = wp_kses_post( $_POST['post_content'] ?? '' );
+        $post_status  = in_array( $_POST['post_status'] ?? '', [ 'publish', 'draft' ] ) ? $_POST['post_status'] : 'publish';
+        $thumbnail_id = absint( $_POST['thumbnail_id'] ?? 0 );
+
+        if ( empty( $post_title ) ) {
+            wp_send_json_error( 'Judul webinar tidak boleh kosong.' );
+        }
+
+        // Insert or update WP post
+        $post_data = [
+            'post_title'   => $post_title,
+            'post_excerpt' => $post_excerpt,
+            'post_content' => $post_content,
+            'post_status'  => $post_status,
+            'post_type'    => 'webinar',
+        ];
+
+        if ( $post_id > 0 ) {
+            $post_data['ID'] = $post_id;
+            wp_update_post( $post_data );
+        } else {
+            $post_id = wp_insert_post( $post_data );
+        }
+
+        if ( is_wp_error( $post_id ) || ! $post_id ) {
+            wp_send_json_error( 'Gagal menyimpan webinar.' );
+        }
+
+        // Thumbnail / Featured Image
+        if ( $thumbnail_id > 0 ) {
+            set_post_thumbnail( $post_id, $thumbnail_id );
+        } else {
+            delete_post_thumbnail( $post_id );
+        }
+
+        // Meta data
+        $start = sanitize_text_field( $_POST['start_datetime'] ?? '' );
+        $end   = sanitize_text_field( $_POST['end_datetime'] ?? '' );
+        if ( $start ) $start = str_replace( 'T', ' ', $start ) . ':00';
+        if ( $end )   $end   = str_replace( 'T', ' ', $end ) . ':00';
+
+        $meta_data = [
+            'post_id'             => $post_id,
+            'start_datetime'      => $start,
+            'end_datetime'        => $end,
+            'zoom_link'           => esc_url_raw( $_POST['zoom_link'] ?? '' ),
+            'youtube_link'        => esc_url_raw( $_POST['youtube_link'] ?? '' ),
+            'cert_number_pattern' => sanitize_text_field( $_POST['cert_number_pattern'] ?? 'PTKAN/{nomor}/{tahun}' ),
+        ];
+
+        $existing_meta = $wpdb->get_var( $wpdb->prepare(
+            "SELECT post_id FROM {$wpdb->prefix}webinar_meta WHERE post_id = %d", $post_id
+        ) );
+
+        if ( $existing_meta ) {
+            $wpdb->update( $wpdb->prefix . 'webinar_meta', $meta_data, [ 'post_id' => $post_id ] );
+        } else {
+            $wpdb->insert( $wpdb->prefix . 'webinar_meta', $meta_data );
+        }
+
+        // File uploads for templates (.docx)
+        $tpl_dir = WBR_UPLOAD . 'templates/';
+        wp_mkdir_p( $tpl_dir );
+
+        if ( ! empty( $_FILES['sk_template']['tmp_name'] ) ) {
+            $file = $_FILES['sk_template'];
+            $ext  = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
+            if ( $ext === 'docx' ) {
+                $filename = 'sk-tpl-' . $post_id . '-' . time() . '.docx';
+                move_uploaded_file( $file['tmp_name'], $tpl_dir . $filename );
+                $wpdb->update( $wpdb->prefix . 'webinar_meta', [ 'sk_template_file' => $filename ], [ 'post_id' => $post_id ] );
+            }
+        }
+
+        if ( ! empty( $_FILES['petikan_template']['tmp_name'] ) ) {
+            $file = $_FILES['petikan_template'];
+            $ext  = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
+            if ( $ext === 'docx' ) {
+                $filename = 'petikan-tpl-' . $post_id . '-' . time() . '.docx';
+                move_uploaded_file( $file['tmp_name'], $tpl_dir . $filename );
+                $wpdb->update( $wpdb->prefix . 'webinar_meta', [ 'petikan_template_file' => $filename ], [ 'post_id' => $post_id ] );
+            }
+        }
+
+        wp_send_json_success( [ 'post_id' => $post_id, 'message' => 'Webinar berhasil disimpan.' ] );
+    }
 
     public static function save_webinar_meta() {
+
         global $wpdb;
         $post_id = absint( $_POST['post_id'] ?? 0 );
         if ( ! $post_id || get_post_type( $post_id ) !== 'webinar' ) {
@@ -240,12 +330,19 @@ class WBR_Ajax {
     public static function public_attend() {
         check_ajax_referer( 'wbr_public_nonce', 'nonce' );
 
-        $token     = sanitize_text_field( $_POST['token'] ?? '' );
-        $form_data = array_map( 'wp_unslash', (array) ( $_POST['form_data'] ?? [] ) );
+        $token      = sanitize_text_field( $_POST['token'] ?? '' );
+        $webinar_id = absint( $_POST['webinar_id'] ?? 0 );
+        $is_walkin  = ! empty( $_POST['is_walkin'] );
+        $form_data  = array_map( 'wp_unslash', (array) ( $_POST['form_data'] ?? [] ) );
 
-        $result = WBR_Attendance::submit( $token, $form_data );
+        if ( $is_walkin ) {
+            $result = WBR_Attendance::submit_walkin( $webinar_id, $form_data );
+        } else {
+            $result = WBR_Attendance::submit_via_token( $token, $form_data );
+        }
 
         if ( $result['success'] ) wp_send_json_success( $result['message'] );
         else wp_send_json_error( $result['message'] );
     }
 }
+

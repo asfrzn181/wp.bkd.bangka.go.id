@@ -4,9 +4,9 @@ bkpsdmdBangka.zip
 # ==========================================
 # DATA SERVER - tidak boleh tertimpa git pull
 # ==========================================
-wp-config.php
+#wp-config.php
 #.htaccess
-wp-content/uploads/
+#wp-content/uploads/
 #/asset/
 
 # ==========================================

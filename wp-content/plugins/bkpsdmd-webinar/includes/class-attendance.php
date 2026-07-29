@@ -1,98 +1,23 @@
 <?php
 /**
- * Attendance — absensi peserta via token link / QR
+ * Attendance — Dua skenario:
+ *
+ * A) Self-service via token (peserta sudah daftar)
+ *    → Buka /absensi/{token} → form identity pre-filled → submit
+ *
+ * B) Walk-in (peserta datang langsung tanpa daftar)
+ *    → Buka /absensi/webinar/{id} → isi form absensi lengkap → submit
+ *
+ * C) Operator/panitia scan QR/input token di panel admin
+ *
+ * Setiap attendance yang tercatat → langsung schedule WP Cron untuk generate sertifikat.
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WBR_Attendance {
 
-    /**
-     * Proses submit form absensi
-     * @param string $token  unique_token dari link/QR
-     * @param array  $form_data  POST data dari form absensi
-     */
-    public static function submit( $token, $form_data ) {
-        global $wpdb;
-
-        // Validasi token
-        $registrant = WBR_Registrant::get_by_token( $token );
-        if ( ! $registrant ) {
-            return [ 'success' => false, 'message' => 'Token tidak valid atau sudah kedaluwarsa.' ];
-        }
-
-        // Cek apakah sudah absen
-        $existing = $wpdb->get_var( $wpdb->prepare(
-            "SELECT id FROM {$wpdb->prefix}webinar_attendance
-             WHERE webinar_id = %d AND registrant_id = %d LIMIT 1",
-            $registrant->webinar_id, $registrant->id
-        ) );
-        if ( $existing ) {
-            return [ 'success' => false, 'message' => 'Anda sudah tercatat hadir sebelumnya.' ];
-        }
-
-        // Ambil field form absensi (hanya non-identity field untuk diisi)
-        $fields = $wpdb->get_results( $wpdb->prepare(
-            "SELECT * FROM {$wpdb->prefix}webinar_form_field
-             WHERE webinar_id = %d AND form_type = 'attendance'
-             ORDER BY sort_order ASC",
-            $registrant->webinar_id
-        ) );
-
-        // Identity fields: ambil dari data registrasi
-        $reg_data   = json_decode( $registrant->submission_data, true ) ?: [];
-        $attendance = [];
-        $errors     = [];
-
-        foreach ( $fields as $f ) {
-            if ( $f->is_identity_field ) {
-                // Otomatis ambil dari data registrant
-                $attendance[ $f->field_key ] = $reg_data[ $f->field_key ] ?? '';
-                continue;
-            }
-
-            $raw   = $form_data[ $f->field_key ] ?? '';
-            $value = self::sanitize_field( $raw, $f->field_type );
-
-            if ( $f->is_required && $value === '' ) {
-                $errors[] = $f->label . ' wajib diisi.';
-                continue;
-            }
-            $attendance[ $f->field_key ] = $value;
-        }
-
-        if ( ! empty( $errors ) ) {
-            return [ 'success' => false, 'message' => implode( '<br>', $errors ) ];
-        }
-
-        // Insert absensi
-        $inserted = $wpdb->insert(
-            $wpdb->prefix . 'webinar_attendance',
-            [
-                'webinar_id'      => $registrant->webinar_id,
-                'registrant_id'   => $registrant->id,
-                'submission_data' => wp_json_encode( $attendance ),
-                'attended_at'     => current_time( 'mysql' ),
-            ],
-            [ '%d', '%d', '%s', '%s' ]
-        );
-
-        if ( ! $inserted ) {
-            return [ 'success' => false, 'message' => 'Gagal menyimpan absensi. Coba lagi.' ];
-        }
-
-        return [
-            'success'      => true,
-            'message'      => 'Absensi berhasil dicatat. Terima kasih telah hadir!',
-            'registrant'   => $registrant,
-            'webinar_id'   => $registrant->webinar_id,
-        ];
-    }
-
-    /**
-     * Absensi manual oleh panitia (scan QR di lokasi)
-     * Tidak perlu mengisi form — langsung catat hadir
-     */
-    public static function record_by_operator( $token ) {
+    // ── Submit dari form self-service (via token registrasi) ─────────────────
+    public static function submit_via_token( $token, array $form_data ) {
         global $wpdb;
 
         $registrant = WBR_Registrant::get_by_token( $token );
@@ -100,55 +25,168 @@ class WBR_Attendance {
             return [ 'success' => false, 'message' => 'Token tidak valid.' ];
         }
 
-        $existing = $wpdb->get_var( $wpdb->prepare(
-            "SELECT id FROM {$wpdb->prefix}webinar_attendance
-             WHERE webinar_id = %d AND registrant_id = %d LIMIT 1",
-            $registrant->webinar_id, $registrant->id
-        ) );
+        $webinar_id = (int) $registrant->webinar_id;
 
-        if ( $existing ) {
-            return [ 'success' => true, 'message' => 'Sudah tercatat hadir.', 'already' => true ];
+        // Cek duplikat
+        if ( self::has_attended( $webinar_id, $registrant->id ) ) {
+            return [ 'success' => false, 'message' => 'Absensi sudah tercatat sebelumnya.' ];
         }
 
-        // Ambil identity field dari registrant
-        $reg_data   = json_decode( $registrant->submission_data, true ) ?: [];
-        $attendance = $reg_data; // copy semua data registrasi sebagai identitas
+        $att_id = self::insert( $webinar_id, $registrant->id, $form_data );
+        if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal menyimpan absensi.' ];
+
+        self::schedule_certificate( $att_id );
+
+        return [
+            'success' => true,
+            'message' => 'Kehadiran Anda berhasil tercatat. Sertifikat akan segera dikirimkan ke email Anda.',
+        ];
+    }
+
+    // ── Submit walk-in (tanpa token, langsung isi form) ──────────────────────
+    public static function submit_walkin( $webinar_id, array $form_data ) {
+        global $wpdb;
+
+        $webinar_id = absint( $webinar_id );
+        if ( ! $webinar_id || get_post_type( $webinar_id ) !== 'webinar' ) {
+            return [ 'success' => false, 'message' => 'Webinar tidak ditemukan.' ];
+        }
+
+        // Buat registrant minimal dengan data dari form absensi
+        $email_key = self::find_email_key( $webinar_id );
+        $email     = sanitize_email( $form_data[ $email_key ] ?? '' );
+
+        // Cegah duplikat walk-in berdasarkan email
+        if ( $email ) {
+            $exists = $wpdb->get_var( $wpdb->prepare(
+                "SELECT a.id FROM {$wpdb->prefix}webinar_attendance a
+                 JOIN {$wpdb->prefix}webinar_registrant r ON r.id = a.registrant_id
+                 WHERE a.webinar_id = %d AND r.email = %s LIMIT 1",
+                $webinar_id, $email
+            ) );
+            if ( $exists ) return [ 'success' => false, 'message' => 'Email ini sudah tercatat hadir.' ];
+        }
+
+        // Buat registrant minimal (walk-in, tidak perlu form registrasi)
+        $reg_id = WBR_Registrant::create_walkin( $webinar_id, $email, $form_data );
+        if ( ! $reg_id ) return [ 'success' => false, 'message' => 'Gagal mencatat data peserta.' ];
+
+        $att_id = self::insert( $webinar_id, $reg_id, $form_data );
+        if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal menyimpan absensi.' ];
+
+        self::schedule_certificate( $att_id );
+
+        return [
+            'success' => true,
+            'message' => 'Kehadiran Anda berhasil tercatat. Sertifikat akan segera dikirimkan ke email Anda.',
+        ];
+    }
+
+    // ── Operator catat hadir via token/scan QR (dari panel admin) ────────────
+    public static function operator_record( $token ) {
+        $registrant = WBR_Registrant::get_by_token( $token );
+        if ( ! $registrant ) return [ 'success' => false, 'message' => 'Token tidak valid.' ];
+
+        $webinar_id = (int) $registrant->webinar_id;
+        if ( self::has_attended( $webinar_id, $registrant->id ) ) {
+            return [ 'success' => false, 'message' => 'Sudah hadir.' ];
+        }
+
+        // Operator mencatat tanpa isi form tambahan
+        $att_id = self::insert( $webinar_id, $registrant->id, [] );
+        if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal mencatat.' ];
+
+        self::schedule_certificate( $att_id );
+
+        return [ 'success' => true, 'message' => 'Kehadiran berhasil dicatat.' ];
+    }
+
+    // ── Core insert ───────────────────────────────────────────────────────────
+    private static function insert( $webinar_id, $registrant_id, array $form_data ) {
+        global $wpdb;
+
+        // Filter hanya field non-identity untuk submission_data
+        $att_fields = self::get_attendance_fields( $webinar_id );
+        $filtered   = [];
+        foreach ( $att_fields as $f ) {
+            if ( ! $f->is_identity_field && isset( $form_data[ $f->field_key ] ) ) {
+                $filtered[ $f->field_key ] = sanitize_text_field( (string) $form_data[ $f->field_key ] );
+            }
+        }
 
         $wpdb->insert(
             $wpdb->prefix . 'webinar_attendance',
             [
-                'webinar_id'      => $registrant->webinar_id,
-                'registrant_id'   => $registrant->id,
-                'submission_data' => wp_json_encode( $attendance ),
+                'webinar_id'      => $webinar_id,
+                'registrant_id'   => $registrant_id,
+                'submission_data' => wp_json_encode( $filtered ),
                 'attended_at'     => current_time( 'mysql' ),
             ],
             [ '%d', '%d', '%s', '%s' ]
         );
-
-        return [ 'success' => true, 'message' => 'Absensi berhasil dicatat oleh panitia.' ];
+        return $wpdb->insert_id ?: null;
     }
 
-    /**
-     * Ambil semua yang hadir untuk satu webinar
-     */
+    // ── Trigger WP Cron untuk generate sertifikat ─────────────────────────────
+    private static function schedule_certificate( $attendance_id ) {
+        // Jalankan langsung (5 detik delay untuk hindari race condition)
+        if ( ! wp_next_scheduled( 'wbr_generate_certificate_for_attendance', [ $attendance_id ] ) ) {
+            wp_schedule_single_event( time() + 5, 'wbr_generate_certificate_for_attendance', [ $attendance_id ] );
+        }
+    }
+
+    // ── Helper: cek sudah hadir ───────────────────────────────────────────────
+    public static function has_attended( $webinar_id, $registrant_id ) {
+        global $wpdb;
+        return (bool) $wpdb->get_var( $wpdb->prepare(
+            "SELECT id FROM {$wpdb->prefix}webinar_attendance WHERE webinar_id = %d AND registrant_id = %d LIMIT 1",
+            $webinar_id, $registrant_id
+        ) );
+    }
+
+    // ── Get all attendances for a webinar ─────────────────────────────────────
     public static function get_all( $webinar_id ) {
         global $wpdb;
         return $wpdb->get_results( $wpdb->prepare(
-            "SELECT a.*, r.email, r.submission_data AS reg_data
+            "SELECT a.*,
+                    r.email, r.submission_data AS reg_data, r.unique_token,
+                    c.id AS cert_id, c.status AS cert_status, c.petikan_number,
+                    c.qr_verification_hash
              FROM {$wpdb->prefix}webinar_attendance a
              JOIN {$wpdb->prefix}webinar_registrant r ON r.id = a.registrant_id
+             LEFT JOIN {$wpdb->prefix}webinar_certificate c ON c.attendance_id = a.id
              WHERE a.webinar_id = %d
              ORDER BY a.attended_at ASC",
             $webinar_id
         ) );
     }
 
-    private static function sanitize_field( $value, $type ) {
-        switch ( $type ) {
-            case 'email':    return sanitize_email( $value );
-            case 'textarea': return sanitize_textarea_field( $value );
-            case 'number':   return absint( $value );
-            default:         return sanitize_text_field( $value );
-        }
+    public static function get_by_id( $id ) {
+        global $wpdb;
+        return $wpdb->get_row( $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}webinar_attendance WHERE id = %d LIMIT 1", $id
+        ) );
+    }
+
+    // ── Helper: ambil attendance form fields ──────────────────────────────────
+    private static function get_attendance_fields( $webinar_id ) {
+        global $wpdb;
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}webinar_form_field
+             WHERE webinar_id = %d AND form_type = 'attendance'
+             ORDER BY sort_order ASC",
+            $webinar_id
+        ) );
+    }
+
+    // ── Helper: cari field key email di form absensi ──────────────────────────
+    private static function find_email_key( $webinar_id ) {
+        global $wpdb;
+        $field = $wpdb->get_row( $wpdb->prepare(
+            "SELECT field_key FROM {$wpdb->prefix}webinar_form_field
+             WHERE webinar_id = %d AND form_type = 'attendance' AND field_type = 'email' LIMIT 1",
+            $webinar_id
+        ) );
+        return $field ? $field->field_key : 'email';
     }
 }
