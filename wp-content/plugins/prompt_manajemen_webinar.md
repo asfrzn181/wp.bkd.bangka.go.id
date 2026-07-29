@@ -131,4 +131,4 @@ Bangun plugin WordPress untuk manajemen webinar milik instansi pemerintah, denga
 
 - Semua input publik wajib melalui nonce WordPress & sanitasi standar (`sanitize_text_field`, dsb)
 - Query list webinar & registrant harus pakai index yang tepat pada `webinar_id` dan `start_datetime`/`end_datetime`
-- Proses generate PDF batch (banyak petikan sekaligus) sebaiknya dijalankan sebagai background job (WP Cron / Action Scheduler), bukan sinkron di request HTTP, untuk menghindari timeout
+- Proses generate PDF batch (banyak petikan sekaligus) sebaiknya dijalankan sebagai background job (WP Cron / Action Scheduler), bukan sinkron di request HTTP, untuk menghindari timeoutd
