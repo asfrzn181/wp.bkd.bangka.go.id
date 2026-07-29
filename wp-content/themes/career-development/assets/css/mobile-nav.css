@@ -418,8 +418,47 @@ body:has(.wp-block-navigation__responsive-container.is-menu-open) {
     -webkit-tap-highlight-color: transparent;
     outline: none;
 }
+
 .main-header .wp-block-navigation-item__content:focus-visible,
 .main-header .wp-block-navigation__responsive-container-open:focus-visible {
     outline: 2px solid var(--wp--preset--color--primary, #FF9A04);
     outline-offset: 3px;
 }
+
+/* =====================================================
+   11. ACCORDION SUBMENU — transisi smooth JS-driven
+   (class .bksl-sub-open ditambahkan oleh custom-script.js)
+   ===================================================== */
+@media (max-width: 768px) {
+    /* Transisi max-height untuk efek accordion */
+    .main-header .wp-block-navigation__responsive-container.is-menu-open
+    .wp-block-navigation__submenu-container {
+        overflow: hidden !important;
+        transition: max-height 0.28s ease, opacity 0.2s ease !important;
+        opacity: 1;
+    }
+
+    /* Saat tertutup (sebelum expand) */
+    .main-header .wp-block-navigation__responsive-container.is-menu-open
+    .wp-block-navigation-submenu:not(.bksl-sub-open)
+    > .wp-block-navigation__submenu-container,
+    .main-header .wp-block-navigation__responsive-container.is-menu-open
+    .wp-block-navigation-item.has-child:not(.bksl-sub-open)
+    > .wp-block-navigation__submenu-container {
+        opacity: 0.6;
+    }
+
+    /* Arrow rotasi saat .bksl-sub-open */
+    .main-header .wp-block-navigation__responsive-container.is-menu-open
+    .wp-block-navigation-submenu.bksl-sub-open
+    > .wp-block-navigation-item__content
+    .wp-block-navigation__submenu-icon,
+    .main-header .wp-block-navigation__responsive-container.is-menu-open
+    .wp-block-navigation-item.has-child.bksl-sub-open
+    > .wp-block-navigation-item__content
+    .wp-block-navigation__submenu-icon {
+        transform: rotate(180deg);
+        color: var(--wp--preset--color--primary, #FF9A04);
+    }
+}
+
