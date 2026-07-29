@@ -1,5 +1,5 @@
 /* =====================================================
-   Blog Grid Filter — blog-filter.css
+   Blog Grid Filter — blog-filter.css (Responsive Enhanced)
    Tema: career-development / BKPSDMD Bangka
    Primary: #FF9A04  |  Heading: #2A2A2A
    ===================================================== */
@@ -13,21 +13,29 @@
     --bf-text-mute: #9CA3AF;
     --bf-text:      #374151;
     --bf-radius:    8px;
-    --bf-h-input:   40px;
+    --bf-h-input:   44px;
     --bf-font:      var(--wp--preset--font-family--plus-jakarta-sans, 'Plus Jakarta Sans', sans-serif);
 
     width: 100%;
+    max-width: 100%;
     font-family: var(--bf-font);
     font-size: 14px;
     line-height: 1.5;
     color: var(--bf-text);
     position: relative;
+    box-sizing: border-box;
+}
+
+.bkpsdmd-blog-filter-wrap *,
+.bkpsdmd-blog-filter-wrap *::before,
+.bkpsdmd-blog-filter-wrap *::after {
+    box-sizing: border-box;
 }
 
 /* ── Header ──────────────────────────────────────────── */
 .bkpsdmd-filter-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
 }
 .bkpsdmd-filter-subtitle {
     font-size: 12px;
@@ -38,7 +46,7 @@
     margin: 0 0 .5rem;
 }
 .bkpsdmd-filter-title {
-    font-size: clamp(22px, 4vw, 30px);
+    font-size: clamp(20px, 4vw, 30px);
     font-weight: 700;
     color: var(--bf-heading);
     margin: 0;
@@ -46,50 +54,55 @@
 }
 
 /* =====================================================
-   Filter Bar — dua baris sejajar (label + input)
+   Filter Bar — Responsive Grid / Flex
    ===================================================== */
 .bkpsdmd-filter-bar {
     background: var(--bf-surface);
     border: 1px solid var(--bf-border);
     border-top: 3px solid var(--bf-primary);
-    border-radius: 0 0 var(--bf-radius) var(--bf-radius);
-    padding: 14px 16px 16px;
+    border-radius: var(--bf-radius);
+    padding: 16px;
     margin-bottom: 1.25rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* Kedua baris (label & input) pakai flex identik */
+/* Flex layout dengan wrap support */
 .bkpsdmd-filter-labels,
 .bkpsdmd-filter-inputs {
     display: flex;
     align-items: stretch;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
 }
-.bkpsdmd-filter-labels { margin-bottom: 5px; }
+.bkpsdmd-filter-labels {
+    margin-bottom: 6px;
+}
 
-/* Kolom — lebar identik di kedua baris */
+/* Kolom — responsive sizing */
 .bkpsdmd-fc {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    min-width: 0;
+    min-width: 0; /* Prevents overflow in flexbox */
 }
-.bkpsdmd-fc--keyword  { flex: 2 1 180px; }
-.bkpsdmd-fc--date     { flex: 1 1 130px; }
-.bkpsdmd-fc--cat      { flex: 1.5 1 160px; }
-.bkpsdmd-fc--actions  { flex: 0 0 auto; }
+.bkpsdmd-fc--keyword  { flex: 2 1 200px; }
+.bkpsdmd-fc--date     { flex: 1 1 140px; }
+.bkpsdmd-fc--cat      { flex: 1.5 1 180px; }
+.bkpsdmd-fc--actions  { flex: 0 0 auto; min-width: 120px; }
 
 /* Label reset total dari gaya global tema */
 .bkpsdmd-fb-label {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 10.5px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: .6px;
+    letter-spacing: .5px;
     text-transform: uppercase;
     color: var(--bf-text-mute);
     line-height: 1;
-    /* Reset paksa gaya global */
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
@@ -118,24 +131,16 @@
     transition: border-color .15s, box-shadow .15s;
     outline: none;
     appearance: none;
-    /* Reset dari gaya global tema */
     margin: 0 !important;
     line-height: normal;
 }
 .bkpsdmd-input:focus {
     border-color: var(--bf-primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--bf-primary) 15%, transparent);
+    box-shadow: 0 0 0 3px rgba(255, 154, 4, 0.2);
 }
 .bkpsdmd-input::placeholder {
     color: var(--bf-text-mute);
     font-style: normal;
-}
-
-/* Fallback box-shadow untuk browser lama (tidak support color-mix) */
-@supports not (color: color-mix(in srgb, red 50%, blue)) {
-    .bkpsdmd-input:focus {
-        box-shadow: 0 0 0 3px rgba(255, 154, 4, .18);
-    }
 }
 
 /* Date input — icon kalender di kanan */
@@ -147,22 +152,19 @@
     background-repeat: no-repeat;
     background-position: right 10px center;
 }
-.bkpsdmd-datepicker.flatpickr-input.active,
-.bkpsdmd-datepicker:focus {
-    border-color: var(--bf-primary);
-    box-shadow: 0 0 0 3px rgba(255,154,4,.15);
-}
 
 /* ── Tombol ──────────────────────────────────────────── */
 .bkpsdmd-fb-btns {
     display: flex;
     align-items: center;
     gap: 8px;
+    width: 100%;
 }
 
 .bkpsdmd-search-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 7px;
     height: var(--bf-h-input);
     padding: 0 20px;
@@ -176,19 +178,13 @@
     cursor: pointer;
     white-space: nowrap;
     transition: filter .15s, box-shadow .15s, opacity .15s;
+    flex: 1;
 }
 .bkpsdmd-search-btn:hover {
     filter: brightness(1.08);
     box-shadow: 0 4px 16px rgba(255,154,4,.4);
 }
 .bkpsdmd-search-btn:active { filter: brightness(.95); }
-.bkpsdmd-search-btn:disabled,
-.bkpsdmd-search-btn.is-loading {
-    opacity: .55;
-    cursor: not-allowed;
-    box-shadow: none;
-    filter: none;
-}
 
 .bkpsdmd-reset-btn {
     display: inline-flex;
@@ -210,88 +206,11 @@
     background: #FEF2F2;
 }
 
-/* =====================================================
-   Flatpickr — tema oranye
-   ===================================================== */
-.flatpickr-calendar {
-    border: 1px solid var(--bf-border) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,.12) !important;
-    font-family: var(--bf-font) !important;
-    font-size: 13px !important;
-}
-.flatpickr-months {
-    background: var(--bf-primary) !important;
-    border-radius: 9px 9px 0 0 !important;
-    padding: 4px 0 !important;
-}
-.flatpickr-month { background: transparent !important; }
-.flatpickr-current-month,
-.flatpickr-current-month input.cur-year,
-.flatpickr-current-month .flatpickr-monthDropdown-months {
-    color: #fff !important;
-    fill: #fff !important;
-    font-weight: 700 !important;
-}
-.flatpickr-monthDropdown-months {
-    background: var(--bf-primary) !important;
-    border: none !important;
-}
-.flatpickr-prev-month,
-.flatpickr-next-month {
-    color: #fff !important;
-    fill: #fff !important;
-    padding: 8px !important;
-}
-.flatpickr-prev-month:hover svg,
-.flatpickr-next-month:hover svg { fill: rgba(255,255,255,.7) !important; }
-.flatpickr-weekdays { background: #fff5e0 !important; }
-.flatpickr-weekday {
-    background: transparent !important;
-    color: var(--bf-primary) !important;
-    font-weight: 700 !important;
-    font-size: 11px !important;
-}
-.flatpickr-day {
-    border-radius: 6px !important;
-    font-size: 12px !important;
-    font-family: var(--bf-font) !important;
-    border: none !important;
-}
-.flatpickr-day:hover {
-    background: rgba(255,154,4,.12) !important;
-    border: none !important;
-}
-.flatpickr-day.today {
-    border: 1.5px solid var(--bf-primary) !important;
-    background: transparent !important;
-    color: var(--bf-primary) !important;
-    font-weight: 700 !important;
-}
-.flatpickr-day.selected,
-.flatpickr-day.selected:hover,
-.flatpickr-day.startRange,
-.flatpickr-day.endRange {
-    background: var(--bf-primary) !important;
-    border-color: var(--bf-primary) !important;
-    color: #fff !important;
-}
-.flatpickr-day.flatpickr-disabled,
-.flatpickr-day.flatpickr-disabled:hover {
-    color: var(--bf-border) !important;
-    cursor: default !important;
-}
-.numInputWrapper:hover { background: rgba(255,154,4,.07) !important; }
-
-/* =====================================================
-   Select2 — tema oranye
-   ===================================================== */
+/* Select2 overrides */
 .bkpsdmd-fc--cat .select2-container {
     width: 100% !important;
-    font-family: var(--bf-font) !important;
+    min-width: 0 !important;
 }
-
-/* Selection box */
 .bkpsdmd-fc--cat .select2-container--default .select2-selection--single {
     height: var(--bf-h-input);
     border: 1px solid var(--bf-border);
@@ -299,187 +218,19 @@
     background: #fff;
     display: flex;
     align-items: center;
-    transition: border-color .15s, box-shadow .15s;
-    outline: none;
-}
-.bkpsdmd-fc--cat .select2-container--default.select2-container--focus .select2-selection--single,
-.bkpsdmd-fc--cat .select2-container--default.select2-container--open  .select2-selection--single {
-    border-color: var(--bf-primary);
-    box-shadow: 0 0 0 3px rgba(255,154,4,.15);
-    outline: none;
-}
-
-/* Teks terpilih */
-.bkpsdmd-fc--cat .select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: var(--bf-heading);
-    font-size: 13px;
-    font-family: var(--bf-font);
-    line-height: calc(var(--bf-h-input) - 2px);
-    padding-left: 12px;
-    padding-right: 28px;
-}
-.bkpsdmd-fc--cat .select2-container--default .select2-selection--single .select2-selection__placeholder {
-    color: var(--bf-text-mute);
-}
-
-/* Arrow */
-.bkpsdmd-fc--cat .select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 100%;
-    right: 10px;
-    width: 18px;
-    top: 0;
-}
-.bkpsdmd-fc--cat .select2-container--default .select2-selection--single .select2-selection__arrow b {
-    border-width: 5px 4px 0 4px;
-    border-color: var(--bf-text-mute) transparent transparent transparent;
-    margin-top: -2px;
-}
-.bkpsdmd-fc--cat .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
-    border-width: 0 4px 5px 4px;
-    border-color: transparent transparent var(--bf-text-mute) transparent;
-}
-
-/* Clear button */
-.bkpsdmd-fc--cat .select2-container--default .select2-selection--single .select2-selection__clear {
-    font-size: 18px;
-    line-height: 1;
-    color: var(--bf-text-mute);
-    margin-right: 18px;
-    font-weight: 400;
-}
-.bkpsdmd-fc--cat .select2-container--default .select2-selection--single .select2-selection__clear:hover {
-    color: #EF4444;
-}
-
-
-/* Dropdown panel */
-.bkpsdmd-blog-filter-wrap + .select2-container--open .select2-dropdown,
-.select2-dropdown {
-    border: 1px solid var(--bf-border) !important;
-    border-radius: var(--bf-radius) !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,.10) !important;
-    font-family: var(--bf-font) !important;
-    font-size: 13px !important;
-    overflow: hidden;
-}
-.select2-search--dropdown {
-    padding: 8px 10px !important;
-    border-bottom: 1px solid var(--bf-surface) !important;
-}
-.select2-search--dropdown .select2-search__field {
-    height: 34px;
-    padding: 0 10px !important;
-    border: 1px solid var(--bf-border) !important;
-    border-radius: 6px !important;
-    font-size: 12px !important;
-    font-family: var(--bf-font) !important;
-    outline: none !important;
-    box-sizing: border-box;
-}
-.select2-search--dropdown .select2-search__field:focus {
-    border-color: var(--bf-primary) !important;
-    box-shadow: 0 0 0 2px rgba(255,154,4,.15) !important;
-}
-.select2-results__option {
-    padding: 9px 14px !important;
-    font-size: 13px !important;
-    font-family: var(--bf-font) !important;
-    cursor: pointer !important;
-    transition: background .1s !important;
-}
-.select2-results__option--highlighted[aria-selected] {
-    background: var(--bf-primary) !important;
-    color: #fff !important;
-}
-.select2-results__option[aria-selected="true"] {
-    background: #fff8ee !important;
-    color: var(--bf-primary) !important;
-    font-weight: 700 !important;
-}
-/* z-index dropdown supaya tidak tertutup elemen lain */
-.select2-container--open { z-index: 99999; }
-
-/* =====================================================
-   Result Bar
-   ===================================================== */
-.bkpsdmd-result-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    padding: 6px 2px;
-    margin-bottom: 1.25rem;
-    font-size: 12px;
-    color: var(--bf-text-mute);
-}
-.bkpsdmd-result-info strong {
-    color: var(--bf-primary);
-    font-weight: 700;
-}
-.bkpsdmd-info-empty { color: #F59E0B; font-weight: 700; }
-.bkpsdmd-active-filters { display: flex; gap: 6px; flex-wrap: wrap; }
-.bkpsdmd-ftag {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 10px;
-    background: #fff8ee;
-    color: var(--bf-primary);
-    border: 1px solid rgba(255,154,4,.3);
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
 }
 
 /* =====================================================
-   Loading Overlay
-   ===================================================== */
-.bkpsdmd-loading-overlay {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: .75rem;
-    padding: 2.5rem;
-    background: rgba(255,255,255,.85);
-    border-radius: var(--bf-radius);
-    backdrop-filter: blur(4px);
-}
-.bkpsdmd-loading-overlay p {
-    font-size: 13px;
-    color: var(--bf-text-mute);
-    margin: 0;
-}
-.bkpsdmd-spinner { width: 36px; height: 36px; }
-.bkpsdmd-spinner-ring {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--bf-border);
-    border-top-color: var(--bf-primary);
-    border-radius: 50%;
-    animation: bkpsdmd-spin .65s linear infinite;
-}
-@keyframes bkpsdmd-spin { to { transform: rotate(360deg); } }
-
-/* =====================================================
-   Grid Posts
+   Grid Posts — Fully Responsive
    ===================================================== */
 .bkpsdmd-posts-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     margin-bottom: 1.75rem;
-    transition: opacity .2s ease;
-    min-height: 160px;
-}
-.bkpsdmd-posts-grid.is-loading {
-    opacity: .3;
-    pointer-events: none;
+    width: 100%;
 }
 
-/* =====================================================
-   Kartu Post
-   ===================================================== */
 .bkpsdmd-post-card {
     background: #fff;
     border: 1px solid var(--bf-border);
@@ -488,6 +239,7 @@
     display: flex;
     flex-direction: column;
     transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    width: 100%;
 }
 .bkpsdmd-post-card:hover {
     transform: translateY(-5px);
@@ -495,7 +247,6 @@
     border-color: var(--bf-primary);
 }
 
-/* Thumbnail */
 .bkpsdmd-post-thumb {
     display: block;
     position: relative;
@@ -507,20 +258,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform .35s ease;
     display: block;
 }
-.bkpsdmd-post-card:hover .bkpsdmd-post-thumb img { transform: scale(1.05); }
 
-.bkpsdmd-no-thumb {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 150px;
-}
-.bkpsdmd-thumb-placeholder { color: var(--bf-border); }
-
-/* Badge kategori */
 .bkpsdmd-cat-badge {
     position: absolute;
     top: 8px;
@@ -529,16 +269,13 @@
     color: #fff;
     font-size: 10px;
     font-weight: 700;
-    padding: 2px 9px;
+    padding: 3px 10px;
     border-radius: 20px;
     text-transform: uppercase;
-    letter-spacing: .4px;
-    z-index: 2;
 }
 
-/* Body kartu */
 .bkpsdmd-post-body {
-    padding: 1rem 1.25rem 1.25rem;
+    padding: 1.25rem;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -550,8 +287,7 @@
     gap: .85rem;
     flex-wrap: wrap;
 }
-.bkpsdmd-meta-date,
-.bkpsdmd-meta-author {
+.bkpsdmd-meta-date, .bkpsdmd-meta-author {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -559,29 +295,20 @@
     font-weight: 600;
     color: var(--bf-primary);
 }
-.bkpsdmd-post-divider {
-    width: 28px;
-    height: 2px;
-    background: var(--bf-border);
-    border-radius: 2px;
-}
 .bkpsdmd-post-title {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     line-height: 1.45;
     margin: 0;
     color: var(--bf-heading);
 }
-.bkpsdmd-post-title a {
-    color: inherit;
-    text-decoration: none;
-    transition: color .15s;
-}
+.bkpsdmd-post-title a { color: inherit; text-decoration: none; }
 .bkpsdmd-post-title a:hover { color: var(--bf-primary); }
+
 .bkpsdmd-post-excerpt {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--bf-text);
-    line-height: 1.65;
+    line-height: 1.6;
     margin: 0;
     flex: 1;
 }
@@ -589,99 +316,80 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--bf-primary);
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: .5px;
     margin-top: auto;
-    transition: gap .15s;
+    padding-top: 8px;
 }
-.bkpsdmd-read-more:hover { gap: 9px; }
 
-/* =====================================================
-   No Posts
-   ===================================================== */
-.bkpsdmd-no-posts {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 3.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .65rem;
-}
-.bkpsdmd-no-posts svg { opacity: .25; color: var(--bf-text-mute); }
-.bkpsdmd-no-posts p { font-size: 15px; font-weight: 600; color: var(--bf-text); margin: 0; }
-.bkpsdmd-no-posts small { font-size: 12px; color: var(--bf-text-mute); }
-
-/* =====================================================
-   Pagination
-   ===================================================== */
+/* Pagination */
 .bkpsdmd-pagination {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 6px;
     flex-wrap: wrap;
-    margin-top: .75rem;
+    margin-top: 1rem;
 }
 .bkpsdmd-page-btn {
-    min-width: 34px;
-    height: 34px;
-    padding: 0 8px;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
     background: #fff;
     border: 1px solid var(--bf-border);
-    border-radius: 6px;
+    border-radius: 8px;
     color: var(--bf-text);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    font-family: var(--bf-font);
     cursor: pointer;
-    transition: border-color .15s, color .15s, background .15s, box-shadow .15s;
-    line-height: 1;
-}
-.bkpsdmd-page-btn:hover {
-    border-color: var(--bf-primary);
-    color: var(--bf-primary);
-    background: #fff8ee;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .bkpsdmd-page-btn.active {
     background: var(--bf-primary);
     border-color: var(--bf-primary);
     color: #fff;
-    box-shadow: 0 3px 10px rgba(255,154,4,.35);
 }
 
 /* =====================================================
-   Responsive
+   RESPONSIVE BREAKPOINTS
    ===================================================== */
 @media (max-width: 1024px) {
-    .bkpsdmd-posts-grid { grid-template-columns: repeat(2, 1fr); }
+    .bkpsdmd-posts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+    .bkpsdmd-fc--keyword { flex: 1 1 45%; }
+    .bkpsdmd-fc--cat     { flex: 1 1 45%; }
+    .bkpsdmd-fc--date    { flex: 1 1 45%; }
+    .bkpsdmd-fc--actions { flex: 1 1 100%; margin-top: 4px; }
+    .bkpsdmd-filter-labels { display: none; }
 }
 
-
-@media (max-width: 768px) {
-    .bkpsdmd-filter-labels { display: none; } /* sembunyikan label di mobile — tidak perlu */
+@media (max-width: 640px) {
+    .bkpsdmd-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .bkpsdmd-filter-bar {
+        padding: 12px;
+    }
     .bkpsdmd-filter-inputs {
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
     }
-    .bkpsdmd-fc--keyword,
-    .bkpsdmd-fc--date,
-    .bkpsdmd-fc--cat,
-    .bkpsdmd-fc--actions {
-        flex: unset;
+    .bkpsdmd-fc {
         width: 100%;
-        min-width: unset;
+        flex: 1 1 100% !important;
     }
-    .bkpsdmd-fb-btns { width: 100%; }
-    .bkpsdmd-search-btn {
-        flex: 1;
-        justify-content: center;
+    .bkpsdmd-filter-title {
+        font-size: 20px;
     }
-    .bkpsdmd-posts-grid { grid-template-columns: 1fr; }
-    .bkpsdmd-filter-title { font-size: 22px; }
+    .bkpsdmd-post-body {
+        padding: 1rem;
+    }
 }
-

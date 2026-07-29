@@ -1,5 +1,5 @@
 /* =====================================================
-   ASN Data Dashboard Frontend Stylesheet
+   ASN Data Dashboard Frontend Stylesheet (Responsive Enhanced)
    ===================================================== */
 
 .asndd-frontend-wrap {
@@ -8,20 +8,25 @@
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    padding: 24px;
-    margin: 20px 0;
+    padding: 20px;
+    margin: 16px 0;
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
     box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
-.asndd-frontend-wrap *, .asndd-frontend-wrap *::before, .asndd-frontend-wrap *::after {
+.asndd-frontend-wrap *, 
+.asndd-frontend-wrap *::before, 
+.asndd-frontend-wrap *::after {
     box-sizing: border-box;
 }
 
 /* Header */
 .asndd-fe-header {
-    margin-bottom: 20px;
-    padding-bottom: 15px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
     border-bottom: 2px solid #f1f5f9;
 }
 .asndd-fe-title-wrap {
@@ -29,11 +34,11 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 12px;
 }
 .asndd-fe-title {
     margin: 0 !important;
-    font-size: 22px !important;
+    font-size: clamp(18px, 3.5vw, 22px) !important;
     font-weight: 800 !important;
     color: #0f172a !important;
     line-height: 1.3 !important;
@@ -46,13 +51,15 @@
     padding: 6px 12px;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
+    max-width: 100%;
 }
 .asndd-fe-filter-group label {
     font-size: 13px;
     color: #475569;
+    white-space: nowrap;
 }
 .asndd-fe-period-select {
-    font-size: 14px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
     color: #1d4ed8 !important;
     background: #ffffff !important;
@@ -86,6 +93,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
 }
 .asndd-fe-filter-hint .dashicons {
     font-size: 16px;
@@ -97,15 +105,15 @@
 /* Summary Interactive Cards */
 .asndd-fe-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
 }
 .asndd-fe-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
-    padding: 16px 18px;
+    padding: 14px;
     border-left: 4px solid #3b82f6;
     display: flex;
     flex-direction: column;
@@ -113,6 +121,7 @@
     position: relative;
     transition: all 0.2s ease;
     user-select: none;
+    min-width: 0;
 }
 .asndd-fe-card:hover {
     transform: translateY(-2px);
@@ -144,7 +153,7 @@
     align-items: center;
 }
 .asndd-fe-card-label {
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     text-transform: uppercase;
     color: #64748b;
@@ -156,62 +165,70 @@
     border-radius: 50%;
     background: transparent;
     transition: background 0.2s ease;
+    flex-shrink: 0;
 }
 .asndd-fe-card-active .asndd-fe-active-dot {
     background: #2563eb;
     box-shadow: 0 0 0 3px rgba(37,99,235,0.25);
 }
 
+.asndd-fe-card-val {
+    font-size: clamp(18px, 4vw, 24px);
+    font-weight: 800;
+    color: #0f172a;
+    margin: 4px 0;
+    line-height: 1.1;
+}
+.asndd-fe-card-sub {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Section Header for Charts */
 .asndd-fe-section-header {
-    margin-bottom: 18px;
-    padding-bottom: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
     border-bottom: 2px dashed #e2e8f0;
 }
 .asndd-fe-section-title {
     margin: 0 !important;
-    font-size: 16px !important;
+    font-size: 15px !important;
     font-weight: 700 !important;
     color: #0f172a !important;
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
 }
 .asndd-fe-section-title .dashicons {
     color: #2563eb;
 }
 
-.asndd-fe-card-val {
-    font-size: 24px;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 4px 0;
-}
-.asndd-fe-card-sub {
-    font-size: 12px;
-    color: #64748b;
-    font-weight: 500;
-}
-
 /* Tabs */
 .asndd-fe-tabs {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     border-bottom: 2px solid #e2e8f0;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 .asndd-fe-tab {
     background: none;
     border: none;
-    padding: 10px 18px;
-    font-size: 14px;
+    padding: 8px 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #64748b;
     cursor: pointer;
     border-bottom: 3px solid transparent;
     transition: all 0.2s ease;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 .asndd-fe-tab:hover {
     color: #2563eb;
@@ -228,21 +245,16 @@
     display: block;
 }
 
-/* Grids */
+/* Grids — Fully Responsive */
 .asndd-fe-grid-2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
 }
 .asndd-fe-grid-3 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-}
-@media (max-width: 640px) {
-    .asndd-fe-grid-2, .asndd-fe-grid-3 {
-        grid-template-columns: 1fr;
-    }
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
 }
 .asndd-fe-mt-15 { margin-top: 15px; }
 
@@ -251,25 +263,32 @@
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
-    padding: 18px;
+    padding: 16px;
+    min-width: 0; /* Prevents grid flex overflow */
 }
 .asndd-fe-box-title {
-    margin: 0 0 14px 0 !important;
-    font-size: 15px !important;
+    margin: 0 0 12px 0 !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
     color: #0f172a !important;
     border-bottom: 2px solid #f1f5f9;
     padding-bottom: 8px;
 }
 
-/* Tables */
+/* Tables — Responsive Scroll Container */
+.asndd-fe-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 .asndd-fe-table {
     width: 100% !important;
     border-collapse: collapse !important;
     font-size: 13px !important;
+    min-width: 320px;
 }
 .asndd-fe-table th, .asndd-fe-table td {
-    padding: 8px 12px !important;
+    padding: 8px 10px !important;
     border-bottom: 1px solid #e2e8f0 !important;
     text-align: left !important;
 }
@@ -280,7 +299,7 @@
 }
 .asndd-fe-table td.num, .asndd-fe-table th.num {
     text-align: center !important;
-    width: 75px;
+    width: 70px;
 }
 .asndd-fe-table td.total, .asndd-fe-table th.total {
     font-weight: 700 !important;
@@ -290,14 +309,64 @@
 .asndd-fe-scroll {
     max-height: 420px;
     overflow-y: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Charts */
 .asndd-fe-chart-wrap {
     position: relative;
-    height: 300px;
+    height: 280px;
     width: 100%;
+    max-width: 100%;
 }
 .asndd-fe-chart-square {
-    height: 250px;
+    height: 240px;
+}
+
+/* ── RESPONSIVE MEDIA QUERIES ── */
+@media (max-width: 768px) {
+    .asndd-frontend-wrap {
+        padding: 14px;
+        border-radius: 8px;
+    }
+    .asndd-fe-grid-2, .asndd-fe-grid-3 {
+        grid-template-columns: 1fr;
+    }
+    .asndd-fe-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .asndd-fe-card {
+        padding: 12px;
+    }
+    .asndd-fe-chart-wrap {
+        height: 240px;
+    }
+    .asndd-fe-chart-square {
+        height: 210px;
+    }
+}
+
+@media (max-width: 480px) {
+    .asndd-frontend-wrap {
+        padding: 10px;
+        margin: 10px 0;
+    }
+    .asndd-fe-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    .asndd-fe-card-label {
+        font-size: 9.5px;
+    }
+    .asndd-fe-card-val {
+        font-size: 18px;
+    }
+    .asndd-fe-card-sub {
+        font-size: 10px;
+    }
+    .asndd-fe-chart-wrap {
+        height: 220px;
+    }
 }

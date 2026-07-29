@@ -1,0 +1,300 @@
+/* ============================================================
+   BKPSDMD Banner Carousel — Frontend Styles
+   ============================================================ */
+
+/* ── Wrapper ── */
+.bkbc-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #111;
+    /* Aspect ratio 16:5 desktop, 16:9 mobile */
+    aspect-ratio: 16 / 5;
+    max-height: 680px;
+    isolation: isolate;
+}
+@media (max-width: 768px) {
+    .bkbc-carousel {
+        aspect-ratio: 16 / 9;
+        max-height: 360px;
+    }
+}
+@media (max-width: 480px) {
+    .bkbc-carousel {
+        aspect-ratio: 4 / 3;
+        max-height: 320px;
+    }
+}
+
+/* ── Track ── */
+.bkbc-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* ════════════════════════════════════════════════════════════
+   SLIDE — Base
+   ════════════════════════════════════════════════════════════ */
+.bkbc-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+.bkbc-slide.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+/* ── Gambar background ── */
+.bkbc-slide-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+.bkbc-slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    will-change: transform;
+}
+.bkbc-slide-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* ── Konten teks ── */
+.bkbc-slide-content {
+    position: relative;
+    z-index: 3;
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+    padding: 20px;
+    /* Animate in when slide becomes active */
+    transform: translateY(0);
+    opacity: 1;
+}
+.bkbc-slide-subtitle {
+    font-size: clamp(11px, 1.2vw, 14px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffce63;
+    margin: 0 0 12px;
+    opacity: 0.9;
+}
+.bkbc-slide-title {
+    font-size: clamp(22px, 4vw, 52px);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    margin: 0 0 14px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+.bkbc-slide-desc {
+    font-size: clamp(13px, 1.4vw, 16px);
+    color: rgba(255,255,255,0.82);
+    line-height: 1.6;
+    margin: 0 0 24px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.bkbc-slide-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: var(--wp--preset--color--primary, #FF9A04);
+    color: #fff;
+    border-radius: 50px;
+    font-size: clamp(13px, 1.3vw, 15px);
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.bkbc-slide-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    color: #fff;
+    background: var(--wp--preset--color--primary, #e88d00);
+    filter: brightness(1.05);
+}
+.bkbc-slide-cta svg {
+    transition: transform 0.2s;
+}
+.bkbc-slide-cta:hover svg {
+    transform: translateX(4px);
+}
+
+/* ════════════════════════════════════════════════════════════
+   ANIMASI — Fade
+   ════════════════════════════════════════════════════════════ */
+.bkbc-carousel[data-animation="fade"] .bkbc-slide {
+    transition: opacity var(--bkbc-dur, 0.6s) ease,
+                visibility var(--bkbc-dur, 0.6s) ease;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ANIMASI — Slide Horizontal
+   ════════════════════════════════════════════════════════════ */
+.bkbc-carousel[data-animation="slide"] .bkbc-slide {
+    transition: transform var(--bkbc-dur, 0.6s) cubic-bezier(0.77,0,0.175,1),
+                opacity 0.1s;
+    transform: translateX(100%);
+    opacity: 1;
+    visibility: visible;
+}
+.bkbc-carousel[data-animation="slide"] .bkbc-slide.active {
+    transform: translateX(0);
+}
+.bkbc-carousel[data-animation="slide"] .bkbc-slide.leaving {
+    transform: translateX(-100%);
+}
+
+/* ════════════════════════════════════════════════════════════
+   ANIMASI — Zoom
+   ════════════════════════════════════════════════════════════ */
+.bkbc-carousel[data-animation="zoom"] .bkbc-slide {
+    transition: opacity var(--bkbc-dur, 0.6s) ease,
+                visibility var(--bkbc-dur, 0.6s) ease;
+}
+.bkbc-carousel[data-animation="zoom"] .bkbc-slide .bkbc-slide-img {
+    transition: transform var(--bkbc-dur, 0.6s) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: scale(1.08);
+}
+.bkbc-carousel[data-animation="zoom"] .bkbc-slide.active .bkbc-slide-img {
+    transform: scale(1);
+}
+
+/* Konten slide masuk dengan animasi saat active */
+@keyframes bkbcContentIn {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.bkbc-slide.active .bkbc-slide-content {
+    animation: bkbcContentIn 0.6s 0.2s ease both;
+}
+
+/* ════════════════════════════════════════════════════════════
+   NAVIGATION ARROWS
+   ════════════════════════════════════════════════════════════ */
+.bkbc-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.45);
+    border: 2px solid rgba(255,255,255,0.25);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.22s;
+    -webkit-tap-highlight-color: transparent;
+    backdrop-filter: blur(4px);
+}
+.bkbc-arrow:hover {
+    background: rgba(0,0,0,0.7);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-50%) scale(1.08);
+}
+.bkbc-prev { left: 16px; }
+.bkbc-next { right: 16px; }
+
+@media (max-width: 480px) {
+    .bkbc-arrow { width: 36px; height: 36px; }
+    .bkbc-arrow svg { width: 18px; height: 18px; }
+    .bkbc-prev { left: 8px; }
+    .bkbc-next { right: 8px; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   NAVIGATION DOTS
+   ════════════════════════════════════════════════════════════ */
+.bkbc-dots {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.bkbc-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    border: 2px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: all 0.25s;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+}
+.bkbc-dot.active {
+    background: #fff;
+    border-color: #fff;
+    width: 24px;
+    border-radius: 4px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   PROGRESS BAR
+   ════════════════════════════════════════════════════════════ */
+.bkbc-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.15);
+    z-index: 10;
+}
+.bkbc-progress-bar {
+    height: 100%;
+    background: var(--wp--preset--color--primary, #FF9A04);
+    width: 0%;
+    transition: none;
+}
+.bkbc-progress-bar.running {
+    transition: width var(--bkbc-interval, 5s) linear;
+    width: 100%;
+}
+
+/* ── Pause saat hover ── */
+.bkbc-carousel:hover .bkbc-progress-bar.running {
+    animation-play-state: paused;
+}
+
+/* ── Accessibility: reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+    .bkbc-slide,
+    .bkbc-slide-img,
+    .bkbc-arrow,
+    .bkbc-dot,
+    .bkbc-progress-bar {
+        transition: none !important;
+        animation: none !important;
+    }
+}

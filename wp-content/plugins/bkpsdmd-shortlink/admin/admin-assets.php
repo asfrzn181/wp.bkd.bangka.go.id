@@ -21,16 +21,17 @@ function bksl_enqueue_admin_assets( $hook ) {
         'bksl-admin',
         BKSL_URL . 'assets/css/admin.css',
         [],
-        BKSL_VERSION
+        filemtime( BKSL_PATH . 'assets/css/admin.css' )
     );
 
     wp_enqueue_script(
         'bksl-admin',
         BKSL_URL . 'assets/js/admin.js',
         [ 'jquery' ],
-        BKSL_VERSION,
+        filemtime( BKSL_PATH . 'assets/js/admin.js' ),
         true
     );
+
 
     wp_localize_script( 'bksl-admin', 'bkslData', [
         'ajaxUrl' => admin_url( 'admin-ajax.php' ),

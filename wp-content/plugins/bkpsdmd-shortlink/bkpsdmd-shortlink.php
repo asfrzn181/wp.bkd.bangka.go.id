@@ -3,7 +3,7 @@
  * Plugin Name: BKPSDMD Short Link & QR Code
  * Plugin URI:  https://bkpsdmd.bangka.go.id
  * Description: Buat short link (5 karakter alphanum) untuk Post & Page, lengkap dengan QR Code otomatis untuk kebutuhan media sosial.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      BKPSDMD Bangka
  * Author URI:  https://bkpsdmd.bangka.go.id
  * Text Domain: bkpsdmd-sl
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // ── Konstanta ───────────────────────────────────────────────────────────────
-define( 'BKSL_VERSION',  '1.0.0' );
+define( 'BKSL_VERSION',  '1.1.0' );
 define( 'BKSL_PATH',     plugin_dir_path( __FILE__ ) );
 define( 'BKSL_URL',      plugin_dir_url( __FILE__ ) );
 define( 'BKSL_TABLE',    'bkpsdmd_shortlinks' );
@@ -60,17 +60,15 @@ function bksl_init() {
     BKSL_Redirector::init();
 }
 
-// ── Auto-create short link on publish ────────────────────────────────────────
+// ── Auto-create short link on publish (dinonaktifkan — user kini pilih manual) ─
+// Aktifkan kembali jika ingin short link otomatis terbuat saat post di-publish.
+/*
 add_action( 'publish_post', 'bksl_auto_create', 10, 2 );
 add_action( 'publish_page', 'bksl_auto_create', 10, 2 );
 function bksl_auto_create( $post_id, $post ) {
-    // Jangan buat duplikat
-    if ( BKSL_DB::get_by_post_id( $post_id ) ) {
-        return;
-    }
-    if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
-        return;
-    }
+    if ( BKSL_DB::get_by_post_id( $post_id ) ) return;
+    if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) return;
     $slug = BKSL_DB::generate_unique_slug();
     BKSL_DB::insert( $post_id, $slug );
 }
+*/
