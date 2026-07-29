@@ -1,7 +1,5 @@
 ---
-   deployment:
-     tasks:
-       - export DEPLOYPATH=/home/bkdbangkago/public_html/
-       - /usr/bin/rsync -av --exclude='.git' --exclude='.cpanel.yml' --exclude='backup website CI3.zip' --exclude='simpur.bkd.bangka.go.id.zip' --exclude='simpur.bkd.bangka.go.id' --exclude='sinona.bkd.bangka.go.id' --exclude='.cpanel.yml' ./ $DEPLOYPATH
-
-       
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/bkdbangkago/public_html/
+    - /usr/bin/rsync -av --exclude-from='.rsync-exclude' ./ $DEPLOYPATH
