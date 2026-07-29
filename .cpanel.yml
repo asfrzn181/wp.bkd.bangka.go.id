@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/bkdbangkago/public_html/
-    - /usr/bin/rsync -av --exclude-from='.rsync-exclude' ./ $DEPLOYPATH
+    - rsync -av --exclude-from='.rsync-exclude' ./ $DEPLOYPATH
