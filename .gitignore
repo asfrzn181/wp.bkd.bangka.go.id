@@ -4,10 +4,10 @@ bkpsdmdBangka.zip
 # ==========================================
 # DATA SERVER - tidak boleh tertimpa git pull
 # ==========================================
-#wp-config.php
-#.htaccess
-#wp-content/uploads/
-#/asset/
+wp-config.php
+.htaccess
+wp-content/uploads/
+/asset/
 
 # ==========================================
 # FILE BESAR & BACKUP
