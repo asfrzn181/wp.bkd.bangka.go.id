@@ -143,7 +143,7 @@ class WBR_Registrant {
                 'webinar_id'      => $webinar_id,
                 'unique_token'    => $token,
                 'email'           => sanitize_email( $email ),
-                'submission_data' => wp_json_encode( [] ), // no pre-registration data
+                'submission_data' => wp_json_encode( $form_data ), // Simpan seluruh form data walk-in sebagai registration data
                 'registered_at'   => current_time( 'mysql' ),
             ],
             [ '%d', '%s', '%s', '%s', '%s' ]

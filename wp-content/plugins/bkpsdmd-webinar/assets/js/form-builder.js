@@ -6,10 +6,15 @@
     'use strict';
 
     $(document).ready(function () {
-        var $fb = $('#wbr-form-builder');
-        if ( ! $fb.length ) return;
+        // Cek apakah ada tombol tambah field
+        if ( ! $('.wbr-add-field').length ) return;
 
-        var webinarId = $fb.data('webinar-id');
+        // Ambil ID webinar dari input hidden jika ada, atau dari data attribute tombol
+        function getWebinarId(btn) {
+            var inputId = $('#wbr-post-id').val();
+            if (inputId && parseInt(inputId) > 0) return parseInt(inputId);
+            return $(btn).data('webinar-id') || 0;
+        }
 
         // ── Tabs switching ────────────────────────────────────────────────────
         $('.wbr-fb-tab').on('click', function () {
@@ -116,7 +121,7 @@
 
             $.post( wbrAdmin.ajaxUrl, {
                 action:     'wbr_save_form_fields',
-                webinar_id: webinarId,
+                webinar_id: getWebinarId($btn),
                 form_type:  formType,
                 fields:     JSON.stringify(fields),
                 nonce:      wbrAdmin.nonce

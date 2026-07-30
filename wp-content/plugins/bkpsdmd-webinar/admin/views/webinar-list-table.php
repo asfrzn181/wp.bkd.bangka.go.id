@@ -29,15 +29,15 @@ $webinars = $wpdb->get_results(
      FROM {$wpdb->posts} p
      LEFT JOIN {$wpdb->prefix}webinar_meta m ON m.post_id = p.ID
      LEFT JOIN {$wpdb->prefix}webinar_sk sk   ON sk.webinar_id = p.ID
-     WHERE p.post_type = 'webinar' AND p.post_status != 'trash'
+     WHERE p.post_type = 'webinar' AND p.post_status NOT IN ('trash', 'auto-draft')
      ORDER BY m.start_datetime DESC"
 );
 
 $now = current_time( 'timestamp' );
 
 function wbr_webinar_status_badge( $start, $end, $now ) {
-    $s = strtotime( $start );
-    $e = strtotime( $end );
+    $s = strtotime( (string) $start );
+    $e = strtotime( (string) $end );
     if ( ! $s ) return '<span class="wbr-tag wbr-tag--gray">—</span>';
     if ( $now < $s )       return '<span class="wbr-tag wbr-tag--blue">📅 Akan Datang</span>';
     if ( $now <= $e )      return '<span class="wbr-tag wbr-tag--red">🔴 Berlangsung</span>';

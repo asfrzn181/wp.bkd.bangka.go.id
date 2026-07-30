@@ -55,11 +55,18 @@ class WBR_CPT {
             'index.php?wbr_token=$matches[1]',
             'top'
         );
+        // /absensi-walkin/{webinar_id}
+        add_rewrite_rule(
+            '^absensi-walkin/([0-9]+)/?$',
+            'index.php?wbr_absensi=$matches[1]',
+            'top'
+        );
     }
 
     public static function query_vars( $vars ) {
         $vars[] = 'wbr_verify';
         $vars[] = 'wbr_token';
+        $vars[] = 'wbr_absensi';
         return $vars;
     }
 }
