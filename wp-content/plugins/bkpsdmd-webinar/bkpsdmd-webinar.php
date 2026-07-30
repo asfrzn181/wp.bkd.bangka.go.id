@@ -3,7 +3,7 @@
  * Plugin Name: BKPSDMD Webinar Management
  * Plugin URI:  https://bkpsdmd.bangka.go.id
  * Description: Sistem manajemen webinar instansi — pendaftaran, absensi, SK Minut, petikan sertifikat dengan QR verifikasi.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      BKPSDMD Bangka
  * Author URI:  https://bkpsdmd.bangka.go.id
  * Text Domain: bkpsdmd-wbr
@@ -14,7 +14,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // ── Konstanta ────────────────────────────────────────────────────────────────
-define( 'WBR_VERSION',  '1.0.0' );
+define( 'WBR_VERSION',  '1.0.1' );
 define( 'WBR_PATH',     plugin_dir_path( __FILE__ ) );
 define( 'WBR_URL',      plugin_dir_url( __FILE__ ) );
 define( 'WBR_UPLOAD',   WP_CONTENT_DIR . '/uploads/bkpsdmd-webinar/' );

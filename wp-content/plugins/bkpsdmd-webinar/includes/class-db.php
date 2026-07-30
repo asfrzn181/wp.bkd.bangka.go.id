@@ -61,7 +61,7 @@ class WBR_DB {
             id              BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             webinar_id      BIGINT(20) UNSIGNED NOT NULL,
             registrant_id   BIGINT(20) UNSIGNED NOT NULL,
-            submission_data LONGTEXT            NOT NULL DEFAULT '{}',
+            submission_data LONGTEXT            NOT NULL,
             attended_at     DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             UNIQUE KEY uk_registrant (webinar_id, registrant_id),
