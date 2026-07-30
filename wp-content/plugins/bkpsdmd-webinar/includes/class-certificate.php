@@ -87,22 +87,29 @@ class WBR_Certificate {
             $att->webinar_id
         ) );
 
+        $data = [
+            'webinar_id'           => $att->webinar_id,
+            'attendance_id'        => $attendance_id,
+            'petikan_number'       => $petikan_number,
+            'holder_name'          => $holder_name,
+            'holder_email'         => $holder_email,
+            'file_path_pdf'        => '',
+            'qr_verification_hash' => $hash,
+            'status'               => self::STATUS_ACTIVE,
+            'generated_at'         => current_time( 'mysql' ),
+        ];
+        $formats = [ '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ];
+
+        if ( $sk_id ) {
+            $data['sk_id'] = $sk_id;
+            $formats[] = '%d';
+        }
+
         // Insert certificate
         $wpdb->insert(
             $wpdb->prefix . 'webinar_certificate',
-            [
-                'webinar_id'           => $att->webinar_id,
-                'sk_id'                => $sk_id ?: null,
-                'attendance_id'        => $attendance_id,
-                'petikan_number'       => $petikan_number,
-                'holder_name'          => $holder_name,
-                'holder_email'         => $holder_email,
-                'file_path_pdf'        => '',
-                'qr_verification_hash' => $hash,
-                'status'               => self::STATUS_ACTIVE,
-                'generated_at'         => current_time( 'mysql' ),
-            ],
-            [ '%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ]
+            $data,
+            $formats
         );
         $cert_id = $wpdb->insert_id;
         if ( ! $cert_id ) return false;

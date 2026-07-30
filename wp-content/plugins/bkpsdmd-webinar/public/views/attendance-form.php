@@ -38,6 +38,8 @@ $fields = $wpdb->get_results( $wpdb->prepare(
      ORDER BY sort_order ASC",
     $webinar_id
 ) );
+
+$thumb_url = get_the_post_thumbnail_url( $webinar_id, 'large' );
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -51,7 +53,11 @@ $fields = $wpdb->get_results( $wpdb->prepare(
 <div class="wbr-att-wrap">
     <div class="wbr-att-card">
         <div class="wbr-att-header">
+            <?php if ( $thumb_url ) : ?>
+            <img src="<?php echo esc_url( $thumb_url ); ?>" alt="Poster Webinar" style="width:100%; height:auto; max-height:250px; object-fit:cover; border-radius:8px; margin-bottom:16px;">
+            <?php else : ?>
             <div class="wbr-att-icon">📋</div>
+            <?php endif; ?>
             <h1>Form Absensi Peserta</h1>
             <p><?php echo esc_html( $webinar->post_title ); ?></p>
         </div>
