@@ -39,8 +39,8 @@ class WBR_Attendance {
 
         return [
             'success'      => true,
-            'message'      => '✅ Kehadiran Anda berhasil tercatat. Membuka sertifikat...',
-            'redirect_url' => $hash ? home_url( '/verifikasi-petikan/' . $hash ) : '',
+            'message'      => '✅ Kehadiran Anda berhasil tercatat. Membuka daftar peserta...',
+            'redirect_url' => home_url( '/daftar-peserta/' . $webinar_id . '/?success=1' ),
         ];
     }
 
@@ -79,8 +79,8 @@ class WBR_Attendance {
 
         return [
             'success'      => true,
-            'message'      => '✅ Kehadiran Anda berhasil tercatat. Membuka sertifikat...',
-            'redirect_url' => $hash ? home_url( '/verifikasi-petikan/' . $hash ) : '',
+            'message'      => '✅ Kehadiran Anda berhasil tercatat. Membuka daftar peserta...',
+            'redirect_url' => home_url( '/daftar-peserta/' . $webinar_id . '/?success=1' ),
         ];
     }
 

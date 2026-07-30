@@ -96,6 +96,8 @@ class WBR_Ajax {
             'youtube_link'        => esc_url_raw( $_POST['youtube_link'] ?? '' ),
             'jam_pelajaran'       => absint( $_POST['jam_pelajaran'] ?? 0 ),
             'cert_number_pattern' => sanitize_text_field( $_POST['cert_number_pattern'] ?? 'PTKAN/{nomor}/{tahun}' ),
+            'is_registration_open'=> isset($_POST['is_registration_open']) ? absint($_POST['is_registration_open']) : 1,
+            'is_attendance_open'  => isset($_POST['is_attendance_open']) ? absint($_POST['is_attendance_open']) : 1,
         ];
 
         $existing_meta = $wpdb->get_var( $wpdb->prepare(
@@ -125,12 +127,25 @@ class WBR_Ajax {
         if ( ! empty( $_FILES['petikan_template']['tmp_name'] ) ) {
             $file = $_FILES['petikan_template'];
             $ext  = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
-            if ( $ext === 'docx' ) {
-                $filename = 'petikan-tpl-' . $post_id . '-' . time() . '.docx';
+            if ( in_array( $ext, [ 'docx', 'jpg', 'jpeg', 'png' ] ) ) {
+                $filename = 'petikan-tpl-' . $post_id . '-' . time() . '.' . $ext;
                 move_uploaded_file( $file['tmp_name'], $tpl_dir . $filename );
                 $wpdb->update( $wpdb->prefix . 'webinar_meta', [ 'petikan_template_file' => $filename ], [ 'post_id' => $post_id ] );
             }
         }
+
+        if ( ! empty( $_FILES['signature_template']['tmp_name'] ) ) {
+            $file = $_FILES['signature_template'];
+            $ext  = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
+            if ( $ext === 'png' ) {
+                $filename = 'signature-tpl-' . $post_id . '-' . time() . '.png';
+                move_uploaded_file( $file['tmp_name'], $tpl_dir . $filename );
+                $wpdb->update( $wpdb->prefix . 'webinar_meta', [ 'signature_image_file' => $filename ], [ 'post_id' => $post_id ] );
+            }
+        }
+
+        // Hapus cache PDF agar sertifikat menggunakan template/data terbaru
+        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}webinar_certificate SET file_path_pdf = '' WHERE webinar_id = %d", $post_id ) );
 
         wp_send_json_success( [ 'post_id' => $post_id, 'message' => 'Webinar berhasil disimpan.' ] );
     }
@@ -150,6 +165,8 @@ class WBR_Ajax {
             'youtube_link'         => esc_url_raw( $_POST['youtube_link']                  ?? '' ),
             'jam_pelajaran'        => absint( $_POST['jam_pelajaran']                      ?? 0 ),
             'cert_number_pattern'  => sanitize_text_field( $_POST['cert_number_pattern']   ?? '' ),
+            'is_registration_open' => isset($_POST['is_registration_open']) ? absint($_POST['is_registration_open']) : 1,
+            'is_attendance_open'   => isset($_POST['is_attendance_open']) ? absint($_POST['is_attendance_open']) : 1,
         ];
 
         $existing = $wpdb->get_var( $wpdb->prepare(
@@ -163,12 +180,16 @@ class WBR_Ajax {
         }
 
         // Handle template uploads
-        foreach ( [ 'sk_template_file', 'petikan_template_file' ] as $field ) {
+        foreach ( [ 'sk_template_file', 'petikan_template_file', 'signature_image_file' ] as $field ) {
             if ( ! empty( $_FILES[ $field ]['tmp_name'] ) ) {
                 $file = $_FILES[ $field ];
                 $ext  = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
-                if ( $ext !== 'docx' ) continue;
-                $dest = WBR_UPLOAD . 'templates/tpl-' . $field . '-' . $post_id . '.docx';
+                
+                if ( $field === 'sk_template_file' && $ext !== 'docx' ) continue;
+                if ( $field === 'petikan_template_file' && ! in_array( $ext, [ 'docx', 'jpg', 'jpeg', 'png' ] ) ) continue;
+                if ( $field === 'signature_image_file' && $ext !== 'png' ) continue;
+                
+                $dest = WBR_UPLOAD . 'templates/tpl-' . $field . '-' . $post_id . '.' . $ext;
                 move_uploaded_file( $file['tmp_name'], $dest );
                 $wpdb->update(
                     $wpdb->prefix . 'webinar_meta',
@@ -177,6 +198,9 @@ class WBR_Ajax {
                 );
             }
         }
+
+        // Hapus cache PDF agar sertifikat menggunakan template/data terbaru
+        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}webinar_certificate SET file_path_pdf = '' WHERE webinar_id = %d", $post_id ) );
 
         wp_send_json_success( 'Data webinar berhasil disimpan.' );
     }
@@ -330,6 +354,12 @@ class WBR_Ajax {
         $webinar_id = absint( $_POST['webinar_id'] ?? 0 );
         $form_data  = array_map( 'wp_unslash', (array) ( $_POST['form_data'] ?? [] ) );
 
+        global $wpdb;
+        $is_open = $wpdb->get_var( $wpdb->prepare( "SELECT is_registration_open FROM {$wpdb->prefix}webinar_meta WHERE post_id = %d", $webinar_id ) );
+        if ( isset($is_open) && $is_open == 0 ) {
+            wp_send_json_error( 'Pendaftaran untuk webinar ini telah ditutup.' );
+        }
+
         $result = WBR_Registrant::submit( $webinar_id, $form_data );
 
         if ( $result['success'] ) wp_send_json_success( $result['message'] );
@@ -343,6 +373,12 @@ class WBR_Ajax {
         $webinar_id = absint( $_POST['webinar_id'] ?? 0 );
         $is_walkin  = ! empty( $_POST['is_walkin'] );
         $form_data  = array_map( 'wp_unslash', (array) ( $_POST['form_data'] ?? [] ) );
+
+        global $wpdb;
+        $is_open = $wpdb->get_var( $wpdb->prepare( "SELECT is_attendance_open FROM {$wpdb->prefix}webinar_meta WHERE post_id = %d", $webinar_id ) );
+        if ( isset($is_open) && $is_open == 0 ) {
+            wp_send_json_error( 'Sesi absensi untuk webinar ini telah ditutup.' );
+        }
 
         if ( $is_walkin ) {
             $result = WBR_Attendance::submit_walkin( $webinar_id, $form_data );

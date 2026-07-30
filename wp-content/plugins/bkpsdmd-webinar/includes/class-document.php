@@ -258,6 +258,7 @@ class WBR_Document {
     // ── URL download file SK atau Petikan (dengan kapabilitas check) ──────────
     public static function download_url( $type, $id ) {
         return add_query_arg( [
+            'action'       => 'wbr_download_file',
             'wbr_download' => $type,
             'id'           => $id,
             'nonce'        => wp_create_nonce( 'wbr_download_' . $type . '_' . $id ),
@@ -364,6 +365,31 @@ function wbr_handle_file_download() {
 
     if ( ! file_exists( $file ) ) {
         wp_die( 'File tidak ditemukan.', 404 );
+    }
+
+    $mime = mime_content_type( $file );
+    header( 'Content-Type: ' . $mime );
+    header( 'Content-Disposition: attachment; filename="' . basename( $file ) . '"' );
+    header( 'Content-Length: ' . filesize( $file ) );
+    readfile( $file );
+    exit;
+}
+
+// ── Public Certificate Download (via Hash) ────────────────────────────────────
+add_action( 'wp_ajax_wbr_download_cert_public', 'wbr_handle_cert_download_public' );
+add_action( 'wp_ajax_nopriv_wbr_download_cert_public', 'wbr_handle_cert_download_public' );
+function wbr_handle_cert_download_public() {
+    $hash = sanitize_text_field( $_GET['hash'] ?? '' );
+    if ( ! $hash ) wp_die( 'Hash tidak valid.', 400 );
+
+    $cert = WBR_Certificate::verify_by_hash( $hash );
+    if ( ! $cert || ! $cert->file_path_pdf ) {
+        wp_die( 'Sertifikat tidak ditemukan atau belum digenerate.', 404 );
+    }
+
+    $file = WBR_UPLOAD . 'certificates/' . basename( $cert->file_path_pdf );
+    if ( ! file_exists( $file ) ) {
+        wp_die( 'File fisik tidak ditemukan di server.', 404 );
     }
 
     $mime = mime_content_type( $file );

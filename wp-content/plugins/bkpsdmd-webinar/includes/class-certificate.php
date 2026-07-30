@@ -114,12 +114,12 @@ class WBR_Certificate {
         $cert_id = $wpdb->insert_id;
         if ( ! $cert_id ) return false;
 
-        // Generate PDF
-        $pdf_result = WBR_Document::generate_certificate_pdf( $cert_id );
-        if ( $pdf_result['success'] && ! empty( $pdf_result['filename'] ) ) {
+        // Generate Image Certificate via GD
+        $img_result = WBR_GD_Certificate::generate_image( $cert_id );
+        if ( $img_result['success'] && ! empty( $img_result['filename'] ) ) {
             $wpdb->update(
                 $wpdb->prefix . 'webinar_certificate',
-                [ 'file_path_pdf' => $pdf_result['filename'] ],
+                [ 'file_path_pdf' => $img_result['filename'] ],
                 [ 'id' => $cert_id ],
                 [ '%s' ], [ '%d' ]
             );
@@ -239,7 +239,7 @@ class WBR_Certificate {
     }
 
     public static function regenerate_pdf( $cert_id ) {
-        return WBR_Document::generate_certificate_pdf( $cert_id );
+        return WBR_GD_Certificate::generate_image( $cert_id );
     }
 
     // ── Private helpers ───────────────────────────────────────────────────────

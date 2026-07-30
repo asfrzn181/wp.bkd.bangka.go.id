@@ -6,13 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $hash = get_query_var( 'wbr_verify' ) ?: ( $_GET['wbr_verify'] ?? '' );
 $cert = WBR_Certificate::verify_by_hash( $hash );
-
-$reg_data   = $cert ? (json_decode( $cert->reg_data, true ) ?: []) : [];
-$nama       = '';
-foreach ( $reg_data as $k => $v ) {
-    if ( is_string( $v ) && stripos( $k, 'nama' ) !== false ) { $nama = $v; break; }
-}
-if ( ! $nama && $cert ) $nama = $cert->email;
+$nama = $cert ? $cert->holder_name : '';
+$email = $cert ? $cert->holder_email : '';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -61,14 +56,14 @@ if ( ! $nama && $cert ) $nama = $cert->email;
         <div class="wbr-verify-details">
             <div class="wbr-vrow"><span>Nomor Petikan:</span> <strong><?php echo esc_html( $cert->petikan_number ); ?></strong></div>
             <div class="wbr-vrow"><span>Nama Peserta:</span> <strong><?php echo esc_html( $nama ); ?></strong></div>
-            <div class="wbr-vrow"><span>Email:</span> <?php echo esc_html( $cert->email ); ?></div>
+            <div class="wbr-vrow"><span>Email:</span> <?php echo esc_html( $email ); ?></div>
             <div class="wbr-vrow"><span>Webinar:</span> <?php echo esc_html( $cert->webinar_title ); ?></div>
             <div class="wbr-vrow"><span>Pelaksanaan:</span> <?php echo esc_html( wp_date( 'd F Y', strtotime( $cert->start_datetime ) ) ); ?></div>
-            <div class="wbr-vrow"><span>Referensi SK Minut:</span> <strong><?php echo esc_html( $cert->sk_number ); ?></strong></div>
+            <div class="wbr-vrow"><span>Referensi SK Minut:</span> <strong><?php echo esc_html( $cert->sk_number ?: 'Belum disahkan' ); ?></strong></div>
             <?php if ( $cert->sk_date ) : ?>
             <div class="wbr-vrow"><span>Tanggal SK:</span> <?php echo esc_html( wp_date( 'd F Y', strtotime( $cert->sk_date ) ) ); ?></div>
             <?php endif; ?>
-            <div class="wbr-vrow"><span>Penandatangan SK:</span> <?php echo esc_html( $cert->signing_official ); ?></div>
+            <div class="wbr-vrow"><span>Penandatangan SK:</span> <?php echo esc_html( $cert->signing_official ?: 'Belum disahkan' ); ?></div>
             <div class="wbr-vrow"><span>Tanggal Terbit:</span> <?php echo esc_html( wp_date( 'd F Y, H:i', strtotime( $cert->generated_at ) ) ); ?> WIB</div>
         </div>
 

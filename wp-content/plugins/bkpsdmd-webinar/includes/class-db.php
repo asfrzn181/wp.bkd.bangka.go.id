@@ -22,6 +22,8 @@ class WBR_DB {
             cert_number_pattern VARCHAR(255)        NOT NULL DEFAULT '',
             sk_template_file    VARCHAR(500)        NOT NULL DEFAULT '',
             petikan_template_file VARCHAR(500)      NOT NULL DEFAULT '',
+            is_registration_open TINYINT(1)         NOT NULL DEFAULT 1,
+            is_attendance_open  TINYINT(1)          NOT NULL DEFAULT 1,
             PRIMARY KEY  (post_id),
             KEY idx_start (start_datetime),
             KEY idx_end (end_datetime)
@@ -124,6 +126,13 @@ class WBR_DB {
         $check_jp = $wpdb->get_results( "SHOW COLUMNS FROM {$meta_table} LIKE 'jam_pelajaran'" );
         if ( empty( $check_jp ) ) {
             $wpdb->query( "ALTER TABLE {$meta_table} ADD COLUMN jam_pelajaran INT(11) NOT NULL DEFAULT 0 AFTER youtube_link" );
+        }
+
+        // ── MANUAL FIX: Pastikan kolom is_registration_open & is_attendance_open ada ──
+        $check_reg = $wpdb->get_results( "SHOW COLUMNS FROM {$meta_table} LIKE 'is_registration_open'" );
+        if ( empty( $check_reg ) ) {
+            $wpdb->query( "ALTER TABLE {$meta_table} ADD COLUMN is_registration_open TINYINT(1) NOT NULL DEFAULT 1" );
+            $wpdb->query( "ALTER TABLE {$meta_table} ADD COLUMN is_attendance_open TINYINT(1) NOT NULL DEFAULT 1" );
         }
     }
 

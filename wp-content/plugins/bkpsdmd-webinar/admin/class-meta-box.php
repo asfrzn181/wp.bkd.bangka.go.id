@@ -77,8 +77,8 @@ class WBR_MetaBox {
                 <?php endif; ?>
             </div>
             <div>
-                <label class="wbr-meta-label">Template Petikan (.docx)</label>
-                <input type="file" name="petikan_template_file" accept=".docx">
+                <label class="wbr-meta-label">Template Petikan (.jpg, .png)</label>
+                <input type="file" name="petikan_template_file" accept=".jpg,.jpeg,.png,.docx">
                 <?php if ( ! empty( $m['petikan_template_file'] ) ) : ?>
                 <p class="wbr-tip">Saat ini: <?php echo esc_html( $m['petikan_template_file'] ); ?></p>
                 <?php endif; ?>

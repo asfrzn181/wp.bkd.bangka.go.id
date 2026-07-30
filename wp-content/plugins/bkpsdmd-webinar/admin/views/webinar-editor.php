@@ -141,6 +141,19 @@ if ( isset( $_GET['saved'] ) ) {
                             <option value="draft" <?php selected( $post->post_status ?? '', 'draft' ); ?>>📝 Draft</option>
                         </select>
                     </div>
+                    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:15px 0;">
+                    <div class="wbr-eform-row" style="margin-bottom:10px;">
+                        <label style="display:flex;align-items:center;gap:8px;color:#e2e8f0;font-size:13px;cursor:pointer;">
+                            <input type="checkbox" id="wbr-is-reg-open" value="1" <?php checked( $meta->is_registration_open ?? 1, 1 ); ?>>
+                            Buka Pendaftaran Peserta
+                        </label>
+                    </div>
+                    <div class="wbr-eform-row">
+                        <label style="display:flex;align-items:center;gap:8px;color:#e2e8f0;font-size:13px;cursor:pointer;">
+                            <input type="checkbox" id="wbr-is-att-open" value="1" <?php checked( $meta->is_attendance_open ?? 1, 1 ); ?>>
+                            Buka Form Absensi
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -199,7 +212,8 @@ if ( isset( $_GET['saved'] ) ) {
     <div class="wbr-epanel" data-tab="templates">
         <div class="wbr-card" style="padding:28px;max-width:700px;">
             <p style="color:#64748b;font-size:13px;margin-bottom:20px;">
-                Upload file <code>.docx</code> berisi placeholder <code>${variable}</code>. Placeholder yang tersedia untuk masing-masing template tercantum di bawah.
+                <strong>SK Minut:</strong> Upload file <code>.docx</code> berisi placeholder <code>${variable}</code>.<br>
+                <strong>Petikan Sertifikat:</strong> Upload gambar <em>blank certificate</em> (<code>.jpg</code>, <code>.png</code>). Sistem GD akan otomatis mencetak teks di atasnya.
             </p>
 
             <div class="wbr-template-box">
@@ -230,12 +244,27 @@ if ( isset( $_GET['saved'] ) ) {
                     <code>${qr_url}</code> + <code>${qr_image}</code> (untuk embed QR gambar)
                 </div>
                 <div class="wbr-template-upload">
-                    <label for="wbr-petikan-template" class="wbr-btn wbr-btn-secondary">📁 Pilih File .docx</label>
-                    <input type="file" id="wbr-petikan-template" name="wbr_petikan_template" accept=".docx" style="display:none;">
+                    <label for="wbr-petikan-template" class="wbr-btn wbr-btn-secondary">📁 Pilih Gambar (.jpg, .png)</label>
+                    <input type="file" id="wbr-petikan-template" name="wbr_petikan_template" accept=".jpg,.jpeg,.png,.docx" style="display:none;">
                     <?php if ( $meta && $meta->petikan_template_file ) : ?>
                     <span class="wbr-template-current">📄 File aktif: <strong><?php echo esc_html( basename( $meta->petikan_template_file ) ); ?></strong></span>
                     <?php else : ?>
                     <span class="wbr-template-current" style="color:#94a3b8;">Belum ada template — sistem akan pakai template default.</span>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="wbr-template-box" style="margin-top:20px;">
+                <h3 class="wbr-template-title">✍️ Tanda Tangan Pejabat (.png transparan)</h3>
+                <div class="wbr-template-vars">
+                    Upload gambar tanda tangan (tanpa background) untuk dicap secara otomatis pada sertifikat Petikan.
+                </div>
+                <div class="wbr-template-upload">
+                    <label for="wbr-signature-template" class="wbr-btn wbr-btn-secondary">📁 Pilih Tanda Tangan (.png)</label>
+                    <input type="file" id="wbr-signature-template" name="wbr_signature_template" accept=".png" style="display:none;">
+                    <?php if ( $meta && !empty($meta->signature_image_file) ) : ?>
+                    <span class="wbr-template-current">📄 File aktif: <strong><?php echo esc_html( basename( $meta->signature_image_file ) ); ?></strong></span>
+                    <?php else : ?>
+                    <span class="wbr-template-current" style="color:#94a3b8;">Belum ada tanda tangan.</span>
                     <?php endif; ?>
                 </div>
             </div>
@@ -486,12 +515,16 @@ if ( isset( $_GET['saved'] ) ) {
         fd.append('youtube_link', $('#wbr-youtube-link').val());
         fd.append('jam_pelajaran', $('#wbr-jam-pelajaran').val());
         fd.append('cert_number_pattern', $('#wbr-cert-pattern').val());
+        fd.append('is_registration_open', $('#wbr-is-reg-open').is(':checked') ? 1 : 0);
+        fd.append('is_attendance_open', $('#wbr-is-att-open').is(':checked') ? 1 : 0);
 
         // Template files
         var skFile = $('#wbr-sk-template')[0].files[0];
         var petFile = $('#wbr-petikan-template')[0].files[0];
+        var sigFile = $('#wbr-signature-template')[0] ? $('#wbr-signature-template')[0].files[0] : null;
         if (skFile)  fd.append('sk_template', skFile);
         if (petFile) fd.append('petikan_template', petFile);
+        if (sigFile) fd.append('signature_template', sigFile);
 
         $.ajax({
             url: wbrAdmin.ajaxUrl,

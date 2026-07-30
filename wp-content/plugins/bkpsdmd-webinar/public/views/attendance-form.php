@@ -39,6 +39,12 @@ $fields = $wpdb->get_results( $wpdb->prepare(
     $webinar_id
 ) );
 
+$meta = $wpdb->get_row( $wpdb->prepare(
+    "SELECT is_attendance_open FROM {$wpdb->prefix}webinar_meta WHERE post_id = %d LIMIT 1",
+    $webinar_id
+) );
+$is_attendance_open = isset( $meta->is_attendance_open ) ? (bool) $meta->is_attendance_open : true;
+
 $thumb_url = get_the_post_thumbnail_url( $webinar_id, 'large' );
 ?>
 <!DOCTYPE html>
@@ -62,7 +68,13 @@ $thumb_url = get_the_post_thumbnail_url( $webinar_id, 'large' );
             <p><?php echo esc_html( $webinar->post_title ); ?></p>
         </div>
 
-        <?php if ( $already_attended ) : ?>
+        <?php if ( ! $is_attendance_open ) : ?>
+        <div class="wbr-pub-notice warning" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 20px; border-radius: 8px; margin-top: 20px;">
+            <h3 style="color: #fca5a5; margin-bottom: 8px;">🔒 Absensi Ditutup</h3>
+            <p style="color: #cbd5e1; font-size: 14px;">Mohon maaf, sesi absensi untuk webinar ini belum dibuka atau sudah ditutup oleh panitia.</p>
+        </div>
+
+        <?php elseif ( $already_attended ) : ?>
         <div class="wbr-pub-notice success">
             <h3>✅ Absensi Sudah Dicatat</h3>
             <p>Terima kasih! Kehadiran Anda dalam webinar ini telah terverifikasi.</p>

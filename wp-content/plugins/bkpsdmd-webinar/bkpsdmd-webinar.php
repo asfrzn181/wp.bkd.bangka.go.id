@@ -31,6 +31,7 @@ $includes = [
     'includes/class-attendance.php',
     'includes/class-sk.php',
     'includes/class-certificate.php',
+    'includes/class-gd-certificate.php',
     'includes/class-document.php',
     'includes/class-ajax.php',
     'admin/class-admin-menu.php',
@@ -40,6 +41,11 @@ $includes = [
 ];
 foreach ( $includes as $file ) {
     require_once WBR_PATH . $file;
+}
+
+// ── Load TCPDF (jika diunduh manual) ─────────────────────────────────────────
+if ( file_exists( WBR_PATH . 'lib/tcpdf/tcpdf.php' ) ) {
+    require_once WBR_PATH . 'lib/tcpdf/tcpdf.php';
 }
 
 // ── Activation ────────────────────────────────────────────────────────────────

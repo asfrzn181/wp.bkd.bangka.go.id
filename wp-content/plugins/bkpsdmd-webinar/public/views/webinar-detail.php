@@ -94,6 +94,11 @@ $thumb_url = get_the_post_thumbnail_url( $post->ID, 'large' );
             <h3>⏳ Pendaftaran Ditutup</h3>
             <p>Webinar ini telah selesai dilaksanakan. Terima kasih atas partisipasi Anda.</p>
         </div>
+        <?php elseif ( isset($meta->is_registration_open) && $meta->is_registration_open == 0 ) : ?>
+        <div class="wbr-pub-closed-box" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 20px; text-align: center; border-radius: 8px; margin-top: 20px;">
+            <h3 style="color: #fca5a5; margin-bottom: 8px;">🔒 Pendaftaran Ditutup</h3>
+            <p style="color: #cbd5e1; font-size: 14px;">Pendaftaran untuk webinar ini telah ditutup oleh panitia.</p>
+        </div>
         <?php else : ?>
         <h2 class="wbr-pub-section-title">📝 Form Pendaftaran Peserta</h2>
         <?php require WBR_PATH . 'public/views/registration-form.php'; ?>
