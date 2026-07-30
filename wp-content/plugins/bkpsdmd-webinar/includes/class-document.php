@@ -99,6 +99,7 @@ class WBR_Document {
             'signing_official'   => $sk->signing_official,
             'jumlah_peserta'     => count( $attendees ),
             'daftar_peserta'     => implode( "\n", $daftar ),
+            'jam_pelajaran'      => $meta->jam_pelajaran ?? 0,
         ];
 
         try {
@@ -141,18 +142,30 @@ class WBR_Document {
         $cert = WBR_Certificate::get_by_id( $cert_id );
         if ( ! $cert ) return [ 'success' => false, 'message' => 'Petikan tidak ditemukan.' ];
 
-        $sk   = WBR_SK::get_by_id( $cert->sk_id );
         $reg  = json_decode( $cert->reg_data, true ) ?: [];
+
+        // Ambil data Webinar langsung karena SK mungkin belum ada
+        $webinar_post = get_post( $cert->webinar_id );
+        $meta = $wpdb->get_row( $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}webinar_meta WHERE post_id = %d", $cert->webinar_id
+        ) );
+
+        if ( ! $webinar_post || ! $meta ) {
+            return [ 'success' => false, 'message' => 'Data webinar tidak ditemukan.' ];
+        }
+
+        // Ambil SK (bisa null)
+        $sk = null;
+        if ( $cert->sk_id ) {
+            $sk = WBR_SK::get_by_id( $cert->sk_id );
+        }
 
         // Nama, jabatan, instansi (heuristic dari submission_data)
         $nama     = self::extract_field( $reg, 'nama' );
         $jabatan  = self::extract_field( $reg, 'jabatan' );
         $instansi = self::extract_field( $reg, 'instansi' );
 
-        // Ambil template petikan
-        $meta = $wpdb->get_row( $wpdb->prepare(
-            "SELECT * FROM {$wpdb->prefix}webinar_meta WHERE post_id = %d", $sk->webinar_id
-        ) );
+        // Ambil template petikan dari meta
         $tpl_file = WBR_UPLOAD . 'templates/' . basename( $meta->petikan_template_file ?? '' );
         if ( ! file_exists( $tpl_file ) || is_dir( $tpl_file ) ) {
             $tpl_file = WBR_PATH . 'templates/default-petikan.docx';
@@ -172,11 +185,12 @@ class WBR_Document {
             'jabatan'            => $jabatan,
             'instansi'           => $instansi,
             'petikan_number'     => $cert->petikan_number,
-            'sk_number'          => $sk->sk_number,
-            'sk_date'            => $sk->sk_date ? wp_date( 'd F Y', strtotime( $sk->sk_date ) ) : '',
-            'nama_webinar'       => $sk->webinar_title,
-            'tanggal_pelaksanaan'=> wp_date( 'd F Y', strtotime( $sk->start_datetime ) ),
-            'signing_official'   => $sk->signing_official,
+            'sk_number'          => $sk && $sk->sk_number ? $sk->sk_number : 'Menunggu SK',
+            'sk_date'            => $sk && $sk->sk_date ? wp_date( 'd F Y', strtotime( $sk->sk_date ) ) : 'Menunggu SK',
+            'nama_webinar'       => $webinar_post->post_title,
+            'tanggal_pelaksanaan'=> wp_date( 'd F Y', strtotime( $meta->start_datetime ) ),
+            'jam_pelajaran'      => $meta->jam_pelajaran ?? 0,
+            'signing_official'   => $sk && $sk->signing_official ? $sk->signing_official : '—',
             'qr_url'             => $verify_url,
         ];
 
@@ -274,6 +288,7 @@ class WBR_Document {
 <w:p><w:r><w:t>Tanggal: ${sk_date}</w:t></w:r></w:p>
 <w:p><w:r><w:t>Tentang: Penyelenggaraan Webinar ${nama_webinar}</w:t></w:r></w:p>
 <w:p><w:r><w:t>Pelaksanaan: ${tanggal_pelaksanaan} (${jam_mulai} - ${jam_selesai} WIB)</w:t></w:r></w:p>
+<w:p><w:r><w:t>Jumlah Jam Pelajaran: ${jam_pelajaran} JP</w:t></w:r></w:p>
 <w:p><w:r><w:t>Jumlah Peserta Hadir: ${jumlah_peserta} orang</w:t></w:r></w:p>
 <w:p><w:r><w:t>Daftar Peserta:</w:t></w:r></w:p>
 <w:p><w:r><w:t>${daftar_peserta}</w:t></w:r></w:p>
@@ -288,6 +303,7 @@ class WBR_Document {
 <w:p><w:r><w:t>Instansi: ${instansi}</w:t></w:r></w:p>
 <w:p><w:r><w:t>Atas partisipasinya dalam webinar: ${nama_webinar}</w:t></w:r></w:p>
 <w:p><w:r><w:t>Tanggal Pelaksanaan: ${tanggal_pelaksanaan}</w:t></w:r></w:p>
+<w:p><w:r><w:t>Jumlah Jam Pelajaran: ${jam_pelajaran} JP</w:t></w:r></w:p>
 <w:p><w:r><w:t>Referensi SK Minut: ${sk_number} Tanggal ${sk_date}</w:t></w:r></w:p>
 <w:p><w:r><w:t>Pejabat Penandatangan SK: ${signing_official}</w:t></w:r></w:p>
 <w:p><w:r><w:t>Verifikasi Keaslian: ${qr_url}</w:t></w:r></w:p>';

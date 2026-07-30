@@ -3,7 +3,7 @@
  * Plugin Name: BKPSDMD Webinar Management
  * Plugin URI:  https://bkpsdmd.bangka.go.id
  * Description: Sistem manajemen webinar instansi — pendaftaran, absensi, SK Minut, petikan sertifikat dengan QR verifikasi.
- * Version:     1.0.4
+ * Version:     1.0.7
  * Author:      BKPSDMD Bangka
  * Author URI:  https://bkpsdmd.bangka.go.id
  * Text Domain: bkpsdmd-wbr
@@ -14,7 +14,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // ── Konstanta ────────────────────────────────────────────────────────────────
-define( 'WBR_VERSION',  '1.0.4' );
+define( 'WBR_VERSION',  '1.0.7' );
 define( 'WBR_PATH',     plugin_dir_path( __FILE__ ) );
 define( 'WBR_URL',      plugin_dir_url( __FILE__ ) );
 define( 'WBR_UPLOAD',   WP_CONTENT_DIR . '/uploads/bkpsdmd-webinar/' );
@@ -133,8 +133,9 @@ function wbr_enqueue_public_assets() {
             has_shortcode( $post->post_content, 'webinar_list' )
             || has_shortcode( $post->post_content, 'webinar_detail' )
         ))
-        || get_query_var( 'wbr_token' )
-        || get_query_var( 'wbr_verify' );
+        || get_query_var( 'wbr_token' ) || isset( $_GET['wbr_token'] )
+        || get_query_var( 'wbr_verify' ) || isset( $_GET['wbr_verify'] )
+        || get_query_var( 'wbr_absensi' ) || isset( $_GET['wbr_absensi'] );
 
     if ( ! $has_wbr ) return;
 

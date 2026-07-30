@@ -22,16 +22,17 @@ class WBR_Certificate {
      * tidak mem-block request HTTP form absensi.
      *
      * @param int $attendance_id
+     * @return string|false qr_verification_hash if successful or already exists, false otherwise
      */
     public static function generate_for_attendance( $attendance_id ) {
         global $wpdb;
 
         // Cek sudah ada atau belum
-        $existing = $wpdb->get_var( $wpdb->prepare(
-            "SELECT id FROM {$wpdb->prefix}webinar_certificate WHERE attendance_id = %d LIMIT 1",
+        $existing_hash = $wpdb->get_var( $wpdb->prepare(
+            "SELECT qr_verification_hash FROM {$wpdb->prefix}webinar_certificate WHERE attendance_id = %d LIMIT 1",
             $attendance_id
         ) );
-        if ( $existing ) return;
+        if ( $existing_hash ) return $existing_hash;
 
         $att = $wpdb->get_row( $wpdb->prepare(
             "SELECT a.*,
@@ -43,7 +44,7 @@ class WBR_Certificate {
             $attendance_id
         ) );
 
-        if ( ! $att ) return;
+        if ( ! $att ) return false;
 
         // Ambil pola nomor dari webinar_meta
         $meta = $wpdb->get_row( $wpdb->prepare(
@@ -104,7 +105,7 @@ class WBR_Certificate {
             [ '%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ]
         );
         $cert_id = $wpdb->insert_id;
-        if ( ! $cert_id ) return;
+        if ( ! $cert_id ) return false;
 
         // Generate PDF
         $pdf_result = WBR_Document::generate_certificate_pdf( $cert_id );
@@ -121,6 +122,8 @@ class WBR_Certificate {
         if ( $holder_email ) {
             WBR_Email::send_certificate_ready( $cert_id );
         }
+
+        return $hash;
     }
 
     /**

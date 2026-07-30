@@ -35,11 +35,12 @@ class WBR_Attendance {
         $att_id = self::insert( $webinar_id, $registrant->id, $form_data );
         if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal menyimpan absensi.' ];
 
-        self::schedule_certificate( $att_id );
+        $hash = WBR_Certificate::generate_for_attendance( $att_id );
 
         return [
-            'success' => true,
-            'message' => 'Kehadiran Anda berhasil tercatat. Sertifikat akan segera dikirimkan ke email Anda.',
+            'success'      => true,
+            'message'      => '✅ Kehadiran Anda berhasil tercatat. Membuka sertifikat...',
+            'redirect_url' => $hash ? home_url( '/verifikasi-petikan/' . $hash ) : '',
         ];
     }
 
@@ -74,11 +75,12 @@ class WBR_Attendance {
         $att_id = self::insert( $webinar_id, $reg_id, $form_data );
         if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal menyimpan absensi.' ];
 
-        self::schedule_certificate( $att_id );
+        $hash = WBR_Certificate::generate_for_attendance( $att_id );
 
         return [
-            'success' => true,
-            'message' => 'Kehadiran Anda berhasil tercatat. Sertifikat akan segera dikirimkan ke email Anda.',
+            'success'      => true,
+            'message'      => '✅ Kehadiran Anda berhasil tercatat. Membuka sertifikat...',
+            'redirect_url' => $hash ? home_url( '/verifikasi-petikan/' . $hash ) : '',
         ];
     }
 
@@ -96,9 +98,9 @@ class WBR_Attendance {
         $att_id = self::insert( $webinar_id, $registrant->id, [] );
         if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal mencatat.' ];
 
-        self::schedule_certificate( $att_id );
+        WBR_Certificate::generate_for_attendance( $att_id );
 
-        return [ 'success' => true, 'message' => 'Kehadiran berhasil dicatat.' ];
+        return [ 'success' => true, 'message' => 'Kehadiran berhasil dicatat dan sertifikat dibuat.' ];
     }
 
     // ── Core insert ───────────────────────────────────────────────────────────
@@ -127,13 +129,7 @@ class WBR_Attendance {
         return $wpdb->insert_id ?: null;
     }
 
-    // ── Trigger WP Cron untuk generate sertifikat ─────────────────────────────
-    private static function schedule_certificate( $attendance_id ) {
-        // Jalankan langsung (5 detik delay untuk hindari race condition)
-        if ( ! wp_next_scheduled( 'wbr_generate_certificate_for_attendance', [ $attendance_id ] ) ) {
-            wp_schedule_single_event( time() + 5, 'wbr_generate_certificate_for_attendance', [ $attendance_id ] );
-        }
-    }
+    // (Fungsi schedule_certificate dihapus karena sekarang sinkron)
 
     // ── Helper: cek sudah hadir ───────────────────────────────────────────────
     public static function has_attended( $webinar_id, $registrant_id ) {

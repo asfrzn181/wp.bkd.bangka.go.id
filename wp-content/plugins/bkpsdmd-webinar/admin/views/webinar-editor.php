@@ -177,6 +177,13 @@ if ( isset( $_GET['saved'] ) ) {
                        value="<?php echo esc_attr( $meta->youtube_link ?? '' ); ?>">
             </div>
             <div class="wbr-eform-row">
+                <label class="wbr-elabel">🕒 Jam Pelajaran (JP)</label>
+                <input type="number" id="wbr-jam-pelajaran" class="wbr-einput" min="0" step="1"
+                       placeholder="Contoh: 4"
+                       value="<?php echo esc_attr( $meta->jam_pelajaran ?? '0' ); ?>">
+                <small class="wbr-ehelp">Jumlah jam pelajaran yang akan tercetak di sertifikat.</small>
+            </div>
+            <div class="wbr-eform-row">
                 <label class="wbr-elabel">🏆 Pola Nomor Sertifikat (Petikan)</label>
                 <input type="text" id="wbr-cert-pattern" class="wbr-einput"
                        placeholder="PTKAN/{nomor}/{tahun}"
@@ -199,7 +206,7 @@ if ( isset( $_GET['saved'] ) ) {
                 <h3 class="wbr-template-title">📄 Template SK Minut</h3>
                 <div class="wbr-template-vars">
                     Placeholder tersedia: <code>${sk_number}</code> <code>${sk_date}</code> <code>${nama_webinar}</code>
-                    <code>${tanggal_pelaksanaan}</code> <code>${jam_mulai}</code> <code>${jam_selesai}</code>
+                    <code>${tanggal_pelaksanaan}</code> <code>${jam_mulai}</code> <code>${jam_selesai}</code> <code>${jam_pelajaran}</code>
                     <code>${jumlah_peserta}</code> <code>${daftar_peserta}</code> <code>${signing_official}</code>
                 </div>
                 <div class="wbr-template-upload">
@@ -218,7 +225,7 @@ if ( isset( $_GET['saved'] ) ) {
                 <div class="wbr-template-vars">
                     Placeholder tersedia: <code>${petikan_number}</code> <code>${nama_peserta}</code>
                     <code>${email_peserta}</code> <code>${jabatan}</code> <code>${instansi}</code>
-                    <code>${nama_webinar}</code> <code>${tanggal_pelaksanaan}</code>
+                    <code>${nama_webinar}</code> <code>${tanggal_pelaksanaan}</code> <code>${jam_pelajaran}</code>
                     <code>${sk_number}</code> <code>${sk_date}</code> <code>${signing_official}</code>
                     <code>${qr_url}</code> + <code>${qr_image}</code> (untuk embed QR gambar)
                 </div>
@@ -477,6 +484,7 @@ if ( isset( $_GET['saved'] ) ) {
         fd.append('end_datetime', $('#wbr-end-datetime').val());
         fd.append('zoom_link', $('#wbr-zoom-link').val());
         fd.append('youtube_link', $('#wbr-youtube-link').val());
+        fd.append('jam_pelajaran', $('#wbr-jam-pelajaran').val());
         fd.append('cert_number_pattern', $('#wbr-cert-pattern').val());
 
         // Template files

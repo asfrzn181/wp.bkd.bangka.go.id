@@ -93,6 +93,7 @@ class WBR_Ajax {
             'end_datetime'        => $end,
             'zoom_link'           => esc_url_raw( $_POST['zoom_link'] ?? '' ),
             'youtube_link'        => esc_url_raw( $_POST['youtube_link'] ?? '' ),
+            'jam_pelajaran'       => absint( $_POST['jam_pelajaran'] ?? 0 ),
             'cert_number_pattern' => sanitize_text_field( $_POST['cert_number_pattern'] ?? 'PTKAN/{nomor}/{tahun}' ),
         ];
 
@@ -146,6 +147,7 @@ class WBR_Ajax {
             'end_datetime'         => sanitize_text_field( $_POST['end_datetime']          ?? '' ),
             'zoom_link'            => esc_url_raw( $_POST['zoom_link']                     ?? '' ),
             'youtube_link'         => esc_url_raw( $_POST['youtube_link']                  ?? '' ),
+            'jam_pelajaran'        => absint( $_POST['jam_pelajaran']                      ?? 0 ),
             'cert_number_pattern'  => sanitize_text_field( $_POST['cert_number_pattern']   ?? '' ),
         ];
 
@@ -341,7 +343,7 @@ class WBR_Ajax {
             $result = WBR_Attendance::submit_via_token( $token, $form_data );
         }
 
-        if ( $result['success'] ) wp_send_json_success( $result['message'] );
+        if ( $result['success'] ) wp_send_json_success( $result );
         else wp_send_json_error( $result['message'] );
     }
 }

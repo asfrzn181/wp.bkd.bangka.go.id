@@ -78,7 +78,7 @@
             });
 
             $msg.hide().removeClass('wbr-alert success error');
-            $btn.prop('disabled', true).text('Menyimpan kehadiran...');
+            $btn.prop('disabled', true).text('Menyimpan & Membuat Sertifikat...');
 
             var payload = {
                 action:     'wbr_attend',
@@ -92,10 +92,21 @@
             $.post( wbrPublic.ajaxUrl, payload )
             .done(function (res) {
                 if ( res.success ) {
-                    $msg.addClass('wbr-alert success').html( '✅ ' + res.data ).show();
+                    // Cek jika API mereturn string di res.data (pesan error tak terduga yang di-wrap dalam success=true)
+                    // Atau mereturn object { message: '...', redirect_url: '...' }
+                    var msg = typeof res.data === 'string' ? res.data : (res.data.message || 'Berhasil');
+                    
+                    $msg.addClass('wbr-alert success').html( '✅ ' + msg ).show();
                     $form.find('input, textarea, select, button').prop('disabled', true);
+                    
+                    if ( typeof res.data === 'object' && res.data.redirect_url ) {
+                        setTimeout(function() {
+                            window.location.href = res.data.redirect_url;
+                        }, 1500);
+                    }
                 } else {
-                    $msg.addClass('wbr-alert error').html( '⚠️ ' + (res.data || 'Gagal menyimpan absensi.') ).show();
+                    var errMsg = typeof res.data === 'string' ? res.data : (res.data.message || 'Gagal menyimpan absensi.');
+                    $msg.addClass('wbr-alert error').html( '⚠️ ' + errMsg ).show();
                     $btn.prop('disabled', false).text('✅ Simpan Kehadiran Saya');
                 }
             })

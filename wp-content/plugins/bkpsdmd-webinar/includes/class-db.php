@@ -18,12 +18,13 @@ class WBR_DB {
             end_datetime        DATETIME            NOT NULL,
             zoom_link           VARCHAR(500)        NOT NULL DEFAULT '',
             youtube_link        VARCHAR(500)        NOT NULL DEFAULT '',
+            jam_pelajaran       INT(11)             NOT NULL DEFAULT 0,
             cert_number_pattern VARCHAR(255)        NOT NULL DEFAULT '',
             sk_template_file    VARCHAR(500)        NOT NULL DEFAULT '',
             petikan_template_file VARCHAR(500)      NOT NULL DEFAULT '',
-            PRIMARY KEY (post_id),
-            INDEX idx_start (start_datetime),
-            INDEX idx_end   (end_datetime)
+            PRIMARY KEY  (post_id),
+            KEY idx_start (start_datetime),
+            KEY idx_end (end_datetime)
         ) $charset;" );
 
         // ── 2. webinar_form_field ────────────────────────────────────────────
@@ -38,8 +39,8 @@ class WBR_DB {
             is_required      TINYINT(1)          NOT NULL DEFAULT 0,
             is_identity_field TINYINT(1)         NOT NULL DEFAULT 0,
             sort_order       INT(11)             NOT NULL DEFAULT 0,
-            PRIMARY KEY (id),
-            INDEX idx_webinar_form (webinar_id, form_type, sort_order)
+            PRIMARY KEY  (id),
+            KEY idx_webinar_form (webinar_id, form_type, sort_order)
         ) $charset;" );
 
         // ── 3. webinar_registrant ────────────────────────────────────────────
@@ -50,10 +51,10 @@ class WBR_DB {
             email           VARCHAR(191)        NOT NULL,
             submission_data LONGTEXT            NOT NULL,
             registered_at   DATETIME            NOT NULL,
-            PRIMARY KEY (id),
+            PRIMARY KEY  (id),
             UNIQUE KEY uk_token (unique_token),
-            INDEX idx_webinar (webinar_id),
-            INDEX idx_email   (webinar_id, email)
+            KEY idx_webinar (webinar_id),
+            KEY idx_email (webinar_id, email)
         ) $charset;" );
 
         // ── 4. webinar_attendance ────────────────────────────────────────────
@@ -63,9 +64,9 @@ class WBR_DB {
             registrant_id   BIGINT(20) UNSIGNED NOT NULL,
             submission_data LONGTEXT            NOT NULL,
             attended_at     DATETIME            NOT NULL,
-            PRIMARY KEY (id),
+            PRIMARY KEY  (id),
             UNIQUE KEY uk_registrant (webinar_id, registrant_id),
-            INDEX idx_webinar (webinar_id)
+            KEY idx_webinar (webinar_id)
         ) $charset;" );
 
         // ── 5. webinar_sk ────────────────────────────────────────────────────
@@ -81,7 +82,7 @@ class WBR_DB {
             status            VARCHAR(30)         NOT NULL DEFAULT 'draft',
             created_at        DATETIME            NOT NULL,
             updated_at        DATETIME            NOT NULL,
-            PRIMARY KEY (id),
+            PRIMARY KEY  (id),
             UNIQUE KEY uk_webinar (webinar_id)
         ) $charset;" );
 
@@ -102,13 +103,28 @@ class WBR_DB {
             revoked_by           BIGINT(20) UNSIGNED,
             revoke_reason        TEXT,
             generated_at         DATETIME            NOT NULL,
-            PRIMARY KEY (id),
+            PRIMARY KEY  (id),
             UNIQUE KEY uk_hash (qr_verification_hash),
             UNIQUE KEY uk_att (attendance_id),
-            INDEX idx_webinar (webinar_id),
-            INDEX idx_sk (sk_id),
-            INDEX idx_status (status)
+            KEY idx_webinar (webinar_id),
+            KEY idx_sk (sk_id),
+            KEY idx_status (status)
         ) $charset;" );
+
+        // ── MANUAL FIX: Pastikan kolom webinar_id ada jika dbDelta gagal ──
+        $cert_table = $wpdb->prefix . 'webinar_certificate';
+        $check_col = $wpdb->get_results( "SHOW COLUMNS FROM {$cert_table} LIKE 'webinar_id'" );
+        if ( empty( $check_col ) ) {
+            $wpdb->query( "ALTER TABLE {$cert_table} ADD COLUMN webinar_id BIGINT(20) UNSIGNED NOT NULL AFTER id" );
+            $wpdb->query( "ALTER TABLE {$cert_table} ADD KEY idx_webinar (webinar_id)" );
+        }
+
+        // ── MANUAL FIX: Pastikan kolom jam_pelajaran ada ──
+        $meta_table = $wpdb->prefix . 'webinar_meta';
+        $check_jp = $wpdb->get_results( "SHOW COLUMNS FROM {$meta_table} LIKE 'jam_pelajaran'" );
+        if ( empty( $check_jp ) ) {
+            $wpdb->query( "ALTER TABLE {$meta_table} ADD COLUMN jam_pelajaran INT(11) NOT NULL DEFAULT 0 AFTER youtube_link" );
+        }
     }
 
     // ── Helper: get one row ──────────────────────────────────────────────────
