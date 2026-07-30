@@ -68,7 +68,7 @@ class WBR_Certificate {
         $att_data = json_decode( $att->submission_data, true ) ?: [];
         $reg_data = json_decode( $att->reg_data ?? '{}', true ) ?: [];
 
-        $holder_name  = self::extract_name( array_merge( $reg_data, $att_data ) );
+        $holder_name  = self::extract_name( array_merge( $reg_data, $att_data ), $att->webinar_id );
         $holder_email = $att->reg_email ?: self::extract_email( $att_data );
 
         // Hash verifikasi QR unik
@@ -233,9 +233,25 @@ class WBR_Certificate {
     }
 
     // ── Private helpers ───────────────────────────────────────────────────────
-    private static function extract_name( array $data ) {
+    private static function extract_name( array $data, $webinar_id = 0 ) {
+        global $wpdb;
+        $key_to_label = [];
+        if ( $webinar_id ) {
+            $fields = $wpdb->get_results( $wpdb->prepare(
+                "SELECT field_key, label FROM {$wpdb->prefix}webinar_form_field WHERE webinar_id = %d",
+                $webinar_id
+            ) );
+            foreach ( $fields as $f ) {
+                $key_to_label[ $f->field_key ] = $f->label;
+            }
+        }
+
         foreach ( $data as $key => $val ) {
-            if ( is_string( $val ) && $val !== '' && stripos( $key, 'nama' ) !== false ) return $val;
+            if ( ! is_string( $val ) || $val === '' ) continue;
+            if ( stripos( $key, 'nama' ) !== false ) return $val;
+            
+            $label = $key_to_label[ $key ] ?? '';
+            if ( stripos( $label, 'nama' ) !== false ) return $val;
         }
         return '';
     }

@@ -20,6 +20,16 @@ $webinar_title = '';
 if ( $webinar_id ) {
     $registrants = WBR_Registrant::get_all( $webinar_id, true );
     $webinar_title = get_the_title( $webinar_id );
+
+    // Build key-to-label map for displaying submission data properly
+    $fields = $wpdb->get_results( $wpdb->prepare(
+        "SELECT field_key, label FROM {$wpdb->prefix}webinar_form_field WHERE webinar_id = %d",
+        $webinar_id
+    ) );
+    $key_to_label = [];
+    foreach ( $fields as $f ) {
+        $key_to_label[ $f->field_key ] = $f->label;
+    }
 }
 ?>
 <div class="wrap wbr-admin-wrap">
@@ -106,7 +116,8 @@ if ( $webinar_id ) {
                     $data = json_decode( $r->submission_data, true ) ?: [];
                     $nama = '';
                     foreach ( $data as $k => $v ) {
-                        if ( is_string( $v ) && stripos( $k, 'nama' ) !== false ) { $nama = $v; break; }
+                        $label = $key_to_label[$k] ?? $k;
+                        if ( is_string( $v ) && ( stripos( $k, 'nama' ) !== false || stripos( $label, 'nama' ) !== false ) ) { $nama = $v; break; }
                     }
                 ?>
                 <tr id="wbr-reg-row-<?php echo $r->id; ?>">
@@ -116,8 +127,10 @@ if ( $webinar_id ) {
                         <strong><?php echo esc_html( $nama ?: '—' ); ?></strong>
                         <button type="button" class="wbr-data-toggle" data-id="<?php echo $r->id; ?>">Lihat semua ▼</button>
                         <div class="wbr-data-detail" id="wbr-data-<?php echo $r->id; ?>" style="display:none">
-                            <?php foreach ( $data as $k => $v ) : ?>
-                            <div><em><?php echo esc_html( $k ); ?>:</em> <?php echo esc_html( is_array($v) ? implode(', ',$v) : $v ); ?></div>
+                            <?php foreach ( $data as $k => $v ) : 
+                                $label = $key_to_label[$k] ?? $k;
+                            ?>
+                            <div><em><?php echo esc_html( $label ); ?>:</em> <?php echo esc_html( is_array($v) ? implode(', ',$v) : $v ); ?></div>
                             <?php endforeach; ?>
                         </div>
                     </td>
