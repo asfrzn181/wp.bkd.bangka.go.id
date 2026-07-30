@@ -33,7 +33,9 @@ class WBR_Attendance {
         }
 
         $att_id = self::insert( $webinar_id, $registrant->id, $form_data );
-        if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal menyimpan absensi.' ];
+        if ( $att_id === null || $att_id === false ) {
+            return [ 'success' => false, 'message' => 'Gagal menyimpan absensi. ' . $wpdb->last_error ];
+        }
 
         $hash = WBR_Certificate::generate_for_attendance( $att_id );
 
@@ -73,7 +75,9 @@ class WBR_Attendance {
         if ( ! $reg_id ) return [ 'success' => false, 'message' => 'Gagal mencatat data peserta.' ];
 
         $att_id = self::insert( $webinar_id, $reg_id, $form_data );
-        if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal menyimpan absensi.' ];
+        if ( $att_id === null || $att_id === false ) {
+            return [ 'success' => false, 'message' => 'Gagal menyimpan absensi. ' . $wpdb->last_error ];
+        }
 
         $hash = WBR_Certificate::generate_for_attendance( $att_id );
 
@@ -107,16 +111,13 @@ class WBR_Attendance {
     private static function insert( $webinar_id, $registrant_id, array $form_data ) {
         global $wpdb;
 
-        // Filter hanya field non-identity untuk submission_data
-        $att_fields = self::get_attendance_fields( $webinar_id );
-        $filtered   = [];
-        foreach ( $att_fields as $f ) {
-            if ( ! $f->is_identity_field && isset( $form_data[ $f->field_key ] ) ) {
-                $filtered[ $f->field_key ] = sanitize_text_field( (string) $form_data[ $f->field_key ] );
-            }
+        // Simpan semua data yang dikirim tanpa difilter agar tidak kosong
+        $filtered = [];
+        foreach ( $form_data as $key => $val ) {
+            $filtered[ sanitize_text_field( $key ) ] = sanitize_text_field( (string) $val );
         }
 
-        $wpdb->insert(
+        $result = $wpdb->insert(
             $wpdb->prefix . 'webinar_attendance',
             [
                 'webinar_id'      => $webinar_id,
@@ -126,7 +127,20 @@ class WBR_Attendance {
             ],
             [ '%d', '%d', '%s', '%s' ]
         );
-        return $wpdb->insert_id ?: null;
+
+        if ( $result === false ) {
+            return null; // Query failed
+        }
+
+        if ( $wpdb->insert_id ) {
+            return $wpdb->insert_id;
+        }
+
+        // Fallback: Jika tabel di server kehilangan AUTO_INCREMENT
+        return $wpdb->get_var( $wpdb->prepare(
+            "SELECT id FROM {$wpdb->prefix}webinar_attendance WHERE webinar_id = %d AND registrant_id = %d ORDER BY id DESC LIMIT 1",
+            $webinar_id, $registrant_id
+        ) );
     }
 
     // (Fungsi schedule_certificate dihapus karena sekarang sinkron)
