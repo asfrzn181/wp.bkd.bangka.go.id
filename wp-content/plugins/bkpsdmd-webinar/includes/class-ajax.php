@@ -20,6 +20,7 @@ class WBR_Ajax {
             'wbr_submit_signing'     => [ 'submit_for_signing',        'generate_sk' ],
             'wbr_revoke_cert'        => [ 'revoke_certificate',        'revoke_certificates' ],
             'wbr_regenerate_cert'    => [ 'regenerate_certificate',    'generate_certificates' ],
+            'wbr_batch_generate_certs' => [ 'batch_generate_certificates', 'generate_certificates' ],
             'wbr_export_registrants' => [ 'export_registrants',        'export_webinar_data' ],
         ];
 
@@ -285,6 +286,12 @@ class WBR_Ajax {
         $result  = WBR_Certificate::regenerate_pdf( $cert_id );
         if ( $result['success'] ) wp_send_json_success( $result );
         else wp_send_json_error( $result['message'] );
+    }
+
+    public static function batch_generate_certificates() {
+        $webinar_id = absint( $_POST['webinar_id'] ?? 0 );
+        WBR_Certificate::process_batch( $webinar_id );
+        wp_send_json_success( 'Batch triggered.' );
     }
 
     public static function export_registrants() {

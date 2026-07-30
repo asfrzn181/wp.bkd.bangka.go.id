@@ -137,6 +137,10 @@ $sk              = $webinar_id ? WBR_SK::get_by_webinar( $webinar_id ) : null;
                                class="wbr-btn wbr-btn-secondary wbr-btn-sm" title="Download PDF">
                                 📥 PDF
                             </a>
+                            <button type="button" class="wbr-btn wbr-btn-primary wbr-btn-sm wbr-regen-btn"
+                                    data-id="<?php echo $c->id; ?>" title="Cetak ulang sertifikat ini">
+                                🔄 Regenerate
+                            </button>
                             <?php if ( ! $is_revoked ) : ?>
                             <button type="button" class="wbr-btn wbr-btn-danger wbr-btn-sm wbr-revoke-btn"
                                     data-id="<?php echo $c->id; ?>" data-name="<?php echo esc_attr( $c->holder_name ); ?>">
@@ -164,11 +168,35 @@ $sk              = $webinar_id ? WBR_SK::get_by_webinar( $webinar_id ) : null;
         $btn.prop('disabled', true).text('Generating...');
 
         $.post(wbrAdmin.ajaxUrl, {
-            action: 'wbr_regenerate_cert', // triggers batch
+            action: 'wbr_batch_generate_certs', // triggers batch
             webinar_id: webinarId,
             nonce: wbrAdmin.nonce
-        }).always(function() {
+        }).done(function() {
             location.reload();
+        }).fail(function() {
+            alert('Gagal trigger batch generate.');
+            location.reload();
+        });
+    });
+
+    // Individual regenerate button
+    $('.wbr-regen-btn').on('click', function() {
+        var id   = $(this).data('id');
+        var $btn = $(this);
+        $btn.prop('disabled', true).text('⏳');
+
+        $.post(wbrAdmin.ajaxUrl, {
+            action: 'wbr_regenerate_cert',
+            cert_id: id,
+            nonce: wbrAdmin.nonce
+        }).done(function(res) {
+            if (res.success) {
+                alert('Sertifikat berhasil dibuat ulang!');
+                location.reload();
+            } else {
+                alert('Gagal: ' + (res.data || 'Error'));
+                $btn.prop('disabled', false).text('🔄 Regenerate');
+            }
         });
     });
 

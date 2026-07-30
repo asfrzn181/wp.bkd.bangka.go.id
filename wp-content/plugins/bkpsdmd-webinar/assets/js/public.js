@@ -92,20 +92,24 @@
             $.post( wbrPublic.ajaxUrl, payload )
             .done(function (res) {
                 if ( res.success ) {
-                    // Cek jika API mereturn string di res.data (pesan error tak terduga yang di-wrap dalam success=true)
-                    // Atau mereturn object { message: '...', redirect_url: '...' }
-                    var msg = typeof res.data === 'string' ? res.data : (res.data.message || 'Berhasil');
+                    var msg = 'Berhasil';
+                    if (res.data) {
+                        msg = typeof res.data === 'string' ? res.data : (res.data.message || msg);
+                    }
                     
                     $msg.addClass('wbr-alert success').html( '✅ ' + msg ).show();
                     $form.find('input, textarea, select, button').prop('disabled', true);
                     
-                    if ( typeof res.data === 'object' && res.data.redirect_url ) {
+                    if ( res.data && typeof res.data === 'object' && res.data.redirect_url ) {
                         setTimeout(function() {
                             window.location.href = res.data.redirect_url;
                         }, 1500);
                     }
                 } else {
-                    var errMsg = typeof res.data === 'string' ? res.data : (res.data.message || 'Gagal menyimpan absensi.');
+                    var errMsg = 'Gagal menyimpan absensi.';
+                    if (res.data) {
+                        errMsg = typeof res.data === 'string' ? res.data : (res.data.message || errMsg);
+                    }
                     $msg.addClass('wbr-alert error').html( '⚠️ ' + errMsg ).show();
                     $btn.prop('disabled', false).text('✅ Simpan Kehadiran Saya');
                 }
