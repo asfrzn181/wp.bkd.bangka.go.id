@@ -230,3 +230,16 @@ add_action('after_switch_theme', 'career_development_getstart_setup_options');
 function career_development_getstart_setup_options () {
     update_option('career_development_admin_notice', FALSE );
 }
+
+/**
+ * Fix WP Block Navigation: Force overlayMenu = "mobile"
+ * agar menu muncul inline di desktop (≥600px WP default)
+ * dan hamburger muncul di mobile (≤600px).
+ * CSS mobile-nav.css kemudian override breakpoint ke 992px.
+ */
+add_filter( 'render_block_data', function( $parsed_block ) {
+    if ( isset( $parsed_block['blockName'] ) && $parsed_block['blockName'] === 'core/navigation' ) {
+        $parsed_block['attrs']['overlayMenu'] = 'mobile';
+    }
+    return $parsed_block;
+} );

@@ -51,9 +51,6 @@ $site_name = get_bloginfo( 'name' );
                 <!-- Logo Section -->
                 <div class="col-xl-2 col-lg-3 col-md-2 col-sm-1 col-1">
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" id="navToggleOpen" aria-label="Toggle Navigation">
-                            <span class="dashicons dashicons-menu"></span>
-                        </button>
                         <a class="navbar-brand" href="<?php echo esc_url( $home_url ); ?>">
                             <?php if ( ! empty( $logo_url ) ) : ?>
                                 <img src="<?php echo esc_url( $logo_url ); ?>" class="logo" alt="<?php echo esc_attr( $site_name ); ?>">
@@ -61,6 +58,9 @@ $site_name = get_bloginfo( 'name' );
                                 <span class="logo-title"><?php echo esc_html( $site_name ); ?></span>
                             <?php endif; ?>
                         </a>
+                        <button type="button" class="navbar-toggle" id="navToggleOpen" aria-label="Toggle Navigation">
+                            <span class="dashicons dashicons-menu"></span>
+                        </button>
                     </div>
                 </div>
 

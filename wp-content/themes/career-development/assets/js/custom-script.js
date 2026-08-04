@@ -39,13 +39,13 @@ document.addEventListener('DOMContentLoaded', function () {
   function openMenu() {
     if (panel) panel.classList.add('open');
     if (overlay) overlay.classList.add('show');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('panel-open');
   }
 
   function closeMenu() {
     if (panel) panel.classList.remove('open');
     if (overlay) overlay.classList.remove('show');
-    document.body.style.overflow = '';
+    document.body.classList.remove('panel-open');
   }
 
   if (openBtn) openBtn.addEventListener('click', openMenu);
@@ -55,9 +55,9 @@ document.addEventListener('DOMContentLoaded', function () {
 (function () {
   'use strict';
 
-  var MOBILE_BP = 768;
+  var MOBILE_BP = 992;
 
-  /* ── Pastikan hanya jalan di mobile ─────────────────────── */
+  /* ── Pastikan hanya jalan di mobile/tablet ────────────────── */
   function isMobile() {
     return window.innerWidth < MOBILE_BP;
   }
@@ -68,13 +68,13 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!isMobile()) return;
 
       var toggleBtn = e.target.closest(
-        '.main-header .wp-block-navigation__responsive-container-open, .main-header button.wp-block-navigation__responsive-container-open'
+        'header .wp-block-navigation__responsive-container-open, header button.wp-block-navigation__responsive-container-open'
       );
       var closeBtn = e.target.closest(
-        '.main-header .wp-block-navigation__responsive-container-close, .main-header button.wp-block-navigation__responsive-container-close'
+        'header .wp-block-navigation__responsive-container-close, header button.wp-block-navigation__responsive-container-close'
       );
       var overlay = document.querySelector(
-        '.main-header .wp-block-navigation__responsive-container'
+        'header .wp-block-navigation__responsive-container'
       );
 
       if (toggleBtn && overlay) {
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function watchOverlay() {
     initMobileToggle();
     var overlay = document.querySelector(
-      '.main-header .wp-block-navigation__responsive-container'
+      'header .wp-block-navigation__responsive-container'
     );
     if (!overlay) return;
 
