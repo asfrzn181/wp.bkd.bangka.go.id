@@ -75,6 +75,22 @@ if ( ! function_exists( 'career_development_styles' ) ) :
 		    array('career-development-style'),
 		    filemtime( get_template_directory() . '/assets/css/mobile-nav.css' )
 		);
+
+		// Parallax Carousel Banner
+		wp_enqueue_style(
+		    'bkpsdmd-parallax-banner-css',
+		    get_template_directory_uri() . '/assets/css/parallax-banner.css',
+		    array(),
+		    filemtime( get_template_directory() . '/assets/css/parallax-banner.css' )
+		);
+
+		wp_enqueue_script(
+		    'bkpsdmd-parallax-banner-js',
+		    get_template_directory_uri() . '/assets/js/parallax-banner.js',
+		    array(),
+		    filemtime( get_template_directory() . '/assets/js/parallax-banner.js' ),
+		    true
+		);
 	}
 endif;
 

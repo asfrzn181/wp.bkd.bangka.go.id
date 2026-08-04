@@ -37,7 +37,11 @@ class WBR_Attendance {
             return [ 'success' => false, 'message' => 'Gagal menyimpan absensi. ' . $wpdb->last_error ];
         }
 
-        $hash = WBR_Certificate::generate_for_attendance( $att_id );
+        // Generate sertifikat secara ASYNC via WP Cron agar tidak memblokir respon AJAX.
+        // Jika generate gagal/crash, absensi tetap tercatat dan user menerima respon sukses.
+        if ( ! wp_next_scheduled( 'wbr_generate_certificate_for_attendance', [ (int) $att_id ] ) ) {
+            wp_schedule_single_event( time(), 'wbr_generate_certificate_for_attendance', [ (int) $att_id ] );
+        }
 
         return [
             'success'      => true,
@@ -79,7 +83,10 @@ class WBR_Attendance {
             return [ 'success' => false, 'message' => 'Gagal menyimpan absensi. ' . $wpdb->last_error ];
         }
 
-        $hash = WBR_Certificate::generate_for_attendance( $att_id );
+        // Generate sertifikat secara ASYNC via WP Cron agar tidak memblokir respon AJAX.
+        if ( ! wp_next_scheduled( 'wbr_generate_certificate_for_attendance', [ (int) $att_id ] ) ) {
+            wp_schedule_single_event( time(), 'wbr_generate_certificate_for_attendance', [ (int) $att_id ] );
+        }
 
         return [
             'success'      => true,
@@ -102,7 +109,10 @@ class WBR_Attendance {
         $att_id = self::insert( $webinar_id, $registrant->id, [] );
         if ( ! $att_id ) return [ 'success' => false, 'message' => 'Gagal mencatat.' ];
 
-        WBR_Certificate::generate_for_attendance( $att_id );
+        // Generate sertifikat secara ASYNC via WP Cron
+        if ( ! wp_next_scheduled( 'wbr_generate_certificate_for_attendance', [ (int) $att_id ] ) ) {
+            wp_schedule_single_event( time(), 'wbr_generate_certificate_for_attendance', [ (int) $att_id ] );
+        }
 
         return [ 'success' => true, 'message' => 'Kehadiran berhasil dicatat dan sertifikat dibuat.' ];
     }

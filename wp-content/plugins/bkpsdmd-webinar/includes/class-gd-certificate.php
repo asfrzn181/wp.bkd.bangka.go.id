@@ -33,8 +33,9 @@ class WBR_GD_Certificate {
             self::ensure_default_template( $template_file );
         }
 
+        // Cek font — JANGAN download dari internet (server hosting sering tidak bisa)
         $font_file = WBR_PATH . 'assets/fonts/Roboto-Regular.ttf';
-        self::ensure_default_font( $font_file );
+        $has_font  = file_exists( $font_file ) && filesize( $font_file ) > 1000;
 
         // Buat image resource
         $ext = strtolower( pathinfo( $template_file, PATHINFO_EXTENSION ) );
@@ -61,7 +62,7 @@ class WBR_GD_Certificate {
         $gray_color = imagecolorallocate( $image, 100, 100, 100 );
 
         // Tambah teks (Nama)
-        if ( file_exists( $font_file ) ) {
+        if ( $has_font ) {
             // Tulis Nama (Tengah) - dengan Auto Scaling
             $font_size_nama = 60; // Start ukuran besar
             $max_width_nama = $width * 0.8; // Maksimal 80% lebar gambar
@@ -73,16 +74,16 @@ class WBR_GD_Certificate {
                 $font_size_nama -= 2;
             }
             
-            $x_nama = ( $width - $text_width ) / 2;
-            $y_nama = $height / 2;
+            $x_nama = (int) (( $width - $text_width ) / 2);
+            $y_nama = (int) ($height / 2);
             imagettftext( $image, $font_size_nama, 0, $x_nama, $y_nama, $text_color, $font_file, $nama );
 
             // Tulis Judul Webinar
             $font_size_webinar = 24;
             $bbox2 = imagettfbbox( $font_size_webinar, 0, $font_file, $webinar_post->post_title );
             $text_width2 = $bbox2[2] - $bbox2[0];
-            $x_webinar = ( $width - $text_width2 ) / 2;
-            $y_webinar = $y_nama + 80;
+            $x_webinar = (int) (( $width - $text_width2 ) / 2);
+            $y_webinar = (int) ($y_nama + 80);
             imagettftext( $image, $font_size_webinar, 0, $x_webinar, $y_webinar, $gray_color, $font_file, $webinar_post->post_title );
             
             // Tulis Nomor Sertifikat
@@ -102,8 +103,8 @@ class WBR_GD_Certificate {
                         $max_sig_w = $width * 0.25; 
                         if ( $sig_w > $max_sig_w ) {
                             $ratio = $max_sig_w / $sig_w;
-                            $new_sig_w = $max_sig_w;
-                            $new_sig_h = $sig_h * $ratio;
+                            $new_sig_w = (int) $max_sig_w;
+                            $new_sig_h = (int) ($sig_h * $ratio);
                             
                             $resized_sig = imagecreatetruecolor( $new_sig_w, $new_sig_h );
                             imagealphablending( $resized_sig, false );
@@ -119,7 +120,7 @@ class WBR_GD_Certificate {
                         }
                         
                         // Tempel di kanan bawah (agak ke atas QR)
-                        imagecopy( $image, $sig_image, $width - $sig_w - ($width*0.1), $height - $sig_h - ($height*0.1), 0, 0, $sig_w, $sig_h );
+                        imagecopy( $image, $sig_image, (int)($width - $sig_w - ($width*0.1)), (int)($height - $sig_h - ($height*0.1)), 0, 0, $sig_w, $sig_h );
                         imagedestroy( $sig_image );
                     }
                 }
@@ -147,8 +148,8 @@ class WBR_GD_Certificate {
         } else {
             // Fallback tanpa TTF
             imagestring( $image, 5, 50, 50, 'No: ' . $cert->petikan_number, $text_color );
-            imagestring( $image, 5, $width/2 - strlen($nama)*4, $height/2, $nama, $text_color );
-            imagestring( $image, 5, $width/2 - strlen($webinar_post->post_title)*4, $height/2 + 50, $webinar_post->post_title, $gray_color );
+            imagestring( $image, 5, (int)($width/2 - strlen($nama)*4), (int)($height/2), $nama, $text_color );
+            imagestring( $image, 5, (int)($width/2 - strlen($webinar_post->post_title)*4), (int)($height/2 + 50), $webinar_post->post_title, $gray_color );
         }
 
         // Simpan gambar ke disk sebagai format sementara atau final
@@ -280,21 +281,27 @@ class WBR_GD_Certificate {
     }
 
     private static function ensure_default_font( $font_file ) {
-        if ( file_exists( $font_file ) ) return;
+        // Font harus sudah tersedia di dalam direktori plugin.
+        // Fungsi ini tidak lagi mendownload dari internet karena server hosting
+        // umumnya tidak memiliki akses keluar (outbound) yang diperlukan.
+        if ( file_exists( $font_file ) && filesize( $font_file ) > 1000 ) {
+            return; // Font sudah ada dan valid
+        }
         wp_mkdir_p( dirname( $font_file ) );
-        // Gunakan file lokal atau fallback jika bisa fetch dari web
-        $font_url = 'https://github.com/google/fonts/raw/main/ofl/roboto/Roboto-Regular.ttf';
-        
-        $ch = curl_init();
-        curl_setopt( $ch, CURLOPT_URL, $font_url );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false ); // for local envs
-        $font_data = curl_exec( $ch );
-        curl_close( $ch );
-
-        if ( $font_data ) {
-            file_put_contents( $font_file, $font_data );
+        // Coba download hanya jika benar-benar tidak ada (lokal dev)
+        if ( function_exists( 'curl_init' ) ) {
+            $font_url  = 'https://github.com/google/fonts/raw/main/ofl/roboto/Roboto-Regular.ttf';
+            $ch = curl_init();
+            curl_setopt( $ch, CURLOPT_URL, $font_url );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+            curl_setopt( $ch, CURLOPT_TIMEOUT, 10 ); // Timeout 10 detik
+            curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+            $font_data = curl_exec( $ch );
+            curl_close( $ch );
+            if ( $font_data && strlen( $font_data ) > 10000 ) {
+                file_put_contents( $font_file, $font_data );
+            }
         }
     }
 }

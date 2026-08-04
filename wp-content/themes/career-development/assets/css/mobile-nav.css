@@ -3,50 +3,148 @@
    Tema: career-development / BKPSDMD Bangka
    ===================================================== */
 
-/* =====================================================
-   1. LOGO — Ukuran responsif di semua perangkat
-   ===================================================== */
+/* Prevents unwanted horizontal scroll on small screens */
+html,
+body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
 
-/* Desktop: biarkan normal */
+/* 1. LOGO — Ukuran responsif di semua perangkat */
 .main-header .wp-block-site-title,
 .main-header .wp-block-site-logo {
     max-width: 100%;
 }
 
-/* Tablet */
+/* Tablet (max-width: 1024px) */
 @media (max-width: 1024px) {
-    /* wp-block-site-logo (Site Logo block) */
+
     .main-header .wp-block-site-logo img,
     .main-header .wp-site-logo img {
         max-width: 140px !important;
         height: auto !important;
     }
-    /* wp-block-image (Image block dipakai sebagai logo) */
+
     .main-header .wp-block-column:first-child .wp-block-image img,
     .main-header .wp-block-column:first-child figure img {
         max-width: 140px !important;
         width: 140px !important;
         height: auto !important;
     }
+
     .main-header .wp-block-site-title {
         font-size: 18px !important;
     }
 }
 
-/* Smartphone */
+/* Smartphone / Mobile (max-width: 768px) */
 @media (max-width: 768px) {
-    /* wp-block-site-logo */
+
+    /* 0. GLOBAL VIEWPORT & HEADER CONTAINERS FULL-WIDTH */
+    html,
+    body {
+        overflow-x: hidden !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .wp-site-blocks,
+    .is-root-container,
+    .wp-block-template-part,
+    .main-header,
+    .wp-block-group.main-header,
+    .header,
+    .site-header {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Target the white rounded header box and override Gutenberg constrained layout (contentSize: 90%/95%) */
+    .main-header .header-section,
+    .header-section,
+    .wp-block-group.header-section,
+    .main-header>*,
+    :where(.is-layout-constrained)>.header-section,
+    :where(.is-layout-constrained)>.main-header {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 0 0 16px 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Columns row inside white header box */
+    .main-header .header-section .wp-block-columns,
+    .header-section .wp-block-columns,
+    .wp-block-group.header-section .wp-block-columns {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 22px !important;
+        padding-right: 22px !important;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Column wrappers vertical alignment */
+    .main-header .wp-block-column,
+    .header-section .wp-block-column {
+        display: flex !important;
+        align-items: center !important;
+        align-self: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Hide pseudo side accents on mobile so they don't break width calculations or leave gaps */
+    .header-section .wp-block-columns:before,
+    .header-section .wp-block-columns:after,
+    .header-section:before,
+    .header-section:after {
+        display: none !important;
+    }
+
+    .main-header .wp-block-column:first-child,
+    .header-section .wp-block-column:first-child {
+        flex: 1 1 auto !important;
+        justify-content: flex-start !important;
+        min-width: 0 !important;
+        max-width: calc(100% - 68px) !important;
+    }
+
+    .main-header .wp-block-column:has(.wp-block-navigation__responsive-container-open),
+    .main-header .wp-block-column:nth-child(2),
+    .main-header .wp-block-column:last-child {
+        flex: 0 0 auto !important;
+        justify-content: flex-end !important;
+        margin-left: auto !important;
+    }
+
     .main-header .wp-block-site-logo img,
     .main-header .wp-site-logo img {
         max-width: 90px !important;
         height: auto !important;
     }
-    /* wp-block-image dipakai sebagai logo */
+
     .main-header .wp-block-column:first-child .wp-block-image,
     .main-header .wp-block-column:first-child figure.wp-block-image {
         max-width: 90px !important;
         margin: 0 !important;
     }
+
     .main-header .wp-block-column:first-child .wp-block-image img,
     .main-header .wp-block-column:first-child figure.wp-block-image img {
         max-width: 90px !important;
@@ -54,74 +152,143 @@
         height: auto !important;
         object-fit: contain !important;
     }
-    .main-header .wp-block-site-title {
-        font-size: 15px !important;
+
+    .main-header .wp-block-site-title,
+    .main-header .wp-block-site-title a {
+        font-size: clamp(14px, 4.2vw, 17px) !important;
         line-height: 1.3 !important;
-    }
-    /* Header section padding lebih kecil */
-    .main-header .wp-block-columns {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
-    }
-    /* Kolom logo: shrink sesuai konten */
-    .main-header .wp-block-column:first-child {
-        flex-basis: auto !important;
-        flex: 0 0 auto !important;
-        min-width: 0 !important;
-        width: auto !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
 }
 
-/* =====================================================
-   2. HAMBURGER BUTTON
-   Desktop: SEMBUNYIKAN
-   Mobile:  Tampilkan, perbesar & rapikan
-   ===================================================== */
-
-/* DESKTOP — sembunyikan hamburger, tampilkan nav normal */
+/* 2. DESKTOP NAVIGATION & HAMBURGER BUTTON */
 @media (min-width: 769px) {
-    .main-header .wp-block-navigation__responsive-container-open {
-        display: none !important;
-    }
-    /* Pastikan container nav desktop tampil */
-    .main-header .wp-block-navigation__responsive-container:not(.is-menu-open) {
-        display: contents !important;
-    }
-}
-
-/* MOBILE — tampilkan hamburger */
-@media (max-width: 768px) {
+    /* Hide hamburger button on desktop */
     .main-header .wp-block-navigation__responsive-container-open,
     .main-header button.wp-block-navigation__responsive-container-open {
+        display: none !important;
+    }
+
+    /* Force navigation container to be visible and horizontal on desktop,
+       overriding HTML5 [hidden] attribute and WP JS .is-hidden-by-default class */
+    .main-header .wp-block-navigation__responsive-container,
+    .main-header .wp-block-navigation__responsive-container[hidden],
+    .main-header .wp-block-navigation__responsive-container.is-hidden-by-default,
+    .main-header .wp-block-navigation__responsive-container:not(.is-menu-open),
+    .main-header div.wp-block-navigation__responsive-container {
         display: flex !important;
-        align-items: center;
-        justify-content: center;
-        width: 44px;
-        height: 44px;
-        padding: 8px;
-        border-radius: 8px;
-        background: var(--wp--preset--color--primary, #FF9A04);
-        border: none;
+        position: static !important;
+        background: transparent !important;
+        width: auto !important;
+        height: auto !important;
+        padding: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        box-shadow: none !important;
+        flex-grow: 1 !important;
+        justify-content: center !important;
+    }
+
+    .main-header .wp-block-navigation__responsive-container-content {
+        display: flex !important;
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .main-header .wp-block-navigation__responsive-container .wp-block-navigation__container {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 25px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: auto !important;
+    }
+
+    .main-header .wp-block-navigation__responsive-container .wp-block-navigation-item {
+        border: none !important;
+        width: auto !important;
+    }
+
+    .main-header .wp-block-navigation__responsive-container .wp-block-navigation-item__content,
+    .main-header .wp-block-navigation__responsive-container .wp-block-navigation-item > a {
+        color: var(--wp--preset--color--heading, #2A2A2A) !important;
+        padding: 8px 12px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+    }
+
+    .main-header .wp-block-navigation__responsive-container .wp-block-navigation-item__content:hover,
+    .main-header .wp-block-navigation__responsive-container .wp-block-navigation-item > a:hover {
+        color: var(--wp--preset--color--primary, #FF9A04) !important;
+        padding-left: 12px !important;
+    }
+
+    .main-header .wp-block-navigation__responsive-container-close {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .main-header .wp-block-navigation__responsive-container-open,
+    .main-header button.wp-block-navigation__responsive-container-open,
+    .menu-toggle,
+    .navbar-toggler,
+    .hamburger-button {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        max-width: 40px !important;
+        max-height: 40px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        margin-right: 6px !important;
+        border-radius: 8px !important;
+        background: var(--wp--preset--color--primary, #FF9A04) !important;
+        border: none !important;
         cursor: pointer;
-        transition: filter .2s ease;
+        transition: filter .2s ease, transform .2s ease;
         -webkit-tap-highlight-color: transparent;
-        flex-shrink: 0;
+        flex-shrink: 0 !important;
+        align-self: center !important;
+        box-sizing: border-box !important;
     }
-    .main-header .wp-block-navigation__responsive-container-open:hover {
+
+    .main-header .wp-block-navigation__responsive-container-open:hover,
+    .main-header button.wp-block-navigation__responsive-container-open:hover {
         filter: brightness(1.08);
+        transform: scale(1.02);
     }
-    .main-header .wp-block-navigation__responsive-container-open svg {
+
+    .main-header .wp-block-navigation__responsive-container-open svg,
+    .main-header button.wp-block-navigation__responsive-container-open svg {
         width: 22px !important;
         height: 22px !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
         fill: #fff !important;
         stroke: #fff !important;
         color: #fff !important;
+        display: block !important;
+        margin: auto !important;
+    }
+
+    .main-header .wp-block-navigation__responsive-container:not(.is-menu-open) {
+        display: none !important;
     }
 }
 
-/* =====================================================
-   3. CLOSE BUTTON di overlay mobile
-   ===================================================== */
+/* 3. CLOSE BUTTON */
 .main-header .wp-block-navigation__responsive-container-close,
 .main-header button.wp-block-navigation__responsive-container-close {
     display: flex;
@@ -130,15 +297,17 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255,255,255,.15);
-    border: 2px solid rgba(255,255,255,.4);
+    background: rgba(255, 255, 255, .15);
+    border: 2px solid rgba(255, 255, 255, .4);
     cursor: pointer;
     transition: background .2s ease;
     -webkit-tap-highlight-color: transparent;
 }
+
 .main-header .wp-block-navigation__responsive-container-close:hover {
-    background: rgba(255,255,255,.25);
+    background: rgba(255, 255, 255, .25);
 }
+
 .main-header .wp-block-navigation__responsive-container-close svg,
 .main-header .wp-block-navigation__responsive-container-close-icon {
     width: 20px !important;
@@ -147,47 +316,43 @@
     stroke: #fff !important;
 }
 
-/* =====================================================
-   4. MOBILE MENU OVERLAY — Full screen, tampilan premium
-   ===================================================== */
+/* 4. MOBILE MENU OVERLAY */
 .main-header .wp-block-navigation__responsive-container.is-menu-open {
     background: var(--wp--preset--color--heading, #2A2A2A) !important;
     padding: 24px 28px 40px !important;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    /* Smooth open animation */
-    animation: cdNavSlideIn .28s cubic-bezier(.25,.46,.45,.94) both;
+    animation: cdNavSlideIn .28s cubic-bezier(.25, .46, .45, .94) both;
 }
 
 @keyframes cdNavSlideIn {
-    from { opacity: 0; transform: translateY(-12px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Header overlay (baris logo + tombol close) */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__responsive-dialog {
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-dialog {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
 }
 
-/* Logo di dalam overlay */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-site-title a,
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-site-logo {
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-site-title a,
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-site-logo {
     color: #fff !important;
     filter: brightness(10);
 }
 
-/* =====================================================
-   5. ITEM MENU UTAMA di mobile
-   ===================================================== */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__container {
+/* 5. ITEM MENU UTAMA */
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container {
     display: flex !important;
     flex-direction: column !important;
     gap: 0 !important;
@@ -195,21 +360,17 @@
     padding: 0;
 }
 
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item {
-    border-bottom: 1px solid rgba(255,255,255,.08);
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item {
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
     width: 100%;
 }
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item:first-child {
-    border-top: 1px solid rgba(255,255,255,.08);
+
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item:first-child {
+    border-top: 1px solid rgba(255, 255, 255, .08);
 }
 
-/* Link menu utama */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item__content,
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item > a {
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content,
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item>a {
     display: flex !important;
     align-items: center;
     width: 100% !important;
@@ -220,129 +381,114 @@
     text-decoration: none !important;
     transition: color .18s ease, padding-left .18s ease;
 }
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item__content:hover,
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item > a:hover {
+
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content:hover,
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item>a:hover {
     color: var(--wp--preset--color--primary, #FF9A04) !important;
     padding-left: 10px !important;
 }
 
-/* Item aktif / current */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item.current-menu-item > .wp-block-navigation-item__content,
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item.current-menu-item > a {
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item.current-menu-item>.wp-block-navigation-item__content,
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item.current-menu-item>a {
     color: var(--wp--preset--color--primary, #FF9A04) !important;
 }
 
-/* =====================================================
-   6. SUBMENU di mobile — tampilan accordion
-   ===================================================== */
-
-/* Tombol toggle submenu */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-icon {
+/* 6. SUBMENU di mobile */
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-icon {
     display: flex !important;
     align-items: center;
     justify-content: center;
     margin-left: auto;
     padding: 4px;
-    color: rgba(255,255,255,.6);
+    color: rgba(255, 255, 255, .6);
     transition: transform .2s ease, color .18s ease;
 }
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-icon svg {
+
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-icon svg {
     width: 16px !important;
     height: 16px !important;
     stroke: currentColor !important;
     fill: none !important;
 }
-/* Rotasi arrow saat submenu terbuka */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-item.open-on-click.is-menu-open > .wp-block-navigation-item__content
-.wp-block-navigation__submenu-icon,
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation-submenu.is-menu-open > .wp-block-navigation-item__content
-.wp-block-navigation__submenu-icon {
+
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item.open-on-click.is-menu-open>.wp-block-navigation-item__content .wp-block-navigation__submenu-icon,
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-submenu.is-menu-open>.wp-block-navigation-item__content .wp-block-navigation__submenu-icon {
     transform: rotate(180deg);
     color: var(--wp--preset--color--primary, #FF9A04);
 }
 
-/* Container submenu */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-container {
-    background: rgba(0,0,0,.2) !important;
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container {
+    background: rgba(0, 0, 0, .2) !important;
     border-radius: 8px;
     margin: 0 0 6px 0;
     padding: 4px 0 !important;
     border: none !important;
     box-shadow: none !important;
-    position: static !important; /* override absolute positioning */
+    position: static !important;
     width: 100% !important;
     min-width: unset !important;
 }
 
-/* Item submenu */
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-container .wp-block-navigation-item {
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item {
     border-bottom: none;
     border-top: none;
     width: 100%;
 }
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-container .wp-block-navigation-item__content,
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-container .wp-block-navigation-item > a {
+
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item__content,
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item>a {
     padding: 11px 20px !important;
     font-size: 13.5px !important;
     font-weight: 500 !important;
-    color: rgba(255,255,255,.75) !important;
+    color: rgba(255, 255, 255, .75) !important;
     display: flex !important;
     align-items: center;
     gap: 8px;
     transition: color .15s ease, padding-left .15s ease;
 }
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-container .wp-block-navigation-item__content::before,
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-container .wp-block-navigation-item > a::before {
+
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item__content::before,
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item>a::before {
     content: '–';
     color: var(--wp--preset--color--primary, #FF9A04);
     font-size: 14px;
     line-height: 1;
     flex-shrink: 0;
 }
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-container .wp-block-navigation-item__content:hover,
-.main-header .wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__submenu-container .wp-block-navigation-item > a:hover {
+
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item__content:hover,
+.main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item>a:hover {
     color: #fff !important;
     padding-left: 26px !important;
 }
 
-/* =====================================================
-   7. DESKTOP SUBMENU — Perbaikan dropdown desktop
-   ===================================================== */
+/* 7. DESKTOP SUBMENU */
 @media (min-width: 769px) {
     .main-header .wp-block-navigation__submenu-container {
         border-radius: 10px !important;
-        border: 1px solid rgba(0,0,0,.08) !important;
-        box-shadow: 0 8px 30px rgba(0,0,0,.12) !important;
+        border: 1px solid rgba(0, 0, 0, .08) !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .12) !important;
         padding: 6px 0 !important;
         min-width: 200px !important;
         background: #fff !important;
         overflow: hidden;
         animation: cdSubFadeIn .18s ease both;
     }
+
     @keyframes cdSubFadeIn {
-        from { opacity: 0; transform: translateY(6px); }
-        to   { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-    .main-header .wp-block-navigation__submenu-container
-    .wp-block-navigation-item__content,
-    .main-header .wp-block-navigation__submenu-container
-    .wp-block-navigation-item > a {
+
+    .main-header .wp-block-navigation__submenu-container .wp-block-navigation-item__content,
+    .main-header .wp-block-navigation__submenu-container .wp-block-navigation-item>a {
         padding: 10px 18px !important;
         font-size: 13.5px !important;
         color: var(--wp--preset--color--heading, #2A2A2A) !important;
@@ -351,67 +497,46 @@
         text-decoration: none !important;
         transition: background .15s ease, color .15s ease, padding-left .15s ease;
     }
-    .main-header .wp-block-navigation__submenu-container
-    .wp-block-navigation-item__content:hover,
-    .main-header .wp-block-navigation__submenu-container
-    .wp-block-navigation-item > a:hover {
+
+    .main-header .wp-block-navigation__submenu-container .wp-block-navigation-item__content:hover,
+    .main-header .wp-block-navigation__submenu-container .wp-block-navigation-item>a:hover {
         background: #fff8ee !important;
         color: var(--wp--preset--color--primary, #FF9A04) !important;
         padding-left: 24px !important;
     }
-    .main-header .wp-block-navigation__submenu-container
-    .wp-block-navigation-item {
-        border-bottom: 1px solid rgba(0,0,0,.05) !important;
+
+    .main-header .wp-block-navigation__submenu-container .wp-block-navigation-item {
+        border-bottom: 1px solid rgba(0, 0, 0, .05) !important;
     }
-    .main-header .wp-block-navigation__submenu-container
-    .wp-block-navigation-item:last-child {
+
+    .main-header .wp-block-navigation__submenu-container .wp-block-navigation-item:last-child {
         border-bottom: none !important;
     }
 }
 
-/* =====================================================
-   8. HEADER LAYOUT di mobile — satu baris rapi
-   ===================================================== */
+/* 8. HEADER LAYOUT di mobile */
 @media (max-width: 768px) {
-    /* Satu baris: logo | ... | hamburger */
     .main-header .wp-block-columns {
         flex-wrap: nowrap !important;
         align-items: center !important;
     }
-    /* Sembunyikan kolom social links di mobile */
+
     .main-header .wp-block-column:last-child:has(.wp-block-social-links) {
         display: none !important;
     }
-    /* Kolom navigasi rata kanan, flex auto */
-    .main-header .wp-block-column:has(.wp-block-navigation) {
-        display: flex !important;
-        justify-content: flex-end !important;
-        flex-basis: auto !important;
-        flex: 1 !important;
-    }
-    /* Header section shadow */
+
     .main-header .header-section {
         border-radius: 0 0 16px 16px;
-        box-shadow: 0 2px 12px rgba(0,0,0,.08);
-    }
-    /* Pastikan header tidak melampaui viewport */
-    .main-header {
-        width: 100% !important;
-        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
     }
 }
 
-
-/* =====================================================
-   9. SCROLL BEHAVIOR — Cegah body scroll saat menu buka
-   ===================================================== */
+/* 9. SCROLL BEHAVIOR */
 body:has(.wp-block-navigation__responsive-container.is-menu-open) {
     overflow: hidden;
 }
 
-/* =====================================================
-   10. TOUCH — Hapus highlight biru di iOS/Android
-   ===================================================== */
+/* 10. TOUCH */
 .main-header .wp-block-navigation-item__content,
 .main-header .wp-block-navigation__responsive-container-open,
 .main-header .wp-block-navigation__responsive-container-close {
@@ -425,40 +550,204 @@ body:has(.wp-block-navigation__responsive-container.is-menu-open) {
     outline-offset: 3px;
 }
 
-/* =====================================================
-   11. ACCORDION SUBMENU — transisi smooth JS-driven
-   (class .bksl-sub-open ditambahkan oleh custom-script.js)
-   ===================================================== */
+/* 11. ACCORDION SUBMENU */
 @media (max-width: 768px) {
-    /* Transisi max-height untuk efek accordion */
-    .main-header .wp-block-navigation__responsive-container.is-menu-open
-    .wp-block-navigation__submenu-container {
+    .main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container {
         overflow: hidden !important;
         transition: max-height 0.28s ease, opacity 0.2s ease !important;
         opacity: 1;
     }
 
-    /* Saat tertutup (sebelum expand) */
-    .main-header .wp-block-navigation__responsive-container.is-menu-open
-    .wp-block-navigation-submenu:not(.bksl-sub-open)
-    > .wp-block-navigation__submenu-container,
-    .main-header .wp-block-navigation__responsive-container.is-menu-open
-    .wp-block-navigation-item.has-child:not(.bksl-sub-open)
-    > .wp-block-navigation__submenu-container {
+    .main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-submenu:not(.bksl-sub-open)>.wp-block-navigation__submenu-container,
+    .main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item.has-child:not(.bksl-sub-open)>.wp-block-navigation__submenu-container {
         opacity: 0.6;
     }
 
-    /* Arrow rotasi saat .bksl-sub-open */
-    .main-header .wp-block-navigation__responsive-container.is-menu-open
-    .wp-block-navigation-submenu.bksl-sub-open
-    > .wp-block-navigation-item__content
-    .wp-block-navigation__submenu-icon,
-    .main-header .wp-block-navigation__responsive-container.is-menu-open
-    .wp-block-navigation-item.has-child.bksl-sub-open
-    > .wp-block-navigation-item__content
-    .wp-block-navigation__submenu-icon {
+    .main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-submenu.bksl-sub-open>.wp-block-navigation-item__content .wp-block-navigation__submenu-icon,
+    .main-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item.has-child.bksl-sub-open>.wp-block-navigation-item__content .wp-block-navigation__submenu-icon {
         transform: rotate(180deg);
         color: var(--wp--preset--color--primary, #FF9A04);
     }
 }
 
+/* ── CSIS Header Structure Styling ────────────────────────────── */
+
+.site-header {
+    width: 100%;
+    position: relative;
+    z-index: 999;
+}
+
+/* Top Bar */
+.top-bar-area {
+    background: #0f172a;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.top-bar-area .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.top-bar-area .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.top-bar-area .info ul,
+.top-bar-area .social ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.top-bar-area .info ul li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #cbd5e1;
+}
+
+.top-bar-area .info ul li .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: #38bdf8;
+}
+
+.top-bar-area .social ul li a {
+    color: #94a3b8;
+    transition: color 0.2s ease;
+}
+
+.top-bar-area .social ul li a:hover {
+    color: #38bdf8;
+}
+
+/* Nav Bar Sticky & Layout */
+header nav.navbar {
+    background: #ffffff;
+    transition: all 0.3s ease;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+header nav.navbar.is-scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+header nav.navbar .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 12px 20px;
+}
+
+header nav.navbar .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar-brand img.logo {
+    max-height: 50px;
+    width: auto;
+    display: block;
+}
+
+/* Language Switcher */
+.lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.lang-btn {
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.lang-btn.active, .lang-btn:hover {
+    color: #1e3a8a;
+}
+
+.lang-sep {
+    color: #cbd5e1;
+}
+
+/* Top Bar Auto Hide & Navbar Shadow */
+.top-bar-area {
+    overflow: hidden;
+    max-height: 44px;
+    transition: max-height 0.35s ease, padding 0.35s ease, opacity 0.3s ease;
+}
+.top-bar-area.hide {
+    max-height: 0;
+    padding: 0;
+    opacity: 0;
+}
+.navbar.scrolled {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    padding: 8px 0;
+}
+
+/* Off-canvas Mobile Menu Panel */
+.mobile-menu-panel {
+    position: fixed;
+    top: 0; left: 0;
+    width: 280px;
+    max-width: 85%;
+    height: 100%;
+    background: #fff;
+    z-index: 10001;
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+    overflow-y: auto;
+}
+.mobile-menu-panel.open { transform: translateX(0); }
+
+.mobile-menu-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid #eee;
+}
+.mobile-menu-header .logo { height: 36px; max-height: 36px; }
+.mobile-menu-close {
+    background: none; border: 1px solid #ddd; border-radius: 50%;
+    width: 32px; height: 32px; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.mobile-menu-list { list-style: none; margin: 0; padding: 0; }
+.mobile-menu-list li a {
+    display: block; padding: 14px 20px; font-weight: 700; color: #222;
+    border-bottom: 1px solid #f0f0f0; text-decoration: none;
+}
+.mobile-menu-list li a:hover { color: #1e3a8a; }
+
+.mobile-lang-switcher { padding: 16px 20px; display: flex; gap: 6px; font-weight: 700; }
+
+/* Overlay Screen */
+.overlay-screen {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 10000; opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.overlay-screen.show { opacity: 1; visibility: visible; }
+
+@media (max-width: 991px) {
+    .navbar-toggle { display: flex; align-items: center; justify-content: center; }
+}

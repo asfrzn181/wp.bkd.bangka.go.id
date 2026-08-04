@@ -13,11 +13,45 @@ jQuery(document).ready(function ($) {
   });
 });
 
-/* ============================================================
-   Mobile Hamburger Menu — Submenu Accordion Enhancement
-   Bekerja di atas WP Navigation Block built-in JS.
-   Hanya aktif di mobile (< 768px). Desktop tidak tersentuh.
-   ============================================================ */
+/* ── CSIS Off-Canvas Header JS ──────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+  var topBar = document.getElementById('topBar');
+  var navbar = document.getElementById('mainNavbar');
+
+  if (topBar || navbar) {
+    window.addEventListener('scroll', function () {
+      var current = window.scrollY;
+      if (current > 60) {
+        if (topBar) topBar.classList.add('hide');
+        if (navbar) navbar.classList.add('scrolled');
+      } else {
+        if (topBar) topBar.classList.remove('hide');
+        if (navbar) navbar.classList.remove('scrolled');
+      }
+    }, { passive: true });
+  }
+
+  var openBtn = document.getElementById('navToggleOpen');
+  var closeBtn = document.getElementById('navToggleClose');
+  var panel = document.getElementById('mobileMenuPanel');
+  var overlay = document.getElementById('overlayScreen');
+
+  function openMenu() {
+    if (panel) panel.classList.add('open');
+    if (overlay) overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    if (panel) panel.classList.remove('open');
+    if (overlay) overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  if (openBtn) openBtn.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  if (overlay) overlay.addEventListener('click', closeMenu);
+});
 (function () {
   'use strict';
 
@@ -28,8 +62,42 @@ jQuery(document).ready(function ($) {
     return window.innerWidth < MOBILE_BP;
   }
 
+  /* ── Direct Click Handler untuk Hamburger Button di Mobile ── */
+  function initMobileToggle() {
+    document.addEventListener('click', function (e) {
+      if (!isMobile()) return;
+
+      var toggleBtn = e.target.closest(
+        '.main-header .wp-block-navigation__responsive-container-open, .main-header button.wp-block-navigation__responsive-container-open'
+      );
+      var closeBtn = e.target.closest(
+        '.main-header .wp-block-navigation__responsive-container-close, .main-header button.wp-block-navigation__responsive-container-close'
+      );
+      var overlay = document.querySelector(
+        '.main-header .wp-block-navigation__responsive-container'
+      );
+
+      if (toggleBtn && overlay) {
+        e.preventDefault();
+        e.stopPropagation();
+        overlay.classList.add('is-menu-open');
+        overlay.removeAttribute('hidden');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('has-modal-open');
+      } else if (closeBtn && overlay) {
+        e.preventDefault();
+        e.stopPropagation();
+        overlay.classList.remove('is-menu-open');
+        overlay.setAttribute('hidden', '');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('has-modal-open');
+      }
+    });
+  }
+
   /* ── Observasi: tunggu overlay mobile terbuka ───────────── */
   function watchOverlay() {
+    initMobileToggle();
     var overlay = document.querySelector(
       '.main-header .wp-block-navigation__responsive-container'
     );
